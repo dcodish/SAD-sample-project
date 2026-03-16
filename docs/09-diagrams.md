@@ -74,6 +74,7 @@ classDiagram
     }
 
     class OrderItem {
+        <<association>>
         -Order order
         -Product product
         -int quantity
@@ -94,19 +95,22 @@ classDiagram
         עובד_חדש
     }
 
-    class TitleHelper {
-        +ToDisplayString(Title)$ string
-        +FromDisplayString(string)$ Title
-    }
-
     Worker "1" --> "*" Order : מבצע
     Order <|-- DeliveryOrder : ירושה
     Order <|-- PickupOrder : ירושה
-    Order "1" --> "*" OrderItem : מכיל
-    Product "1" --> "*" OrderItem : מופיע ב
+    Order "*" -- "*" Product : מכיל
+    Order "1" -- "*" OrderItem
+    Product "1" -- "*" OrderItem
     Worker --> Title : workerTitle
-    TitleHelper ..> Title : ממיר
 ```
+
+> **מהי מחלקת קישור (Association Class)?**
+>
+> `OrderItem` מסומנת עם `<<association>>` כי היא מייצגת את **הקשר עצמו** בין `Order` ל-`Product` (Many-to-Many).
+> בניגוד למחלקה רגילה, מחלקת קישור לא קיימת בפני עצמה — היא קיימת רק כחלק מהקשר בין שתי ישויות אחרות.
+>
+> ב-UML סטנדרטי, מחלקת קישור מצוירת עם קו מקווקו שמחבר אותה לקו הקשר בין Order ל-Product.
+> ב-Mermaid אין תמיכה בסימון הזה, לכן השתמשנו ב-stereotype `<<association>>` וחיברנו את OrderItem לשני הצדדים.
 
 ## 2. Entity Relationship Diagram (ERD)
 
