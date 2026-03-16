@@ -20,6 +20,7 @@ namespace Example_Project
         //   3. קראו לה מ-initLists בסדר הנכון
         // =====================================================================
 
+        public static List<Title> Titles;       // טבלת Lookup — תפקידים (נטען ראשון!)
         public static List<Worker> Workers;
         public static List<Product> Products;
         public static List<Order> Orders;
@@ -39,10 +40,11 @@ namespace Example_Project
 
         public static void initLists()
         {
-            Worker.initWorkers();        // 1. עובדים (בסיסי)
-            Product.initProducts();      // 2. מוצרים (בסיסי)
-            Order.initOrders();          // 3. הזמנות (מפנות לעובדים)
-            OrderItem.initOrderItems();  // 4. פריטי הזמנה (מפנות להזמנות ולמוצרים)
+            Title.initTitles();          // 1. תפקידים (Lookup — נטען ראשון!)
+            Worker.initWorkers();        // 2. עובדים (מפנים לתפקידים)
+            Product.initProducts();      // 3. מוצרים (בסיסי)
+            Order.initOrders();          // 4. הזמנות (מפנות לעובדים)
+            OrderItem.initOrderItems();  // 5. פריטי הזמנה (מפנות להזמנות ולמוצרים)
         }
 
         // =====================================================================

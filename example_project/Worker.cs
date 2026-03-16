@@ -11,7 +11,7 @@ namespace Example_Project
         // =====================================================================
         private string workerId;
         private string workerName;
-        private Title workerTitle;
+        private Title workerTitle;  // הפניה לאובייקט Title (נטען מטבלת Lookup)
         private List<Order> orders;
 
         // =====================================================================
@@ -76,15 +76,15 @@ namespace Example_Project
 
         // =====================================================================
         // פעולות מול בסיס הנתונים (CRUD)
-        // כל פעולה בונה SqlCommand עם Stored Procedure ושולחת דרך SQL_CON
+        // שומרים את titleId (לא את שם התפקיד!) — Foreign Key לטבלת Titles
         // =====================================================================
         public void createWorker()
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "EXECUTE SP_add_worker @id, @name, @title";
+            cmd.CommandText = "EXECUTE SP_add_worker @id, @name, @titleId";
             cmd.Parameters.AddWithValue("@id", this.workerId);
             cmd.Parameters.AddWithValue("@name", this.workerName);
-            cmd.Parameters.AddWithValue("@title", TitleHelper.ToDisplayString(this.workerTitle));
+            cmd.Parameters.AddWithValue("@titleId", this.workerTitle.getTitleId());
             SQL_CON SC = new SQL_CON();
             SC.execute_non_query(cmd);
         }
@@ -92,10 +92,10 @@ namespace Example_Project
         public void updateWorker()
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "EXECUTE dbo.SP_Update_worker @id, @name, @title";
+            cmd.CommandText = "EXECUTE dbo.SP_Update_worker @id, @name, @titleId";
             cmd.Parameters.AddWithValue("@id", this.workerId);
             cmd.Parameters.AddWithValue("@name", this.workerName);
-            cmd.Parameters.AddWithValue("@title", TitleHelper.ToDisplayString(this.workerTitle));
+            cmd.Parameters.AddWithValue("@titleId", this.workerTitle.getTitleId());
             SQL_CON SC = new SQL_CON();
             SC.execute_non_query(cmd);
         }
@@ -128,7 +128,9 @@ namespace Example_Project
             {
                 string id = rdr.GetValue(0).ToString();
                 string name = rdr.GetValue(1).ToString();
-                Title title = TitleHelper.FromDisplayString(rdr.GetValue(2).ToString());
+                //חיפוש התפקיד לפי מזהה מטבלת Lookup
+                int titleId = int.Parse(rdr.GetValue(2).ToString());
+                Title title = Title.seekTitleById(titleId);
 
                 Worker w = new Worker(id, name, title, false);
                 Program.Workers.Add(w);
