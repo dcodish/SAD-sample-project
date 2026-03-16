@@ -52,45 +52,51 @@ git config --global user.email "your.email@example.com"
 ### יצירת חשבון GitHub
 1. היכנסו ל: https://github.com
 2. צרו חשבון חינמי
-3. חבר צוות אחד יוצר את ה-Repository (ראו שלב 3)
+3. **כל חברי הצוות** צריכים חשבון GitHub
 
-## 3. התחלת עבודה — חבר צוות אחד בלבד
+## 3. יצירת הפרויקט מתוך ה-Template
 
-**חבר צוות אחד** (ה"מנהל") מבצע את השלבים הבאים:
+פרויקט הדוגמה נמצא ב-GitHub בכתובת:
+**https://github.com/dcodish/SAD-sample-project**
 
-### א. יצירת Repository ב-GitHub
-1. לחצו **New Repository** ב-GitHub
-2. תנו שם (למשל: `sad-project-team1`)
-3. סמנו **Private** (פרטי — רק הצוות רואה)
-4. **אל תסמנו** Add README — אנחנו כבר יצרנו קבצים
+**חבר צוות אחד** (ה"מנהל") יוצר את הפרויקט של הצוות מתוך ה-Template:
+
+### א. יצירת Repository מהתבנית
+1. היכנסו ל: https://github.com/dcodish/SAD-sample-project
+2. לחצו על הכפתור הירוק **"Use this template"** > **"Create a new repository"**
+3. תנו שם (למשל: `sad-project-team1`)
+4. סמנו **Private** (פרטי — רק הצוות רואה)
 5. לחצו **Create Repository**
+
+> **מה קורה?** GitHub יוצר עותק חדש של כל הקבצים ב-Repository שלכם.
+> זה לא fork — זה פרויקט עצמאי לגמרי, בלי קשר למאגר המקור.
 
 ### ב. הוספת חברי הצוות
 1. ב-GitHub, היכנסו ל-**Settings > Collaborators**
 2. הוסיפו את שאר חברי הצוות לפי שם המשתמש שלהם ב-GitHub
 
-### ג. העלאת הפרויקט הראשוני
-פתחו Command Prompt **בתיקיית הפרויקט** והריצו:
+### ג. הורדת הפרויקט למחשב שלכם
+ה"מנהל" וכל חברי הצוות מריצים:
 ```
-git init
-git add .
-git commit -m "Initial project setup"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/sad-project-team1.git
-git push -u origin main
+git clone https://github.com/YOUR_USERNAME/sad-project-team1.git
 ```
 
 > **שימו לב:** החליפו `YOUR_USERNAME` ו-`sad-project-team1` בפרטים האמיתיים שלכם.
 
-## 4. הצטרפות — שאר חברי הצוות
+פתחו את ה-`.sln` ב-Visual Studio — הפרויקט מוכן לעבודה.
 
-כל שאר חברי הצוות מריצים פקודה אחת:
+## 4. ה-Commit הראשון שלכם
 
+לפני שמתחילים לעבוד, כל חבר צוות צריך לוודא שהוא יכול לעשות push:
+
+1. שנו משהו קטן (למשל הוסיפו הערה בקובץ)
+2. הריצו:
 ```
-git clone https://github.com/USERNAME/sad-project-team1.git
+git add .
+git commit -m "בדיקת חיבור - [השם שלכם]"
+git push
 ```
-
-זה יוריד את כל הפרויקט למחשב שלכם. פתחו את ה-`.sln` ב-Visual Studio.
+3. אם ה-push הצליח — הכל עובד!
 
 ## 5. העבודה היום-יומית — 4 פקודות
 
