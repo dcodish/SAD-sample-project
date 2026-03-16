@@ -65,11 +65,13 @@ Example_Project/
 ### הרשימות הראשיות (Program.cs)
 
 ```csharp
-public static List<Worker> Workers;  // רשימת כל העובדים
-public static List<Order> Orders;    // רשימת כל ההזמנות
+public static List<Worker> Workers;      // רשימת כל העובדים
+public static List<Product> Products;    // רשימת כל המוצרים
+public static List<Order> Orders;        // רשימת כל ההזמנות (כולל DeliveryOrder, PickupOrder)
+public static List<OrderItem> OrderItems; // רשימת כל פריטי ההזמנות (מחלקת קישור)
 ```
 
-רשימות אלו הן `static` — כלומר נגישות מכל מקום בתוכנית דרך `Program.Workers` ו-`Program.Orders`.
+רשימות אלו הן `static` — כלומר נגישות מכל מקום בתוכנית דרך `Program.Workers`, `Program.Orders` וכו'.
 
 > **שימו לב:** הרשימות מוגדרות ב-`Program.cs`, אבל פעולות הטעינה (`initWorkers`, `initOrders`) והחיפוש (`seekWorker`) מוגדרות כפעולות סטטיות בתוך מחלקות ה-Entity עצמן (`Worker.cs`, `Order.cs`).
 
@@ -78,10 +80,10 @@ public static List<Order> Orders;    // רשימת כל ההזמנות
 ### Worker — עובד
 | שדה | סוג | תיאור |
 |-----|------|--------|
-| WorkerId | string | תעודת זהות |
-| WorkerName | string | שם העובד |
+| workerId | string | תעודת זהות |
+| workerName | string | שם העובד |
 | workerTitle | Title (enum) | תפקיד |
-| orders | List\<Order\> | רשימת ההזמנות של העובד |
+| orders | List\<Order\> | רשימת ההזמנות של העובד (private) |
 
 **פעולות:**
 - `createWorker()` — הוספה לבסיס הנתונים (Stored Procedure)
@@ -98,17 +100,53 @@ public static List<Order> Orders;    // רשימת כל ההזמנות
 | worker | Worker | העובד שביצע את ההזמנה |
 | orderId | int | מזהה הזמנה |
 | orderDate | DateTime | תאריך |
-| OrderTotalPrice | int | מחיר כולל |
+| orderTotalPrice | int | מחיר כולל |
+| orderItems | List\<OrderItem\> | רשימת הפריטים בהזמנה (private) |
+
+**פעולות סטטיות:**
+- `Order.initOrders()` — טעינת כל ההזמנות מה-DB (כולל ירושה)
+- `Order.seekOrder(id)` — חיפוש הזמנה לפי מזהה
+- `Order.getNextOrderId()` — חישוב מזהה הזמנה הבא
+
+### DeliveryOrder — הזמנת משלוח (יורש מ-Order)
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| deliveryAddress | string | כתובת משלוח |
+| deliveryDate | DateTime | תאריך משלוח |
+
+### PickupOrder — הזמנת איסוף (יורש מ-Order)
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| pickupTime | DateTime | זמן איסוף |
+| branchLocation | string | סניף |
+
+### Product — מוצר
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| productId | int | מזהה מוצר |
+| productName | string | שם המוצר |
+| price | double | מחיר |
+| category | string | קטגוריה |
+
+### OrderItem — פריט בהזמנה (מחלקת קישור)
+קשר Many-to-Many בין Order ל-Product.
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| order | Order | הפניה להזמנה |
+| product | Product | הפניה למוצר |
+| quantity | int | כמות |
+| unitPrice | double | מחיר ליחידה |
 
 ### Title — תפקיד (Enum)
 ```csharp
 public enum Title
 {
-    manager,
-    senior,
-    junior
+    מנהל_משמרת,
+    ראש_צוות,
+    עובד_חדש
 }
 ```
+> ב-Enum אי אפשר רווחים — משתמשים בקו תחתון. מחלקת `TitleHelper` ממירה בין קו תחתון (C#) לרווחים (DB/תצוגה).
 
 ## 5. חיבור לבסיס הנתונים (SQL_CON.cs)
 
@@ -133,9 +171,13 @@ public enum Title
             ├── אם ת.ז. = "1111" (מנהל) ──> פאנל CRUDPanel
             │       │
             │       ├── יצירת עובד חדש (CreateWorkerPanel)
-            │       └── עדכון/מחיקת עובד (UpdateDeletePanel)
+            │       ├── עדכון/מחיקת עובד (UpdateDeletePanel)
+            │       ├── הזמנת משלוח (CreateDeliveryOrderPanel)
+            │       └── הזמנת איסוף (CreatePickupOrderPanel)
             │
             └── אם עובד רגיל ──> צפייה בהזמנות (WatchOrdersPanel)
+                                    │
+                                    └── לחיצה על הזמנה ──> פרטי הזמנה (OrderDetailsPanel)
 ```
 
 ## 7. הרצת הפרויקט
@@ -151,8 +193,4 @@ public enum Title
 
 כדי לבנות את המערכת שלכם על בסיס פרויקט הדוגמה:
 
-1. **הגדירו את ה-Entities שלכם** — צרו מחלקות (כמו `Worker` ו-`Order`) עבור כל ישות ב-Class Diagram שלכם
-2. **צרו את הטבלאות** — בנו את בסיס הנתונים לפי ה-Class Diagram
-3. **כתבו Stored Procedures** — עבור כל פעולת CRUD על כל ישות
-4. **בנו את הטפסים** — צרו WinForms עבור כל מסך במערכת
-5. **טענו לזיכרון** — ב-`Program.cs`, צרו רשימות וטענו את הנתונים בהפעלה
+ראו את המדריך המפורט: [סדר פיתוח — 5 הצעדים הראשונים](06-development-order.md)
