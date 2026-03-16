@@ -32,7 +32,8 @@
 
 ### ב-SSMS
 1. בצד שמאל, פתחו את **Databases > SAD_0 > Tables**
-2. ודאו שקיימות שש טבלאות:
+2. ודאו שקיימות שבע טבלאות:
+   - `dbo.Titles` — טבלת Lookup לתפקידים
    - `dbo.Workers`
    - `dbo.Orders`
    - `dbo.DeliveryOrders`
@@ -40,6 +41,7 @@
    - `dbo.Products`
    - `dbo.OrderItems`
 3. פתחו את **Programmability > Stored Procedures** וודאו שקיימים:
+   - `dbo.Get_all_Titles`
    - `dbo.Get_all_Workers`
    - `dbo.Get_all_Orders` — שאילתה בסיסית
    - `dbo.Get_all_Orders_Full` — עם LEFT JOIN לטבלאות הירושה
@@ -66,12 +68,21 @@
 
 ## 3. מבנה בסיס הנתונים
 
+### טבלת Titles (תפקידים — Lookup Table)
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| titleId | INT | מזהה תפקיד (Primary Key) |
+| titleName | NVARCHAR(50) | שם התפקיד |
+
+> **Lookup Table** — טבלה שמכילה ערכים קבועים שנטענים לזיכרון בהפעלת התוכנית.
+> הערכים לא מקודדים בקוד — אם רוצים להוסיף תפקיד חדש, מוסיפים שורה ב-DB.
+
 ### טבלת Workers (עובדים)
 | שדה | סוג | תיאור |
 |-----|------|--------|
 | workerId | VARCHAR(20) | מזהה עובד (Primary Key) |
 | workerName | NVARCHAR(20) | שם העובד |
-| workerTitle | NVARCHAR(50) | תפקיד |
+| titleId | INT | מזהה תפקיד (Foreign Key → Titles) |
 
 ### טבלת Orders (הזמנות) — טבלת אב
 | שדה | סוג | תיאור |
@@ -114,6 +125,8 @@
 > **מפתח ראשי מורכב (Composite PK):** טבלת OrderItems משתמשת בשילוב של `orderId` + `productId` כמפתח ראשי.
 
 ### קשרים
+- **Titles ↔ Workers:** קשר Lookup — עובד מפנה לתפקיד מטבלת Titles
+  - Foreign Key: `Workers.titleId` → `Titles.titleId`
 - **Workers ↔ Orders:** קשר One-to-Many — לעובד אחד יכולות להיות הזמנות רבות
   - Foreign Key: `Orders.workerId` → `Workers.workerId`
 - **Orders ↔ DeliveryOrders:** ירושה (Table-per-Subclass) — הזמנת משלוח מרחיבה הזמנה

@@ -29,7 +29,7 @@ Example_Project/
 ├── PickupOrder.cs           ← הזמנת איסוף (יורש מ-Order)
 ├── Product.cs               ← מוצר
 ├── OrderItem.cs             ← פריט בהזמנה
-├── Title.cs                 ← Enum תפקידים + TitleHelper
+├── Title.cs                 ← Lookup תפקידים (מחלקה הנטענת מטבלת Titles)
 │
 │  פאנלים (WinForms Panels)
 ├── LoginPanel.cs            ← פאנל כניסה (Login)
@@ -57,8 +57,9 @@ Example_Project/
 │  SQL Server  │  ──────────────>   │   זיכרון       │
 │  (DB)        │                    │   (Lists)      │
 │              │  <──────────────   │                │
-│  Workers     │   Create/Update/   │  Workers[]     │
-│  Products    │   Delete           │  Products[]    │
+│  Titles      │   Create/Update/   │  Titles[]      │
+│  Workers     │   Delete           │  Workers[]     │
+│  Products    │                    │  Products[]    │
 │  Orders      │                    │  Orders[]      │
 │  OrderItems  │                    │  OrderItems[]  │
 └──────────────┘                    └────────────────┘
@@ -67,6 +68,7 @@ Example_Project/
 ### הרשימות הראשיות (Program.cs)
 
 ```csharp
+public static List<Title> Titles;        // רשימת התפקידים (Lookup Table)
 public static List<Worker> Workers;      // רשימת כל העובדים
 public static List<Product> Products;    // רשימת כל המוצרים
 public static List<Order> Orders;        // רשימת כל ההזמנות (כולל DeliveryOrder, PickupOrder)
@@ -86,7 +88,7 @@ public static List<OrderItem> OrderItems; // רשימת כל פריטי ההזמ
 |-----|------|--------|--------|
 | workerId | string | private | תעודת זהות |
 | workerName | string | private | שם העובד |
-| workerTitle | Title (enum) | private | תפקיד |
+| workerTitle | Title (class) | private | תפקיד |
 | orders | List\<Order\> | private | רשימת ההזמנות של העובד (קשר One-to-Many) |
 
 **בנאי:**
@@ -255,22 +257,25 @@ public static List<OrderItem> OrderItems; // רשימת כל פריטי ההזמ
 
 ---
 
-### Title — תפקיד (Enum) + TitleHelper
+### Title — תפקיד (מחלקה מטבלת Lookup)
 
-```csharp
-public enum Title
-{
-    מנהל_משמרת,
-    ראש_צוות,
-    עובד_חדש
-}
-```
+> `Title` היא מחלקה (class) שמייצגת תפקיד. התפקידים נטענים מטבלת `Titles` בבסיס הנתונים בעת אתחול התוכנית, ונשמרים ברשימה `Program.Titles`.
 
-> ב-Enum אי אפשר רווחים — משתמשים בקו תחתון. מחלקת `TitleHelper` ממירה בין קו תחתון (C#) לרווחים (DB/תצוגה).
+**שדות:**
+| שדה | סוג | הרשאה | תיאור |
+|-----|------|--------|--------|
+| titleId | int | private | מזהה תפקיד |
+| titleName | string | private | שם התפקיד |
 
-**מחלקת `TitleHelper`** — מחלקה סטטית (`static class`) שמספקת המרה דו-כיוונית בין ערכי ה-Enum לטקסט תצוגה:
-- `TitleHelper.ToDisplayString(Title title)` — המרה מ-enum לטקסט תצוגה (מחליף `_` ברווח). לדוגמה: `מנהל_משמרת` -> `"מנהל משמרת"`
-- `TitleHelper.FromDisplayString(string displayString)` — המרה מטקסט תצוגה ל-enum (מחליף רווח ב-`_`). לדוגמה: `"עובד חדש"` -> `עובד_חדש`
+**Getters:**
+- `getTitleId()` — מחזיר `int` (מזהה התפקיד)
+- `getTitleName()` — מחזיר `string` (שם התפקיד)
+- `toString()` — מחזיר את שם התפקיד (לתצוגה)
+
+**פעולות סטטיות:**
+- `Title.initTitles()` — טעינת כל התפקידים מטבלת `Titles` בבסיס הנתונים לרשימה `Program.Titles`. **חייבת לרוץ ראשונה** לפני שאר פעולות ה-init, כי `initWorkers` צריכה למצוא את ה-Title של כל עובד.
+- `Title.seekTitleById(int id)` — חיפוש תפקיד לפי מזהה ברשימת הזיכרון, מחזיר `Title` או `null`
+- `Title.seekTitleByName(string name)` — חיפוש תפקיד לפי שם ברשימת הזיכרון, מחזיר `Title` או `null`
 
 ## 5. חיבור לבסיס הנתונים (SQL_CON.cs)
 
@@ -286,7 +291,7 @@ public enum Title
 ```
 הפעלה (Program.Main)
     │
-    ├── טעינת נתונים מ-DB לרשימות (initLists)
+    ├── טעינת נתונים מ-DB לרשימות (initLists: Title.initTitles() ראשון, ואז Workers, Products, Orders, OrderItems)
     │
     └── פתיחת טופס הכניסה (LoginPanel)
             │

@@ -45,5 +45,10 @@ namespace Example_Project
         {
             mainForm.showPanel(new MoadAPanel());
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

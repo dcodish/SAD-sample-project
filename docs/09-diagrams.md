@@ -89,13 +89,19 @@ classDiagram
     }
 
     class Title {
-        <<enumeration>>
-        מנהל_משמרת
-        ראש_צוות
-        עובד_חדש
+        <<lookup>>
+        -int titleId
+        -string titleName
+        +getTitleId() int
+        +getTitleName() string
+        +toString() string
+        +initTitles()$ void
+        +seekTitleById(int)$ Title
+        +seekTitleByName(string)$ Title
     }
 
     Worker "1" -- "*" Order : מבצע
+    Worker "*" -- "1" Title : תפקיד
     Order <|-- DeliveryOrder : ירושה
     Order <|-- PickupOrder : ירושה
     Order "*" -- "*" Product : מכיל
@@ -115,10 +121,15 @@ classDiagram
 
 ```mermaid
 erDiagram
+    Titles {
+        int titleId PK
+        nvarchar(50) titleName
+    }
+
     Workers {
         varchar(20) workerId PK
         nvarchar(20) workerName
-        nvarchar(50) workerTitle
+        int titleId FK
     }
 
     Orders {
@@ -154,6 +165,7 @@ erDiagram
         float unitPrice
     }
 
+    Titles ||--o{ Workers : "lookup"
     Workers ||--o{ Orders : "one-to-many"
     Orders ||--o| DeliveryOrders : "inheritance"
     Orders ||--o| PickupOrders : "inheritance"
