@@ -1,4 +1,4 @@
-# SAD Sample Project — פרויקט דוגמה לניתוח ועיצוב מערכות
+# SAD Sample Project — פרויקט לדוגמה בקורס ניתוח ועיצוב מערכות מידע - הנדסת תעשיה וניהול - אוניברסיטת בן-גוריון
 
 פרויקט דוגמה לקורס **Software Analysis and Design** (SAD).
 הפרויקט מדגים מערכת WinForms מלאה עם חיבור ל-SQL Server, כולל דוגמאות לירושה, Enum, מחלקת קישור (Association Class), וניווט מבוסס Panels.
