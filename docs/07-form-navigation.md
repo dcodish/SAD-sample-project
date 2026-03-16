@@ -109,7 +109,6 @@ LoginPanel
   │
   ├── כניסה כעובד ──→ WatchOrdersPanel ──→ חזרה ל-LoginPanel
   │
-  └── מועד א' ──→ MoadAPanel ──→ חזרה ל-LoginPanel
 ```
 
 ## 6. איך להוסיף מסך חדש

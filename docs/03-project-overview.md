@@ -39,8 +39,7 @@ Example_Project/
 ├── CreateDeliveryOrderPanel.cs ← יצירת הזמנת משלוח
 ├── CreatePickupOrderPanel.cs   ← יצירת הזמנת איסוף
 ├── WatchOrdersPanel.cs      ← צפייה בהזמנות
-├── OrderDetailsPanel.cs     ← פרטי הזמנה
-└── MoadAPanel.cs            ← מודעה / אודות
+└── OrderDetailsPanel.cs     ← פרטי הזמנה
 ```
 
 ## 3. ארכיטקטורה - איך הפרויקט עובד

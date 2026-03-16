@@ -41,11 +41,6 @@ namespace Example_Project
             }
         }
 
-        private void button_moadA_Click(object sender, EventArgs e)
-        {
-            mainForm.showPanel(new MoadAPanel());
-        }
-
         private void label1_Click(object sender, EventArgs e)
         {
 

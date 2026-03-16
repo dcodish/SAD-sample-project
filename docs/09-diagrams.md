@@ -180,7 +180,6 @@ flowchart TD
     A[mainForm<br/>חלון ראשי עם Panel] --> B[LoginPanel<br/>מסך כניסה]
     B -->|מנהל 1111| C[CRUDPanel<br/>ניהול המערכת]
     B -->|עובד רגיל| D[WatchOrdersPanel<br/>צפייה בהזמנות]
-    B --> E[MoadAPanel<br/>מועד א]
     C --> F[CreateWorkerPanel<br/>יצירת עובד]
     C --> G[UpdateDeletePanel<br/>עדכון/מחיקת עובד]
     C --> H[CreateDeliveryOrderPanel<br/>הזמנת משלוח]
@@ -191,7 +190,6 @@ flowchart TD
     H --> C
     I --> C
     J --> D
-    E --> B
     C --> B
     D --> B
 ```
