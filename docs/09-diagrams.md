@@ -95,13 +95,12 @@ classDiagram
         עובד_חדש
     }
 
-    Worker "1" --> "*" Order : מבצע
+    Worker "1" -- "*" Order : מבצע
     Order <|-- DeliveryOrder : ירושה
     Order <|-- PickupOrder : ירושה
     Order "*" -- "*" Product : מכיל
     Order "1" -- "*" OrderItem
     Product "1" -- "*" OrderItem
-    Worker --> Title : workerTitle
 ```
 
 > **מהי מחלקת קישור (Association Class)?**
