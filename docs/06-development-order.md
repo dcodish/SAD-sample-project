@@ -5,16 +5,12 @@
 
 ## סדר העבודה המומלץ
 
-```
-שלב 1: SQL_CON + Connection String
-         ↓
-שלב 2: מחלקות Entity (בלי DB)
-         ↓
-שלב 3: Stored Procedures + פעולות DB במחלקות
-         ↓
-שלב 4: Program.cs — טעינה לזיכרון
-         ↓
-שלב 5: טופס ראשון — הצגת נתונים
+```mermaid
+flowchart TD
+    A["שלב 1: SQL_CON + Connection String"] --> B["שלב 2: מחלקות Entity — בלי DB"]
+    B --> C["שלב 3: Stored Procedures + פעולות DB"]
+    C --> D["שלב 4: Program.cs — טעינה לזיכרון"]
+    D --> E["שלב 5: פאנל ראשון — הצגת נתונים"]
 ```
 
 ---
