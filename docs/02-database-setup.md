@@ -32,25 +32,37 @@
 
 ### ב-SSMS
 1. בצד שמאל, פתחו את **Databases > SAD_0 > Tables**
-2. ודאו שקיימות שתי טבלאות:
+2. ודאו שקיימות שש טבלאות:
    - `dbo.Workers`
    - `dbo.Orders`
+   - `dbo.DeliveryOrders`
+   - `dbo.PickupOrders`
+   - `dbo.Products`
+   - `dbo.OrderItems`
 3. פתחו את **Programmability > Stored Procedures** וודאו שקיימים:
    - `dbo.Get_all_Workers`
-   - `dbo.Get_all_Orders`
+   - `dbo.Get_all_Orders` — שאילתה בסיסית
+   - `dbo.Get_all_Orders_Full` — עם LEFT JOIN לטבלאות הירושה
+   - `dbo.Get_all_Products`
+   - `dbo.Get_all_OrderItems`
    - `dbo.SP_add_worker`
    - `dbo.SP_Update_worker`
    - `dbo.SP_delete_worker`
    - `dbo.SP_add_order`
+   - `dbo.SP_add_delivery_order`
+   - `dbo.SP_add_pickup_order`
+   - `dbo.SP_add_product`
+   - `dbo.SP_add_order_item`
 
 ### בדיקת הנתונים
-לחצו Right Click על טבלת `Workers` ובחרו **Select Top 1000 Rows**. אמורים להופיע 3 רשומות:
+לחצו Right Click על טבלת `Workers` ובחרו **Select Top 1000 Rows**. אמורים להופיע 4 רשומות:
 
 | workerId | workerName | workerTitle |
 |----------|------------|-------------|
-| 123      | shelly     | manager     |
-| 345      | liel       | senior      |
-| 678      | david      | manager     |
+| 1111     | admin      | מנהל משמרת  |
+| 123      | shelly     | מנהל משמרת  |
+| 345      | liel       | ראש צוות    |
+| 678      | david      | מנהל משמרת  |
 
 ## 3. מבנה בסיס הנתונים
 
@@ -58,20 +70,59 @@
 | שדה | סוג | תיאור |
 |-----|------|--------|
 | workerId | VARCHAR(20) | מזהה עובד (Primary Key) |
-| workerName | VARCHAR(20) | שם העובד |
-| workerTitle | VARCHAR(50) | תפקיד (manager / senior / junior) |
+| workerName | NVARCHAR(20) | שם העובד |
+| workerTitle | NVARCHAR(50) | תפקיד |
 
-### טבלת Orders (הזמנות)
+### טבלת Orders (הזמנות) — טבלת אב
 | שדה | סוג | תיאור |
 |-----|------|--------|
-| workerId | VARCHAR(20) | מזהה עובד (Foreign Key → Workers) |
 | orderId | INT | מזהה הזמנה (Primary Key) |
+| workerId | VARCHAR(20) | מזהה עובד (Foreign Key → Workers) |
 | orderDate | DATE | תאריך ההזמנה |
 | orderTotalPrice | INT | סכום כולל |
 
+### טבלת DeliveryOrders (הזמנות משלוח) — ירושה מ-Orders
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| orderId | INT | מזהה הזמנה (Primary Key + Foreign Key → Orders) |
+| deliveryAddress | VARCHAR(100) | כתובת למשלוח |
+| deliveryDate | DATE | תאריך משלוח |
+
+### טבלת PickupOrders (הזמנות איסוף) — ירושה מ-Orders
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| orderId | INT | מזהה הזמנה (Primary Key + Foreign Key → Orders) |
+| pickupTime | DATETIME | מועד איסוף |
+| branchLocation | VARCHAR(50) | סניף לאיסוף |
+
+### טבלת Products (מוצרים)
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| productId | INT | מזהה מוצר (Primary Key) |
+| productName | NVARCHAR(50) | שם המוצר |
+| price | FLOAT | מחיר |
+| category | NVARCHAR(30) | קטגוריה |
+
+### טבלת OrderItems (פריטי הזמנה) — Association Class
+| שדה | סוג | תיאור |
+|-----|------|--------|
+| orderId | INT | מזהה הזמנה (Primary Key + Foreign Key → Orders) |
+| productId | INT | מזהה מוצר (Primary Key + Foreign Key → Products) |
+| quantity | INT | כמות |
+| unitPrice | FLOAT | מחיר ליחידה |
+
+> **מפתח ראשי מורכב (Composite PK):** טבלת OrderItems משתמשת בשילוב של `orderId` + `productId` כמפתח ראשי.
+
 ### קשרים
-- **Workers ↔ Orders:** קשר של One-to-Many — לעובד אחד יכולות להיות הזמנות רבות
-- Foreign Key: `Orders.workerId` → `Workers.workerId`
+- **Workers ↔ Orders:** קשר One-to-Many — לעובד אחד יכולות להיות הזמנות רבות
+  - Foreign Key: `Orders.workerId` → `Workers.workerId`
+- **Orders ↔ DeliveryOrders:** ירושה (Table-per-Subclass) — הזמנת משלוח מרחיבה הזמנה
+  - Foreign Key: `DeliveryOrders.orderId` → `Orders.orderId`
+- **Orders ↔ PickupOrders:** ירושה (Table-per-Subclass) — הזמנת איסוף מרחיבה הזמנה
+  - Foreign Key: `PickupOrders.orderId` → `Orders.orderId`
+- **Orders ↔ Products:** קשר Many-to-Many דרך טבלת OrderItems
+  - Foreign Key: `OrderItems.orderId` → `Orders.orderId`
+  - Foreign Key: `OrderItems.productId` → `Products.productId`
 
 ## 4. עדכון Connection String בפרויקט
 

@@ -53,13 +53,15 @@ Example_Project/
 3. כך אנחנו עובדים מהר (מהזיכרון) ושומרים על עקביות (בסיס הנתונים)
 
 ```
-┌──────────────┐       הפעלה        ┌──────────────┐
-│  SQL Server  │  ──────────────>   │   זיכרון     │
-│  (DB)        │                    │   (Lists)    │
-│              │  <──────────────   │              │
-│  Workers     │   Create/Update/   │  Workers[]   │
-│  Orders      │   Delete           │  Orders[]    │
-└──────────────┘                    └──────────────┘
+┌──────────────┐       הפעלה        ┌────────────────┐
+│  SQL Server  │  ──────────────>   │   זיכרון       │
+│  (DB)        │                    │   (Lists)      │
+│              │  <──────────────   │                │
+│  Workers     │   Create/Update/   │  Workers[]     │
+│  Products    │   Delete           │  Products[]    │
+│  Orders      │                    │  Orders[]      │
+│  OrderItems  │                    │  OrderItems[]  │
+└──────────────┘                    └────────────────┘
 ```
 
 ### הרשימות הראשיות (Program.cs)
@@ -78,66 +80,183 @@ public static List<OrderItem> OrderItems; // רשימת כל פריטי ההזמ
 ## 4. המחלקות (Classes)
 
 ### Worker — עובד
-| שדה | סוג | תיאור |
-|-----|------|--------|
-| workerId | string | תעודת זהות |
-| workerName | string | שם העובד |
-| workerTitle | Title (enum) | תפקיד |
-| orders | List\<Order\> | רשימת ההזמנות של העובד (private) |
 
-**פעולות:**
-- `createWorker()` — הוספה לבסיס הנתונים (Stored Procedure)
-- `updateWorker()` — עדכון בבסיס הנתונים
-- `deleteWorker()` — מחיקה מבסיס הנתונים ומהרשימה
+**שדות:**
+| שדה | סוג | הרשאה | תיאור |
+|-----|------|--------|--------|
+| workerId | string | private | תעודת זהות |
+| workerName | string | private | שם העובד |
+| workerTitle | Title (enum) | private | תפקיד |
+| orders | List\<Order\> | private | רשימת ההזמנות של העובד (קשר One-to-Many) |
+
+**בנאי:**
+- `Worker(string id, string name, Title title, bool is_new)` — אם `is_new = true`: שומר ב-DB ומוסיף לרשימה. אם `false`: מופע שנטען מה-DB.
+
+**Getters & Setters:**
+- `getId()` — מחזיר `string` (תעודת זהות)
+- `getName()` — מחזיר `string` (שם העובד)
+- `getTitle()` — מחזיר `Title` (תפקיד)
+- `setName(string name)` — עדכון שם העובד
+- `setTitle(Title t)` — עדכון תפקיד
+
+**פעולות ניהול קשר (One-to-Many עם Order):**
+- `getOrders()` — מחזיר `List<Order>` (רשימת ההזמנות של העובד)
+- `addOrder(Order newOrder)` — הוספת הזמנה לרשימה + קריאה ל-`newOrder.setWorker(this)`
+- `removeOrder(Order oldOrder)` — הסרת הזמנה מהרשימה
+
+**פעולות CRUD (מול בסיס הנתונים):**
+- `createWorker()` — הוספה לבסיס הנתונים דרך Stored Procedure (`SP_add_worker`)
+- `updateWorker()` — עדכון בבסיס הנתונים דרך Stored Procedure (`SP_Update_worker`)
+- `deleteWorker()` — מחיקה מהרשימה בזיכרון ומבסיס הנתונים (`SP_delete_worker`)
 
 **פעולות סטטיות (שייכות למחלקה, לא למופע):**
-- `Worker.initWorkers()` — טעינת כל העובדים מה-DB לרשימה
-- `Worker.seekWorker(id)` — חיפוש עובד לפי ת.ז.
+- `Worker.initWorkers()` — טעינת כל העובדים מה-DB לרשימה `Program.Workers`
+- `Worker.seekWorker(string id)` — חיפוש עובד לפי ת.ז. ברשימת הזיכרון, מחזיר `Worker` או `null`
 
-### Order — הזמנה
-| שדה | סוג | תיאור |
-|-----|------|--------|
-| worker | Worker | העובד שביצע את ההזמנה |
-| orderId | int | מזהה הזמנה |
-| orderDate | DateTime | תאריך |
-| orderTotalPrice | int | מחיר כולל |
-| orderItems | List\<OrderItem\> | רשימת הפריטים בהזמנה (private) |
+---
+
+### Order — הזמנה (מחלקת אב לירושה)
+
+**שדות:**
+| שדה | סוג | הרשאה | תיאור |
+|-----|------|--------|--------|
+| worker | Worker | private | העובד שביצע את ההזמנה |
+| orderId | int | protected | מזהה הזמנה (protected כדי שמחלקות הבן יוכלו לגשת) |
+| orderDate | DateTime | protected | תאריך ההזמנה |
+| orderTotalPrice | int | protected | מחיר כולל |
+| orderItems | List\<OrderItem\> | private | רשימת הפריטים בהזמנה (קשר Many-to-Many עם Product) |
+
+**בנאי:**
+- `Order(Worker w, int id, DateTime date, int totalPrice, bool is_new)` — אם `is_new = true`: קורא ל-`createOrder()`, מוסיף לרשימת העובד ול-`Program.Orders`.
+
+**Getters & Setters:**
+- `getOrderId()` — מחזיר `int`
+- `getOrderDate()` — מחזיר `DateTime`
+- `getOrderTotalPrice()` — מחזיר `int`
+- `getWorker()` — מחזיר `Worker`
+- `setWorker(Worker w)` — עדכון העובד
+
+**פעולות ניהול קשר (Many-to-Many עם Product דרך OrderItem):**
+- `addOrderItem(OrderItem item)` — הוספת פריט לרשימת הפריטים
+- `getOrderItems()` — מחזיר `List<OrderItem>`
+
+**פעולות CRUD:**
+- `virtual createOrder()` — שמירה בטבלת Orders ב-DB דרך `SP_add_order`. הפעולה מוגדרת כ-**virtual** כדי שמחלקות הבן (`DeliveryOrder`, `PickupOrder`) יוכלו לדרוס (override) אותה.
 
 **פעולות סטטיות:**
-- `Order.initOrders()` — טעינת כל ההזמנות מה-DB (כולל ירושה)
-- `Order.seekOrder(id)` — חיפוש הזמנה לפי מזהה
-- `Order.getNextOrderId()` — חישוב מזהה הזמנה הבא
+- `Order.initOrders()` — טעינת כל ההזמנות מה-DB, כולל זיהוי סוג הירושה (DeliveryOrder / PickupOrder / Order רגיל) לפי שדות ב-DB
+- `Order.seekOrder(int id)` — חיפוש הזמנה לפי מזהה, מחזיר `Order` או `null`
+- `Order.getNextOrderId()` — מחשב את מזהה ההזמנה הבא (MAX + 1)
+
+---
 
 ### DeliveryOrder — הזמנת משלוח (יורש מ-Order)
-| שדה | סוג | תיאור |
-|-----|------|--------|
-| deliveryAddress | string | כתובת משלוח |
-| deliveryDate | DateTime | תאריך משלוח |
+
+> מחלקה שיורשת מ-`Order`. הבנאי קורא ל-`base(w, id, date, totalPrice, false)` — שולח `false` לבנאי האב כדי שהאב לא ישמור ב-DB, ומחלקת הבן מנהלת את השמירה בעצמה.
+
+**שדות נוספים (מעבר לשדות שיורש מ-Order):**
+| שדה | סוג | הרשאה | תיאור |
+|-----|------|--------|--------|
+| deliveryAddress | string | private | כתובת משלוח |
+| deliveryDate | DateTime | private | תאריך משלוח |
+
+**בנאי:**
+- `DeliveryOrder(Worker w, int id, DateTime date, int totalPrice, string deliveryAddress, DateTime deliveryDate, bool is_new)` — קורא ל-`base(...)` עם `false`, ואם `is_new = true`: קורא ל-`createOrder()`, מוסיף לרשימת העובד ול-`Program.Orders`.
+
+**Getters:**
+- `getDeliveryAddress()` — מחזיר `string`
+- `getDeliveryDate()` — מחזיר `DateTime`
+
+**פעולות CRUD:**
+- `override createOrder()` — דורס את הפעולה של האב. שומר **בשתי טבלאות**: קודם בטבלת Orders (`SP_add_order`) ואז בטבלת DeliveryOrders (`SP_add_delivery_order`).
+
+---
 
 ### PickupOrder — הזמנת איסוף (יורש מ-Order)
-| שדה | סוג | תיאור |
-|-----|------|--------|
-| pickupTime | DateTime | זמן איסוף |
-| branchLocation | string | סניף |
+
+> מחלקה שיורשת מ-`Order`. הבנאי קורא ל-`base(w, id, date, totalPrice, false)` — שולח `false` לבנאי האב כדי שהאב לא ישמור ב-DB, ומחלקת הבן מנהלת את השמירה בעצמה.
+
+**שדות נוספים (מעבר לשדות שיורש מ-Order):**
+| שדה | סוג | הרשאה | תיאור |
+|-----|------|--------|--------|
+| pickupTime | DateTime | private | זמן איסוף |
+| branchLocation | string | private | סניף |
+
+**בנאי:**
+- `PickupOrder(Worker w, int id, DateTime date, int totalPrice, DateTime pickupTime, string branchLocation, bool is_new)` — קורא ל-`base(...)` עם `false`, ואם `is_new = true`: קורא ל-`createOrder()`, מוסיף לרשימת העובד ול-`Program.Orders`.
+
+**Getters:**
+- `getPickupTime()` — מחזיר `DateTime`
+- `getBranchLocation()` — מחזיר `string`
+
+**פעולות CRUD:**
+- `override createOrder()` — דורס את הפעולה של האב. שומר **בשתי טבלאות**: קודם בטבלת Orders (`SP_add_order`) ואז בטבלת PickupOrders (`SP_add_pickup_order`).
+
+---
 
 ### Product — מוצר
-| שדה | סוג | תיאור |
-|-----|------|--------|
-| productId | int | מזהה מוצר |
-| productName | string | שם המוצר |
-| price | double | מחיר |
-| category | string | קטגוריה |
 
-### OrderItem — פריט בהזמנה (מחלקת קישור)
-קשר Many-to-Many בין Order ל-Product.
-| שדה | סוג | תיאור |
-|-----|------|--------|
-| order | Order | הפניה להזמנה |
-| product | Product | הפניה למוצר |
-| quantity | int | כמות |
-| unitPrice | double | מחיר ליחידה |
+**שדות:**
+| שדה | סוג | הרשאה | תיאור |
+|-----|------|--------|--------|
+| productId | int | private | מזהה מוצר |
+| productName | string | private | שם המוצר |
+| price | double | private | מחיר |
+| category | string | private | קטגוריה |
 
-### Title — תפקיד (Enum)
+**בנאי:**
+- `Product(int id, string name, double price, string category, bool is_new)` — אם `is_new = true`: שומר ב-DB ומוסיף ל-`Program.Products`.
+
+**Getters & Setters:**
+- `getProductId()` — מחזיר `int`
+- `getProductName()` — מחזיר `string`
+- `getPrice()` — מחזיר `double`
+- `getCategory()` — מחזיר `string`
+- `setProductName(string name)` — עדכון שם המוצר
+- `setPrice(double price)` — עדכון מחיר
+- `setCategory(string category)` — עדכון קטגוריה
+
+**פעולות CRUD:**
+- `createProduct()` — הוספה לבסיס הנתונים דרך `SP_add_product`
+
+**פעולות סטטיות:**
+- `Product.initProducts()` — טעינת כל המוצרים מה-DB לרשימה `Program.Products`
+- `Product.seekProduct(int id)` — חיפוש מוצר לפי מזהה, מחזיר `Product` או `null`
+
+---
+
+### OrderItem — פריט בהזמנה (מחלקת קישור / Association Class)
+
+> **מחלקת קישור (Association Class):** מייצגת את הקשר **Many-to-Many** בין `Order` ל-`Product`. בנוסף להפניות לשני הצדדים, היא מכילה שדות ייחודיים לקשר (כמות, מחיר ליחידה). ב-DB: טבלת `OrderItems` עם מפתח ראשי מורכב (`orderId` + `productId`).
+
+**שדות:**
+| שדה | סוג | הרשאה | תיאור |
+|-----|------|--------|--------|
+| order | Order | private | הפניה להזמנה (צד אחד של הקשר) |
+| product | Product | private | הפניה למוצר (צד שני של הקשר) |
+| quantity | int | private | כמות — שדה ייחודי לקשר |
+| unitPrice | double | private | מחיר ליחידה — שדה ייחודי לקשר |
+
+**בנאי:**
+- `OrderItem(Order order, Product product, int quantity, double unitPrice, bool is_new)` — אם `is_new = true`: שומר ב-DB, מוסיף לרשימת הפריטים של ההזמנה (`order.addOrderItem`) ול-`Program.OrderItems`.
+
+**Getters:**
+- `getOrder()` — מחזיר `Order`
+- `getProduct()` — מחזיר `Product`
+- `getQuantity()` — מחזיר `int`
+- `getUnitPrice()` — מחזיר `double`
+- `getTotalPrice()` — מחזיר `double` (מחושב: `quantity * unitPrice`)
+
+**פעולות CRUD:**
+- `createOrderItem()` — הוספה לבסיס הנתונים דרך `SP_add_order_item`
+
+**פעולות סטטיות:**
+- `OrderItem.initOrderItems()` — טעינת כל פריטי ההזמנות מה-DB. **חשוב:** חייבים לטעון קודם Products ו-Orders, כי `initOrderItems` משתמש ב-`Order.seekOrder()` וב-`Product.seekProduct()` כדי לקשר כל פריט להזמנה ולמוצר שלו.
+
+---
+
+### Title — תפקיד (Enum) + TitleHelper
+
 ```csharp
 public enum Title
 {
@@ -146,7 +265,12 @@ public enum Title
     עובד_חדש
 }
 ```
+
 > ב-Enum אי אפשר רווחים — משתמשים בקו תחתון. מחלקת `TitleHelper` ממירה בין קו תחתון (C#) לרווחים (DB/תצוגה).
+
+**מחלקת `TitleHelper`** — מחלקה סטטית (`static class`) שמספקת המרה דו-כיוונית בין ערכי ה-Enum לטקסט תצוגה:
+- `TitleHelper.ToDisplayString(Title title)` — המרה מ-enum לטקסט תצוגה (מחליף `_` ברווח). לדוגמה: `מנהל_משמרת` -> `"מנהל משמרת"`
+- `TitleHelper.FromDisplayString(string displayString)` — המרה מטקסט תצוגה ל-enum (מחליף רווח ב-`_`). לדוגמה: `"עובד חדש"` -> `עובד_חדש`
 
 ## 5. חיבור לבסיס הנתונים (SQL_CON.cs)
 
