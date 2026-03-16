@@ -95,15 +95,7 @@ classDiagram
         עובד_חדש
     }
 
-    class TitleHelper {
-        <<utility>>
-        +ToDisplayString(Title)$ string
-        +FromDisplayString(string)$ Title
-    }
-
     Worker "1" -- "*" Order : מבצע
-    Worker "*" -- "1" Title : תפקיד
-    TitleHelper ..> Title : uses
     Order <|-- DeliveryOrder : ירושה
     Order <|-- PickupOrder : ירושה
     Order "*" -- "*" Product : מכיל
