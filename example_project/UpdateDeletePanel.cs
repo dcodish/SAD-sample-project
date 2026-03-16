@@ -34,19 +34,19 @@ namespace Example_Project
             textBox_name.Text = exist_Worker.getName();
             textBox_name.Enabled = true;
             comboBox_title.Enabled = true;
-            //מילוי הקומבובוקס מרשימת התפקידים (נטענה מה-DB)
+            //מילוי הקומבובוקס עם שמות תצוגה (עם רווחים)
             comboBox_title.Items.Clear();
-            foreach (Title t in Program.Titles)
+            foreach (Title t in Enum.GetValues(typeof(Title)))
             {
-                comboBox_title.Items.Add(t);
+                comboBox_title.Items.Add(TitleHelper.ToDisplayString(t));
             }
-            comboBox_title.SelectedItem = exist_Worker.getTitle();
+            comboBox_title.Text = TitleHelper.ToDisplayString(exist_Worker.getTitle());
         }
 
         private void button_update_Click(object sender, EventArgs e)
         {
             exist_Worker.setName(textBox_name.Text);
-            exist_Worker.setTitle((Title)comboBox_title.SelectedItem);
+            exist_Worker.setTitle(TitleHelper.FromDisplayString(comboBox_title.Text));
             exist_Worker.updateWorker();
             mainForm.showPanel(new CRUDPanel());
         }

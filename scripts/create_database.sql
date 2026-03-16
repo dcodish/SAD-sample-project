@@ -6,7 +6,8 @@ USE SAD_0;
 GO
 
 -- Titles — טבלת Lookup לתפקידים
--- ערכי ה-Lookup נטענים לזיכרון בהפעלת התוכנית ולא מקודדים בקוד
+-- טבלת עזר שמכילה את הערכים התקינים לתפקידים
+-- הערכים מוגדרים גם כ-Enum ב-C# (Title.cs)
 CREATE TABLE Titles (
     titleId INT NOT NULL,
     titleName NVARCHAR(50) NOT NULL,
@@ -16,13 +17,12 @@ GO
 
 -- Create Workers table
 -- שימו לב: NVARCHAR תומך בעברית ותווים מיוחדים, בניגוד ל-VARCHAR
--- titleId הוא Foreign Key לטבלת Titles (Lookup)
+-- workerTitle נשמר כטקסט (לא כ-FK) — תואם את ערכי ה-Enum ב-C#
 CREATE TABLE Workers (
     workerId VARCHAR(20) NOT NULL,
     workerName NVARCHAR(20) NULL,
-    titleId INT NULL,
-    CONSTRAINT PK_WORKER PRIMARY KEY (workerId),
-    CONSTRAINT FK_WORKER_TITLE FOREIGN KEY (titleId) REFERENCES Titles(titleId)
+    workerTitle NVARCHAR(50) NULL,
+    CONSTRAINT PK_WORKER PRIMARY KEY (workerId)
 );
 GO
 
@@ -46,7 +46,7 @@ GO
 
 CREATE PROCEDURE dbo.Get_all_Workers
 AS
-    SELECT workerId, workerName, titleId FROM dbo.Workers;
+    SELECT workerId, workerName, workerTitle FROM dbo.Workers;
 GO
 
 CREATE PROCEDURE dbo.Get_all_Orders
@@ -57,18 +57,18 @@ GO
 CREATE PROCEDURE dbo.SP_add_worker
     @id VARCHAR(20),
     @name NVARCHAR(20),
-    @titleId INT
+    @title NVARCHAR(50)
 AS
-    INSERT INTO dbo.Workers (workerId, workerName, titleId) VALUES (@id, @name, @titleId);
+    INSERT INTO dbo.Workers (workerId, workerName, workerTitle) VALUES (@id, @name, @title);
 GO
 
 CREATE PROCEDURE dbo.SP_Update_worker
     @id VARCHAR(20),
     @name NVARCHAR(20),
-    @titleId INT
+    @title NVARCHAR(50)
 AS
     UPDATE dbo.Workers
-    SET workerName = @name, titleId = @titleId
+    SET workerName = @name, workerTitle = @title
     WHERE workerId = @id;
 GO
 
@@ -206,11 +206,11 @@ INSERT INTO Titles VALUES (2, N'ראש צוות');
 INSERT INTO Titles VALUES (3, N'עובד חדש');
 GO
 
--- Workers — עם titleId (Foreign Key לטבלת Titles)
-INSERT INTO Workers VALUES ('1111', N'admin', 1);
-INSERT INTO Workers VALUES ('123', N'shelly', 1);
-INSERT INTO Workers VALUES ('345', N'liel', 2);
-INSERT INTO Workers VALUES ('678', N'david', 1);
+-- Workers — workerTitle נשמר כטקסט (תואם את ערכי ה-Enum ב-C#)
+INSERT INTO Workers VALUES ('1111', N'admin', N'מנהל משמרת');
+INSERT INTO Workers VALUES ('123', N'shelly', N'מנהל משמרת');
+INSERT INTO Workers VALUES ('345', N'liel', N'ראש צוות');
+INSERT INTO Workers VALUES ('678', N'david', N'מנהל משמרת');
 GO
 
 -- הזמנת משלוח - שורה בטבלת האב + שורה בטבלת הבן

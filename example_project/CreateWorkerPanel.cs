@@ -14,10 +14,10 @@ namespace Example_Project
         public CreateWorkerPanel()
         {
             InitializeComponent();
-            //מילוי הקומבובוקס מרשימת התפקידים (נטענה מה-DB)
-            foreach (Title t in Program.Titles)
+            //מילוי הקומבובוקס עם שמות תצוגה (עם רווחים)
+            foreach (Title t in Enum.GetValues(typeof(Title)))
             {
-                comboBox1.Items.Add(t);
+                comboBox1.Items.Add(TitleHelper.ToDisplayString(t));
             }
             comboBox1.SelectedIndex = 0;
         }
@@ -35,7 +35,7 @@ namespace Example_Project
                 return;
             }
 
-            Title title = (Title)comboBox1.SelectedItem;
+            Title title = TitleHelper.FromDisplayString(comboBox1.Text);
             Worker W = new Worker(ID_textBox.Text, Name_textBox.Text, title, true);
             mainForm.showPanel(new CRUDPanel());
         }
