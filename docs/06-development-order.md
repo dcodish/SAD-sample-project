@@ -7,11 +7,19 @@
 
 ```mermaid
 flowchart TD
-    A["שלב 1: SQL_CON + Connection String"] --> B["שלב 2: מחלקות Entity — בלי DB"]
-    B --> C["שלב 3: Stored Procedures + פעולות DB"]
-    C --> D["שלב 4: Program.cs — טעינה לזיכרון"]
-    D --> E["שלב 5: פאנל ראשון — הצגת נתונים"]
+    A["Step 1: SQL_CON + Connection String"] --> B["Step 2: Entity Classes"]
+    B --> C["Step 3: Stored Procedures + DB Methods"]
+    C --> D["Step 4: Program.cs + Init Lists"]
+    D --> E["Step 5: First Panel + Display Data"]
 ```
+
+| שלב | מה עושים |
+|-----|---------|
+| Step 1 | הגדרת חיבור לבסיס הנתונים |
+| Step 2 | בניית מחלקות Entity (בלי DB) |
+| Step 3 | כתיבת Stored Procedures + פעולות DB במחלקות |
+| Step 4 | טעינה לזיכרון ב-Program.cs |
+| Step 5 | בניית פאנל ראשון להצגת נתונים |
 
 ---
 
