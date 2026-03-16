@@ -17,7 +17,7 @@
 | Boolean | `bool` | `BIT` | 0 = false, 1 = true |
 | Date | `DateTime` | `DATE` | תאריך בלבד |
 | DateTime | `DateTime` | `DATETIME` | תאריך + שעה |
-| Lookup | `class` | `INT` (FK) | מזהה שמצביע לטבלת Lookup, ראו סעיף 2 |
+| Enum (ערכים קבועים) | `enum` | `NVARCHAR(50)` | ערך טקסטואלי, ראו סעיף 2 |
 
 ### דוגמה מהפרויקט — Worker
 
@@ -26,155 +26,124 @@ Class Diagram:            C# (Worker.cs):              SQL (Workers table):
 ─────────────            ──────────────               ─────────────────────
 workerId: String    →    string WorkerId         →    workerId VARCHAR(20)
 workerName: String  →    string WorkerName       →    workerName VARCHAR(20)
-workerTitle: Title  →    Title workerTitle        →    titleId INT (FK → Titles)
+workerTitle: Title  →    Title workerTitle        →    workerTitle NVARCHAR(50)
 ```
 
 > **שימו לב:** כשבוחרים אורך ל-`VARCHAR`, חשבו על הערך הארוך ביותר שיכנס.
 > למשל, שם עובד של 20 תווים מספיק לרוב השמות, אבל כתובת תצטרך 100 תווים.
 
-## 2. טבלאות Lookup — מיפוי ערכים מוגדרים מראש
+## 2. Enum עם TitleHelper — מיפוי ערכים מוגדרים מראש
 
-כשיש ב-Class Diagram שדה עם ערכים קבועים (למשל תפקיד: מנהל משמרת/ראש צוות/עובד חדש), שומרים אותם ב**טבלת Lookup** בבסיס הנתונים.
+כשיש ב-Class Diagram שדה עם ערכים קבועים (למשל תפקיד: מנהל משמרת/ראש צוות/עובד חדש), מגדירים אותם כ-**enum** ב-C#.
 
 ### הרעיון
 
-במקום לקבע (hardcode) ערכים בקוד, שומרים אותם בטבלה נפרדת ב-DB.
-כך, הוספת ערך חדש (למשל תפקיד חדש) דורשת רק הוספת שורה ב-DB — **בלי שינוי קוד!**
+הערכים הקבועים מוגדרים כ-enum בקוד. בבסיס הנתונים, התפקיד נשמר כ**טקסט** (`NVARCHAR(50)`) בטבלת Workers.
+בנוסף, קיימת טבלת `Titles` ב-DB כ**טבלת עזר (reference)** — היא לא נטענת לזיכרון, אלא משמשת כהתייחסות בלבד.
 
-### ב-SQL — מבנה הטבלאות
-
-```sql
--- טבלת Lookup — הערכים הקבועים
-CREATE TABLE Titles (
-    titleId INT PRIMARY KEY,
-    titleName NVARCHAR(50)
-);
-
--- טבלת Workers — מצביעה ל-Titles דרך FK
-CREATE TABLE Workers (
-    workerId VARCHAR(20) PRIMARY KEY,
-    workerName NVARCHAR(50),
-    titleId INT,
-    FOREIGN KEY (titleId) REFERENCES Titles(titleId)
-);
-```
-
-> **שימו לב:** ב-Workers שומרים רק את `titleId` (מספר) — לא את שם התפקיד כטקסט.
-> זה מבטיח עקביות ומונע שגיאות כתיב.
-
-### ב-C# — מחלקת Title (לא Enum!)
-
-Title היא **מחלקה רגילה** שנטענת מה-DB:
+### ב-C# — הגדרת ה-Enum וה-TitleHelper
 
 ```csharp
-public class Title
+// ב-Title.cs
+public enum Title
 {
-    private int titleId;
-    private string titleName;
+    מנהל_משמרת,
+    ראש_צוות,
+    עובד_חדש
+}
 
-    public Title(int titleId, string titleName)
+public static class TitleHelper
+{
+    // המרה מ-enum לטקסט תצוגה (מחליף _ ברווח)
+    public static string ToDisplayString(Title title)
     {
-        this.titleId = titleId;
-        this.titleName = titleName;
+        return title.ToString().Replace('_', ' ');
     }
 
-    // Getters
-    public int TitleId { get { return titleId; } }
-    public string TitleName { get { return titleName; } }
-
-    // חשוב! כך ה-ComboBox יציג את שם התפקיד
-    public override string ToString()
+    // המרה מטקסט תצוגה ל-enum (מחליף רווח ב-_)
+    public static Title FromDisplayString(string displayString)
     {
-        return titleName;
-    }
-
-    // טעינת כל התפקידים מה-DB לרשימה
-    public static void initTitles()
-    {
-        // SELECT * FROM Titles
-        // ... לכל שורה יוצרים אובייקט Title ומוסיפים ל-Program.Titles
-    }
-
-    // חיפוש תפקיד לפי מזהה
-    public static Title seekTitleById(int id)
-    {
-        foreach (Title t in Program.Titles)
-            if (t.titleId == id) return t;
-        return null;
-    }
-
-    // חיפוש תפקיד לפי שם
-    public static Title seekTitleByName(string name)
-    {
-        foreach (Title t in Program.Titles)
-            if (t.titleName == name) return t;
-        return null;
+        string enumName = displayString.Replace(' ', '_');
+        return (Title)Enum.Parse(typeof(Title), enumName);
     }
 }
 ```
 
-### סדר הטעינה — Lookup קודם!
+> **שימו לב:** ב-enum של C# אי אפשר להשתמש ברווחים בשמות, לכן משתמשים בקו תחתון (`מנהל_משמרת`).
+> ה-`TitleHelper` אחראי על ההמרה בין הפורמט של ה-enum (עם `_`) לפורמט של ה-DB והתצוגה (עם רווחים).
 
-טבלאות Lookup חייבות להיטען **לפני** הישויות שמפנות אליהן:
+### ב-SQL — מבנה הטבלאות
+
+```sql
+-- טבלת Workers — שומרת את התפקיד כטקסט
+CREATE TABLE Workers (
+    workerId VARCHAR(20) PRIMARY KEY,
+    workerName NVARCHAR(50),
+    workerTitle NVARCHAR(50)          -- טקסט, למשל 'מנהל משמרת'
+);
+
+-- טבלת Titles — טבלת עזר (reference) בלבד, לא נטענת לזיכרון
+CREATE TABLE Titles (
+    titleId INT PRIMARY KEY,
+    titleName NVARCHAR(50)
+);
+```
+
+> **שימו לב:** ב-Workers שומרים את `workerTitle` כטקסט (`NVARCHAR(50)`) — לא כ-FK לטבלת Titles.
+> טבלת Titles קיימת כטבלת עזר אבל אין קשר FK בינה לבין Workers.
+
+### ב-Worker — טעינת Title מטקסט
+
+```csharp
+// ב-initWorkers:
+string titleText = rdr.GetValue(2).ToString();                  // קריאת טקסט מה-DB
+Title t = TitleHelper.FromDisplayString(titleText);             // המרה ל-enum
+Worker w = new Worker(id, name, t, false);
+```
+
+**שמירה ל-DB** — שומרים את הטקסט:
+```csharp
+c.Parameters.AddWithValue("@title", TitleHelper.ToDisplayString(this.workerTitle));
+```
+
+### סדר הטעינה
+
+אין צורך לטעון טבלת Titles — ה-enum מוגדר בקוד:
 
 ```csharp
 // ב-Program.cs
 public static void initLists()
 {
-    Title.initTitles();         // 1. קודם טבלאות Lookup!
-    Worker.initWorkers();       // 2. עובדים (מפנים ל-Titles)
-    Product.initProducts();     // 3. מוצרים
-    Order.initOrders();         // 4. הזמנות (מפנות לעובדים)
-    OrderItem.initOrderItems(); // 5. אחרון! (מפנה להזמנות ולמוצרים)
+    Worker.initWorkers();       // 1. עובדים (ממירים טקסט ל-enum)
+    Product.initProducts();     // 2. מוצרים
+    Order.initOrders();         // 3. הזמנות (מפנות לעובדים)
+    OrderItem.initOrderItems(); // 4. אחרון! (מפנה להזמנות ולמוצרים)
 }
 ```
 
-> **למה?** כש-Worker נטען מה-DB, הוא מכיל `titleId`.
-> כדי להמיר אותו לאובייקט `Title`, הרשימה `Program.Titles` כבר חייבת להיות מוכנה.
-
-### ב-Worker — טעינת Title לפי מזהה
-
-```csharp
-// בבנאי או ב-initWorkers:
-int titleId = int.Parse(rdr.GetValue(2).ToString());
-Title t = Title.seekTitleById(titleId);   // מוצאים את אובייקט ה-Title
-Worker w = new Worker(id, name, t, false);
-```
-
-**שמירה ל-DB** — שומרים את המזהה בלבד:
-```csharp
-c.Parameters.AddWithValue("@titleId", this.workerTitle.TitleId);
-```
-
-### מילוי ComboBox מרשימת Lookup
+### מילוי ComboBox מערכי ה-Enum
 
 ```csharp
 // מילוי ה-ComboBox עם כל התפקידים
-foreach (Title t in Program.Titles)
+foreach (Title t in Enum.GetValues(typeof(Title)))
 {
-    comboBox1.Items.Add(t);  // ToString() מציג את titleName
+    comboBox1.Items.Add(TitleHelper.ToDisplayString(t));  // מציג עם רווחים
 }
 ```
 
 ### קריאה מ-ComboBox
 
 ```csharp
-// המשתמש בחר תפקיד — מקבלים אובייקט Title
-Title title = (Title)comboBox1.SelectedItem;
+// המשתמש בחר תפקיד — ממירים חזרה ל-enum
+Title title = TitleHelper.FromDisplayString(comboBox1.SelectedItem.ToString());
 ```
 
-> **שימו לב:** בזכות `ToString()` שמחזיר את `titleName`, ה-ComboBox מציג את שם התפקיד,
-> ובזכות הקאסט ל-`Title` מקבלים חזרה את האובייקט עם ה-`titleId`.
-
-### מתי להשתמש בטבלת Lookup?
+### מתי להשתמש ב-Enum?
 
 | מצב | פתרון |
 |------|--------|
-| ערכים קבועים שעשויים להשתנות (תפקידים, סטטוסים, קטגוריות) | **טבלת Lookup** |
+| ערכים קבועים שלא ישתנו (תפקידים, סטטוסים) | **Enum** עם Helper class |
 | נתונים שמשתמשים יוצרים (לקוחות, הזמנות) | **טבלה רגילה** |
-
-- **כן:** תפקידים, סטטוס הזמנה, סוגי תשלום, קטגוריות מוצרים
-- **לא:** לקוחות, הזמנות, מוצרים — אלה ישויות שגדלות כל הזמן
 
 ## 3. ירושה (Inheritance) — Table-per-Subclass
 
@@ -430,11 +399,10 @@ public void addOrderItem(OrderItem item)
 // ב-Program.cs
 public static void initLists()
 {
-    Title.initTitles();         // 1. קודם טבלאות Lookup!
-    Worker.initWorkers();       // 2. עובדים (מפנים ל-Titles)
-    Product.initProducts();     // 3. מוצרים (בסיסי)
-    Order.initOrders();         // 4. הזמנות (מפנות לעובדים)
-    OrderItem.initOrderItems(); // 5. אחרון! (מפנה להזמנות ולמוצרים)
+    Worker.initWorkers();       // 1. עובדים (ממירים טקסט ל-enum)
+    Product.initProducts();     // 2. מוצרים (בסיסי)
+    Order.initOrders();         // 3. הזמנות (מפנות לעובדים)
+    OrderItem.initOrderItems(); // 4. אחרון! (מפנה להזמנות ולמוצרים)
 }
 ```
 
@@ -478,9 +446,9 @@ public static void initOrderItems()
 
 - [ ] לכל מחלקה ב-Class Diagram — צרו טבלה
 - [ ] לכל שדה — בחרו טיפוס SQL מתאים (ראו טבלת ההמרה)
-- [ ] לכל ערך קבוע (תפקיד, סטטוס, קטגוריה) — צרו **טבלת Lookup** ב-DB ומחלקה ב-C# עם `initTitles()`, `seekById()`, `seekByName()`
+- [ ] לכל ערך קבוע (תפקיד, סטטוס, קטגוריה) — הגדירו **enum** ב-C# עם **Helper class** להמרה בין enum לטקסט DB/תצוגה
 - [ ] לכל ירושה — צרו טבלת בן עם PK+FK שמצביע לטבלת האב
 - [ ] לכל קשר One-to-Many — הוסיפו Foreign Key + רשימה
 - [ ] לכל קשר Many-to-Many — צרו מחלקת קישור עם מפתח מורכב
 - [ ] לכל טבלה — כתבו Stored Procedures עבור CRUD
-- [ ] ב-`Program.cs` — טענו את כל הנתונים לרשימות בזיכרון **בסדר הנכון** (טבלאות Lookup קודם!)
+- [ ] ב-`Program.cs` — טענו את כל הנתונים לרשימות בזיכרון **בסדר הנכון** (Worker ראשון, OrderItems אחרון)

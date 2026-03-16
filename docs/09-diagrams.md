@@ -89,19 +89,21 @@ classDiagram
     }
 
     class Title {
-        <<lookup>>
-        -int titleId
-        -string titleName
-        +getTitleId() int
-        +getTitleName() string
-        +toString() string
-        +initTitles()$ void
-        +seekTitleById(int)$ Title
-        +seekTitleByName(string)$ Title
+        <<enumeration>>
+        מנהל_משמרת
+        ראש_צוות
+        עובד_חדש
+    }
+
+    class TitleHelper {
+        <<utility>>
+        +ToDisplayString(Title)$ string
+        +FromDisplayString(string)$ Title
     }
 
     Worker "1" -- "*" Order : מבצע
     Worker "*" -- "1" Title : תפקיד
+    TitleHelper ..> Title : uses
     Order <|-- DeliveryOrder : ירושה
     Order <|-- PickupOrder : ירושה
     Order "*" -- "*" Product : מכיל
@@ -129,7 +131,7 @@ erDiagram
     Workers {
         varchar(20) workerId PK
         nvarchar(20) workerName
-        int titleId FK
+        nvarchar(50) workerTitle
     }
 
     Orders {
@@ -165,7 +167,6 @@ erDiagram
         float unitPrice
     }
 
-    Titles ||--o{ Workers : "lookup"
     Workers ||--o{ Orders : "one-to-many"
     Orders ||--o| DeliveryOrders : "inheritance"
     Orders ||--o| PickupOrders : "inheritance"

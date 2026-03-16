@@ -29,7 +29,7 @@ Example_Project/
 ├── PickupOrder.cs           ← הזמנת איסוף (יורש מ-Order)
 ├── Product.cs               ← מוצר
 ├── OrderItem.cs             ← פריט בהזמנה
-├── Title.cs                 ← Lookup תפקידים (מחלקה הנטענת מטבלת Titles)
+├── Title.cs                 ← Enum תפקידים + TitleHelper (המרה בין enum לטקסט)
 │
 │  פאנלים (WinForms Panels)
 ├── LoginPanel.cs            ← פאנל כניסה (Login)
@@ -56,7 +56,7 @@ Example_Project/
 │  SQL Server  │  ──────────────>   │   זיכרון       │
 │  (DB)        │                    │   (Lists)      │
 │              │  <──────────────   │                │
-│  Titles      │   Create/Update/   │  Titles[]      │
+│  Titles      │   Create/Update/   │                │
 │  Workers     │   Delete           │  Workers[]     │
 │  Products    │                    │  Products[]    │
 │  Orders      │                    │  Orders[]      │
@@ -67,16 +67,17 @@ Example_Project/
 ### הרשימות הראשיות (Program.cs)
 
 ```csharp
-public static List<Title> Titles;        // רשימת התפקידים (Lookup Table)
 public static List<Worker> Workers;      // רשימת כל העובדים
 public static List<Product> Products;    // רשימת כל המוצרים
 public static List<Order> Orders;        // רשימת כל ההזמנות (כולל DeliveryOrder, PickupOrder)
 public static List<OrderItem> OrderItems; // רשימת כל פריטי ההזמנות (מחלקת קישור)
 ```
 
+> **שימו לב:** אין רשימה של `Title` — התפקידים מוגדרים כ-enum ב-C# ולא נטענים מה-DB.
+
 רשימות אלו הן `static` — כלומר נגישות מכל מקום בתוכנית דרך `Program.Workers`, `Program.Orders` וכו'.
 
-> **שימו לב:** הרשימות מוגדרות ב-`Program.cs`, אבל פעולות הטעינה (`initWorkers`, `initOrders`) והחיפוש (`seekWorker`) מוגדרות כפעולות סטטיות בתוך מחלקות ה-Entity עצמן (`Worker.cs`, `Order.cs`).
+> **שימו לב:** הרשימות מוגדרות ב-`Program.cs`, אבל פעולות הטעינה (`initWorkers`, `initOrders`) והחיפוש (`seekWorker`) מוגדרות כפעולות סטטיות בתוך מחלקות ה-Entity עצמן (`Worker.cs`, `Order.cs`). תפקידים (Title) הם enum ולכן אינם נטענים מה-DB ואין להם רשימה ב-Program.cs.
 
 ## 4. המחלקות (Classes)
 
@@ -87,7 +88,7 @@ public static List<OrderItem> OrderItems; // רשימת כל פריטי ההזמ
 |-----|------|--------|--------|
 | workerId | string | private | תעודת זהות |
 | workerName | string | private | שם העובד |
-| workerTitle | Title (class) | private | תפקיד |
+| workerTitle | Title (enum) | private | תפקיד |
 | orders | List\<Order\> | private | רשימת ההזמנות של העובד (קשר One-to-Many) |
 
 **בנאי:**
@@ -256,25 +257,24 @@ public static List<OrderItem> OrderItems; // רשימת כל פריטי ההזמ
 
 ---
 
-### Title — תפקיד (מחלקה מטבלת Lookup)
+### Title — תפקיד (Enum)
 
-> `Title` היא מחלקה (class) שמייצגת תפקיד. התפקידים נטענים מטבלת `Titles` בבסיס הנתונים בעת אתחול התוכנית, ונשמרים ברשימה `Program.Titles`.
+> `Title` הוא **enum** (מנייה) שמגדיר את התפקידים האפשריים. הערכים ב-enum משתמשים בקו תחתון (underscore), למשל `מנהל_משמרת`.
+>
+> `TitleHelper` הוא **static class** שמספק המרה בין שם ה-enum (עם קו תחתון) לטקסט תצוגה/DB (עם רווחים).
 
-**שדות:**
-| שדה | סוג | הרשאה | תיאור |
-|-----|------|--------|--------|
-| titleId | int | private | מזהה תפקיד |
-| titleName | string | private | שם התפקיד |
+**ערכי ה-Enum:**
+| ערך | טקסט תצוגה |
+|-----|------------|
+| `מנהל_משמרת` | מנהל משמרת |
+| `ראש_צוות` | ראש צוות |
+| `עובד_חדש` | עובד חדש |
 
-**Getters:**
-- `getTitleId()` — מחזיר `int` (מזהה התפקיד)
-- `getTitleName()` — מחזיר `string` (שם התפקיד)
-- `toString()` — מחזיר את שם התפקיד (לתצוגה)
+**TitleHelper (static class):**
+- `TitleHelper.ToDisplayString(Title title)` — ממיר ערך enum לטקסט תצוגה (מחליף `_` ברווח)
+- `TitleHelper.FromDisplayString(string displayString)` — ממיר טקסט תצוגה לערך enum (מחליף רווח ב-`_`)
 
-**פעולות סטטיות:**
-- `Title.initTitles()` — טעינת כל התפקידים מטבלת `Titles` בבסיס הנתונים לרשימה `Program.Titles`. **חייבת לרוץ ראשונה** לפני שאר פעולות ה-init, כי `initWorkers` צריכה למצוא את ה-Title של כל עובד.
-- `Title.seekTitleById(int id)` — חיפוש תפקיד לפי מזהה ברשימת הזיכרון, מחזיר `Title` או `null`
-- `Title.seekTitleByName(string name)` — חיפוש תפקיד לפי שם ברשימת הזיכרון, מחזיר `Title` או `null`
+> **שימו לב:** בבסיס הנתונים קיימת טבלת `Titles` כטבלת עזר/reference, אך היא **לא נטענת** לזיכרון ואין לה רשימה ב-`Program.cs`. העובדים שומרים את התפקיד כטקסט (`NVARCHAR(50)`) בטבלת Workers, ו-`initWorkers()` ממיר אותו ל-enum באמצעות `TitleHelper.FromDisplayString()`.
 
 ## 5. חיבור לבסיס הנתונים (SQL_CON.cs)
 
@@ -290,7 +290,7 @@ public static List<OrderItem> OrderItems; // רשימת כל פריטי ההזמ
 ```
 הפעלה (Program.Main)
     │
-    ├── טעינת נתונים מ-DB לרשימות (initLists: Title.initTitles() ראשון, ואז Workers, Products, Orders, OrderItems)
+    ├── טעינת נתונים מ-DB לרשימות (initLists: Worker.initWorkers() ראשון, ואז Products, Orders, OrderItems)
     │
     └── פתיחת טופס הכניסה (LoginPanel)
             │
