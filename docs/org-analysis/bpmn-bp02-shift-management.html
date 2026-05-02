@@ -51,17 +51,17 @@
     <span class="badge">BPMN 1.0</span>
   </div>
   <div class="stats-bar">
-    <span>2 מאגרים</span>
-    <span>2 נתיבים</span>
-    <span>6 משימות</span>
+    <span>1 מאגרים</span>
+    <span>3 נתיבים</span>
+    <span>7 משימות</span>
     <span>5 שערים</span>
     <span>3 אירועים</span>
     <span>2 פריטי נתונים</span>
-    <span>17 זרימות</span>
+    <span>16 זרימות</span>
   </div>
   <div class="svg-wrapper">
-    <svg width="2160" height="548"
-         viewBox="0 0 2160 548"
+    <svg width="2160" height="528"
+         viewBox="0 0 2160 528"
          xmlns="http://www.w3.org/2000/svg">
       
     <defs>
@@ -85,415 +85,404 @@
         <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"/>
       </marker>
     </defs>
-      <rect x="0" y="0" width="2160" height="548" fill="#f8fafc"/>
-    <rect x="0" y="0" width="2160" height="548" fill="url(#dot-grid)"/>
+      <rect x="0" y="0" width="2160" height="528" fill="#f8fafc"/>
+    <rect x="0" y="0" width="2160" height="528" fill="url(#dot-grid)"/>
       
-    <!-- pool: pool-prev -->
-    <g class="bpmn-pool" data-pool="pool-prev">
-      <rect x="20" y="72" width="2100" height="60"
-            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
-      <rect x="20" y="72" width="30" height="60"
-            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
-      <text x="35" y="102" text-anchor="middle"
-            dominant-baseline="middle"
-            transform="rotate(-90, 35, 102)"
-            fill="#ffffff" font-size="12" font-weight="600"
-            direction="rtl">מנהל משמרת יוצא</text>
-      <line x1="50" y1="72" x2="50" y2="132"
-            stroke="#8d6e63" stroke-width="1"/>
-    </g>
-
     <!-- pool: pool-org -->
     <g class="bpmn-pool" data-pool="pool-org">
-      <rect x="20" y="148" width="2100" height="364"
+      <rect x="20" y="72" width="2100" height="420"
             fill="#ffffff" stroke="#455a64" stroke-width="1.5"/>
-      <rect x="20" y="148" width="30" height="364"
+      <rect x="20" y="72" width="30" height="420"
             fill="#37474f" stroke="#455a64" stroke-width="1.5"/>
-      <text x="35" y="330" text-anchor="middle"
+      <text x="35" y="282" text-anchor="middle"
             dominant-baseline="middle"
-            transform="rotate(-90, 35, 330)"
+            transform="rotate(-90, 35, 282)"
             fill="#ffffff" font-size="12" font-weight="600"
             direction="rtl">קדם אספקה בע&quot;מ</text>
-      <line x1="50" y1="148" x2="50" y2="512"
+      <line x1="50" y1="72" x2="50" y2="492"
             stroke="#455a64" stroke-width="1"/>
     </g>
       
-    <g class="bpmn-lane" data-lane="lane-manager">
-      <rect x="74" y="148" width="2046" height="224"
+    <g class="bpmn-lane" data-lane="lane-handover">
+      <rect x="74" y="72" width="2046" height="140"
             fill="#fafafa" fill-opacity="0.6" stroke="none"/>
-      <rect x="50" y="148" width="24" height="224"
+      <rect x="50" y="72" width="24" height="140"
             fill="#546e7a" stroke="#455a64" stroke-width="1"/>
-      <text x="62" y="260" text-anchor="middle"
+      <text x="62" y="142" text-anchor="middle"
             dominant-baseline="middle"
-            transform="rotate(-90, 62, 260)"
+            transform="rotate(-90, 62, 142)"
             fill="#ffffff" font-size="11" font-weight="500"
-            direction="rtl">מנהל משמרת</text>
+            direction="rtl">חפיפת משמרת</text>
       
     </g>
 
-    <g class="bpmn-lane" data-lane="lane-worker">
-      <rect x="74" y="372" width="2046" height="140"
+    <g class="bpmn-lane" data-lane="lane-manager">
+      <rect x="74" y="212" width="2046" height="140"
             fill="#fafafa" fill-opacity="0.6" stroke="none"/>
-      <rect x="50" y="372" width="24" height="140"
+      <rect x="50" y="212" width="24" height="140"
             fill="#546e7a" stroke="#455a64" stroke-width="1"/>
-      <text x="62" y="442" text-anchor="middle"
+      <text x="62" y="282" text-anchor="middle"
             dominant-baseline="middle"
-            transform="rotate(-90, 62, 442)"
+            transform="rotate(-90, 62, 282)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">מנהל משמרת</text>
+      <line x1="50" y1="212" x2="2120" y2="212"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+
+    <g class="bpmn-lane" data-lane="lane-worker">
+      <rect x="74" y="352" width="2046" height="140"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="352" width="24" height="140"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="422" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 422)"
             fill="#ffffff" font-size="11" font-weight="500"
             direction="rtl">עובד שטח</text>
-      <line x1="50" y1="372" x2="2120" y2="372"
+      <line x1="50" y1="352" x2="2120" y2="352"
               stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
     </g>
       
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-0">
+      <path d="M 162.0 114.0 L 260.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-1">
-      <path d="M 162.0 232.0 L 260.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 330.0 146.0 L 330.0 222.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-2">
-      <path d="M 400.0 232.0 L 492.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 400.0 254.0 L 492.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-3">
-      <path d="M 540.0 228.0 L 586.0 228.0 L 586.0 232.0 L 632.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 540.0 250.0 L 586.0 250.0 L 586.0 254.0 L 632.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     <g class="bpmn-flow-label">
-      <rect x="511.5" y="217" width="103" height="14"
+      <rect x="511.5" y="239" width="103" height="14"
             rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
-      <text x="563" y="224" text-anchor="middle" dominant-baseline="middle"
+      <text x="563" y="246" text-anchor="middle" dominant-baseline="middle"
             font-size="10" fill="#263238" direction="rtl">כן — יש ממתינות</text>
     </g>
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-4">
-      <path d="M 540.0 236.0 L 702.0 236.0 L 702.0 232.0 L 864.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 540.0 258.0 L 702.0 258.0 L 702.0 254.0 L 864.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
-      <line x1="554" y1="230"
-                 x2="554" y2="242"
+      <line x1="554" y1="252"
+                 x2="554" y2="264"
                  stroke="#455a64" stroke-width="1.5" stroke-linecap="round"/>
       
     <g class="bpmn-flow-label">
-      <rect x="578.8" y="225" width="84.4" height="14"
+      <rect x="578.8" y="247" width="84.4" height="14"
             rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
-      <text x="621" y="232" text-anchor="middle" dominant-baseline="middle"
+      <text x="621" y="254" text-anchor="middle" dominant-baseline="middle"
             font-size="10" fill="#263238" direction="rtl">לא — הכל נקי</text>
     </g>
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-5">
-      <path d="M 772.0 232.0 L 864.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 772.0 254.0 L 864.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-6">
-      <path d="M 912.0 232.0 L 1050.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 912.0 254.0 L 1050.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-7">
-      <path d="M 1098.0 228.0 L 1144.0 228.0 L 1144.0 232.0 L 1190.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1098.0 250.0 L 1144.0 250.0 L 1144.0 254.0 L 1190.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-8">
-      <path d="M 1074.0 256.0 L 1074.0 382.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1074.0 278.0 L 1074.0 362.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-9">
-      <path d="M 1330.0 232.0 L 1422.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1330.0 254.0 L 1422.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-10">
-      <path d="M 1074.0 382.0 L 1074.0 319.0 L 1446.0 319.0 L 1446.0 256.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1074.0 362.0 L 1074.0 320.0 L 1446.0 320.0 L 1446.0 278.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-11">
-      <path d="M 1470.0 232.0 L 1608.0 232.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1470.0 254.0 L 1608.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-13">
-      <path d="M 1656.0 228.0 L 1702.0 228.0 L 1702.0 190.0 L 1748.0 190.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1632.0 230.0 L 1632.0 146.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
-      <line x1="1670" y1="222"
-                 x2="1670" y2="234"
+      <line x1="1626" y1="216"
+                 x2="1638" y2="216"
                  stroke="#455a64" stroke-width="1.5" stroke-linecap="round"/>
       
     <g class="bpmn-flow-label">
-      <rect x="1630.6" y="217" width="96.8" height="14"
+      <rect x="1583.6" y="177" width="96.8" height="14"
             rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
-      <text x="1679" y="224" text-anchor="middle" dominant-baseline="middle"
+      <text x="1632" y="184" text-anchor="middle" dominant-baseline="middle"
             font-size="10" fill="#263238" direction="rtl">לא — יש פתוחות</text>
     </g>
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-12">
-      <path d="M 1656.0 236.0 L 1702.0 236.0 L 1702.0 274.0 L 1748.0 274.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1656.0 258.0 L 1702.0 258.0 L 1702.0 254.0 L 1748.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     <g class="bpmn-flow-label">
-      <rect x="1630.6" y="225" width="96.8" height="14"
+      <rect x="1630.6" y="247" width="96.8" height="14"
             rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
-      <text x="1679" y="232" text-anchor="middle" dominant-baseline="middle"
+      <text x="1679" y="254" text-anchor="middle" dominant-baseline="middle"
             font-size="10" fill="#263238" direction="rtl">כן — הכל הושלם</text>
     </g>
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-14">
-      <path d="M 1888.0 274.0 L 1986.0 274.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1888.0 254.0 L 1986.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
 
     <g class="bpmn-flow bpmn-sequence" data-flow="sf-15">
-      <path d="M 1888.0 190.0 L 1986.0 190.0" fill="none" stroke="#455a64" stroke-width="1.6"
+      <path d="M 1702.0 114.0 L 1800.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
             marker-end="url(#arrow-seq)"/>
       
       
     </g>
       
-    <g class="bpmn-flow bpmn-message" data-flow="mf-1">
-      <path d="M 96.0 132.0 L 96.0 140.0 L 130.0 140.0 L 130.0 214.0" fill="none" stroke="#37474f" stroke-width="1.3"
-            stroke-dasharray="10 5"
-            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
-      
-    <g class="bpmn-flow-label">
-      <rect x="63" y="156" width="134" height="14"
-            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
-      <text x="130" y="163" text-anchor="middle" dominant-baseline="middle"
-            font-size="10" fill="#263238" direction="rtl">דיווח מצב בסוף משמרת</text>
-    </g>
-    </g>
-
-    <g class="bpmn-flow bpmn-message" data-flow="mf-2">
-      <path d="M 1842.0 158.0 L 1842.0 140.0 L 1866.0 140.0 L 1866.0 132.0" fill="none" stroke="#37474f" stroke-width="1.3"
-            stroke-dasharray="10 5"
-            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
-      
-    <g class="bpmn-flow-label">
-      <rect x="1790.1" y="139" width="127.8" height="14"
-            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
-      <text x="1854" y="146" text-anchor="middle" dominant-baseline="middle"
-            font-size="10" fill="#263238" direction="rtl">דיווח הזמנות פתוחות</text>
-    </g>
-    </g>
       
     <g class="bpmn-flow bpmn-data-assoc" data-flow="da-1" data-dir="read">
-      <path d="M 1260.0 322.0 L 1260.0 264.0 L 330.0 264.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+      <path d="M 1027.5 302.0 L 1027.5 146.0 L 330.0 146.0" fill="none" stroke="#7986cb" stroke-width="1.1"
             stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
     </g>
 
-    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-2" data-dir="write">
-      <path d="M 702.0 264.0 L 702.0 322.0 L 1260.0 322.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-2" data-dir="read">
+      <path d="M 1027.5 302.0 L 1027.5 286.0 L 330.0 286.0" fill="none" stroke="#7986cb" stroke-width="1.1"
             stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
     </g>
 
-    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-3" data-dir="read">
-      <path d="M 702.0 322.0 L 702.0 264.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-3" data-dir="write">
+      <path d="M 702.0 286.0 L 702.0 302.0 L 1027.5 302.0" fill="none" stroke="#7986cb" stroke-width="1.1"
             stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
     </g>
 
-    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-4" data-dir="write">
-      <path d="M 1260.0 264.0 L 1260.0 322.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-4" data-dir="read">
+      <path d="M 702.0 302.0 L 702.0 286.0" fill="none" stroke="#7986cb" stroke-width="1.1"
             stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
     </g>
 
     <g class="bpmn-flow bpmn-data-assoc" data-flow="da-5" data-dir="write">
-      <path d="M 1074.0 382.0 L 1074.0 366.0 L 1260.0 366.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+      <path d="M 1260.0 286.0 L 1260.0 302.0 L 1027.5 302.0" fill="none" stroke="#7986cb" stroke-width="1.1"
             stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
     </g>
 
-    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-6" data-dir="read">
-      <path d="M 1260.0 322.0 L 1260.0 256.0 L 1632.0 256.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-6" data-dir="write">
+      <path d="M 1074.0 362.0 L 1074.0 346.0 L 1027.5 346.0" fill="none" stroke="#7986cb" stroke-width="1.1"
             stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
     </g>
 
     <g class="bpmn-flow bpmn-data-assoc" data-flow="da-7" data-dir="write">
-      <path d="M 1818.0 222.0 L 1818.0 322.0 L 1260.0 322.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+      <path d="M 1632.0 146.0 L 1632.0 302.0 L 1027.5 302.0" fill="none" stroke="#7986cb" stroke-width="1.1"
             stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
     </g>
 
     <g class="bpmn-flow bpmn-data-assoc" data-flow="da-8" data-dir="write">
-      <path d="M 1818.0 306.0 L 1818.0 322.0 L 1260.0 322.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+      <path d="M 1818.0 286.0 L 1818.0 302.0 L 1027.5 302.0" fill="none" stroke="#7986cb" stroke-width="1.1"
             stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
     </g>
       
     <g class="bpmn-element bpmn-event" id="start-1" data-kind="event" data-event="start">
-      <circle cx="144" cy="232" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <circle cx="144" cy="114" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
       <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
-             font-weight="500"><tspan x="144" y="264">משמרת החלה</tspan></text>
+             font-weight="500"><tspan x="144" y="146">חפיפת תחילת משמרת</tspan></text>
     </g>
 
-    <g class="bpmn-element bpmn-task" id="t-briefing" data-kind="task">
-      <rect x="260" y="200" width="140" height="64"
+    <g class="bpmn-element bpmn-task" id="t-prepare-report" data-kind="task">
+      <rect x="260" y="82" width="140" height="64"
             rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
       <text text-anchor="middle" dominant-baseline="middle"
             font-size="11.5" font-weight="500"
-            fill="#1a1a2e" direction="rtl"><tspan x="330" y="225">קבל תדריך ממנהל</tspan><tspan x="330" y="239">יוצא</tspan></text>
+            fill="#1a1a2e" direction="rtl"><tspan x="330" y="107">הכן ומסור דיווח</tspan><tspan x="330" y="121">מצב לנכנס</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-transfer" data-kind="task">
+      <rect x="1562" y="82" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1632" y="100">תעד הזמנות</tspan><tspan x="1632" y="114">פתוחות ועדכן</tspan><tspan x="1632" y="128">מנהל הבא</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-with-open" data-kind="event" data-event="end">
+      <circle cx="1818" cy="114" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-briefing" data-kind="task">
+      <rect x="260" y="222" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="330" y="247">קבל תדריך ממנהל</tspan><tspan x="330" y="261">יוצא</tspan></text>
     </g>
 
     <g class="bpmn-element bpmn-gateway" id="gw-pending" data-kind="gateway" data-gw="XOR">
       <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
-             font-weight="500"><tspan x="516" y="185">יש הזמנות פתוחות</tspan><tspan x="516" y="198">ממשמרת קודמת?</tspan></text>
-      <rect x="499" y="215" width="34" height="34"
+             font-weight="500"><tspan x="516" y="207">יש הזמנות פתוחות</tspan><tspan x="516" y="220">ממשמרת קודמת?</tspan></text>
+      <rect x="499" y="237" width="34" height="34"
             fill="#fff8e1" stroke="#f9a825" stroke-width="2"
-            transform="rotate(45, 516, 232)"/>
+            transform="rotate(45, 516, 254)"/>
       
-      <line x1="508" y1="224" x2="524" y2="240"
+      <line x1="508" y1="246" x2="524" y2="262"
             stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
-      <line x1="524" y1="224" x2="508" y2="240"
+      <line x1="524" y1="246" x2="508" y2="262"
             stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
     </g>
 
     <g class="bpmn-element bpmn-task" id="t-assign-pending" data-kind="task">
-      <rect x="632" y="200" width="140" height="64"
+      <rect x="632" y="222" width="140" height="64"
             rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
       <text text-anchor="middle" dominant-baseline="middle"
             font-size="11.5" font-weight="500"
-            fill="#1a1a2e" direction="rtl"><tspan x="702" y="225">הקצה הזמנות</tspan><tspan x="702" y="239">ממתינות לעובדים</tspan></text>
+            fill="#1a1a2e" direction="rtl"><tspan x="702" y="247">הקצה הזמנות</tspan><tspan x="702" y="261">ממתינות לעובדים</tspan></text>
     </g>
 
     <g class="bpmn-element bpmn-gateway" id="gw-pending-merge" data-kind="gateway" data-gw="XOR">
       
-      <rect x="871" y="215" width="34" height="34"
+      <rect x="871" y="237" width="34" height="34"
             fill="#fff8e1" stroke="#f9a825" stroke-width="2"
-            transform="rotate(45, 888, 232)"/>
+            transform="rotate(45, 888, 254)"/>
       
-      <line x1="880" y1="224" x2="896" y2="240"
+      <line x1="880" y1="246" x2="896" y2="262"
             stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
-      <line x1="896" y1="224" x2="880" y2="240"
+      <line x1="896" y1="246" x2="880" y2="262"
             stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
     </g>
 
     <g class="bpmn-element bpmn-gateway" id="gw-and-split" data-kind="gateway" data-gw="AND">
       
-      <rect x="1057" y="215" width="34" height="34"
+      <rect x="1057" y="237" width="34" height="34"
             fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"
-            transform="rotate(45, 1074, 232)"/>
+            transform="rotate(45, 1074, 254)"/>
       
-      <line x1="1074" y1="223" x2="1074" y2="241"
+      <line x1="1074" y1="245" x2="1074" y2="263"
             stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/>
-      <line x1="1065" y1="232" x2="1083" y2="232"
+      <line x1="1065" y1="254" x2="1083" y2="254"
             stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/>
     </g>
 
     <g class="bpmn-element bpmn-task" id="t-manage-orders" data-kind="task">
-      <rect x="1190" y="200" width="140" height="64"
+      <rect x="1190" y="222" width="140" height="64"
             rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
       <text text-anchor="middle" dominant-baseline="middle"
             font-size="11.5" font-weight="500"
-            fill="#1a1a2e" direction="rtl"><tspan x="1260" y="218">קבל ויצור הזמנות</tspan><tspan x="1260" y="232">חדשות, עקוב אחר</tspan><tspan x="1260" y="246">ביצוע</tspan></text>
+            fill="#1a1a2e" direction="rtl"><tspan x="1260" y="240">קבל ויצור הזמנות</tspan><tspan x="1260" y="254">חדשות, עקוב אחר</tspan><tspan x="1260" y="268">ביצוע</tspan></text>
     </g>
 
     <g class="bpmn-element bpmn-gateway" id="gw-and-merge" data-kind="gateway" data-gw="AND">
       
-      <rect x="1429" y="215" width="34" height="34"
+      <rect x="1429" y="237" width="34" height="34"
             fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"
-            transform="rotate(45, 1446, 232)"/>
+            transform="rotate(45, 1446, 254)"/>
       
-      <line x1="1446" y1="223" x2="1446" y2="241"
+      <line x1="1446" y1="245" x2="1446" y2="263"
             stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/>
-      <line x1="1437" y1="232" x2="1455" y2="232"
+      <line x1="1437" y1="254" x2="1455" y2="254"
             stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/>
     </g>
 
     <g class="bpmn-element bpmn-gateway" id="gw-all-done" data-kind="gateway" data-gw="XOR">
       <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
-             font-weight="500"><tspan x="1632" y="185">כל הזמנות המשמרת</tspan><tspan x="1632" y="198">הושלמו?</tspan></text>
-      <rect x="1615" y="215" width="34" height="34"
+             font-weight="500"><tspan x="1632" y="207">כל הזמנות המשמרת</tspan><tspan x="1632" y="220">הושלמו?</tspan></text>
+      <rect x="1615" y="237" width="34" height="34"
             fill="#fff8e1" stroke="#f9a825" stroke-width="2"
-            transform="rotate(45, 1632, 232)"/>
+            transform="rotate(45, 1632, 254)"/>
       
-      <line x1="1624" y1="224" x2="1640" y2="240"
+      <line x1="1624" y1="246" x2="1640" y2="262"
             stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
-      <line x1="1640" y1="224" x2="1624" y2="240"
+      <line x1="1640" y1="246" x2="1624" y2="262"
             stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
-    </g>
-
-    <g class="bpmn-element bpmn-task" id="t-transfer" data-kind="task">
-      <rect x="1748" y="158" width="140" height="64"
-            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
-      <text text-anchor="middle" dominant-baseline="middle"
-            font-size="11.5" font-weight="500"
-            fill="#1a1a2e" direction="rtl"><tspan x="1818" y="176">תעד הזמנות</tspan><tspan x="1818" y="190">פתוחות ועדכן</tspan><tspan x="1818" y="204">מנהל הבא</tspan></text>
     </g>
 
     <g class="bpmn-element bpmn-task" id="t-close-shift" data-kind="task">
-      <rect x="1748" y="242" width="140" height="64"
+      <rect x="1748" y="222" width="140" height="64"
             rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
       <text text-anchor="middle" dominant-baseline="middle"
             font-size="11.5" font-weight="500"
-            fill="#1a1a2e" direction="rtl"><tspan x="1818" y="267">סגור משמרת</tspan><tspan x="1818" y="281">במערכת</tspan></text>
-    </g>
-
-    <g class="bpmn-element bpmn-event" id="end-with-open" data-kind="event" data-event="end">
-      <circle cx="2004" cy="190" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
-      
+            fill="#1a1a2e" direction="rtl"><tspan x="1818" y="247">סגור משמרת</tspan><tspan x="1818" y="261">במערכת</tspan></text>
     </g>
 
     <g class="bpmn-element bpmn-event" id="end-clean" data-kind="event" data-event="end">
-      <circle cx="2004" cy="274" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <circle cx="2004" cy="254" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
       
     </g>
 
     <g class="bpmn-element bpmn-task" id="t-execute" data-kind="task">
-      <rect x="1004" y="382" width="140" height="64"
+      <rect x="1004" y="362" width="140" height="64"
             rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
       <text text-anchor="middle" dominant-baseline="middle"
             font-size="11.5" font-weight="500"
-            fill="#1a1a2e" direction="rtl"><tspan x="1074" y="400">בצע הזמנות</tspan><tspan x="1074" y="414">מוקצות וסמן</tspan><tspan x="1074" y="428">הושלם</tspan></text>
+            fill="#1a1a2e" direction="rtl"><tspan x="1074" y="380">בצע הזמנות</tspan><tspan x="1074" y="394">מוקצות וסמן</tspan><tspan x="1074" y="408">הושלם</tspan></text>
     </g>
 
     <g class="bpmn-element bpmn-data-store" id="ds-orders" data-kind="dataStore">
-      <path d="M 1232 328 L 1232 360
-               A 28 6 0 0 0 1288 360
-               L 1288 328
-               A 28 6 0 0 0 1232 328 Z"
+      <path d="M 999.5 308 L 999.5 340
+               A 28 6 0 0 0 1055.5 340
+               L 1055.5 308
+               A 28 6 0 0 0 999.5 308 Z"
             fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
-      <path d="M 1232 328
-               A 28 6 0 0 0 1288 328"
+      <path d="M 999.5 308
+               A 28 6 0 0 0 1055.5 308"
             fill="none" stroke="#2e7d32" stroke-width="1.4"/>
-      <text x="1260" y="380" text-anchor="middle"
+      <text x="1027.5" y="360" text-anchor="middle"
             font-size="10" fill="#263238"
             direction="rtl">מערכת ההזמנות</text>
     </g>
 
     <g class="bpmn-element bpmn-data-store" id="ds-workers" data-kind="dataStore">
-      <path d="M 674 328 L 674 360
-               A 28 6 0 0 0 730 360
-               L 730 328
-               A 28 6 0 0 0 674 328 Z"
+      <path d="M 674 308 L 674 340
+               A 28 6 0 0 0 730 340
+               L 730 308
+               A 28 6 0 0 0 674 308 Z"
             fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
-      <path d="M 674 328
-               A 28 6 0 0 0 730 328"
+      <path d="M 674 308
+               A 28 6 0 0 0 730 308"
             fill="none" stroke="#2e7d32" stroke-width="1.4"/>
-      <text x="702" y="380" text-anchor="middle"
+      <text x="702" y="360" text-anchor="middle"
             font-size="10" fill="#263238"
             direction="rtl">רשימת העובדים</text>
     </g>
@@ -504,13 +493,13 @@
     <button class="assumptions-btn" onclick="toggleAssumptions()">ℹ️ הנחות ושאלות</button>
     <div id="assumptions-panel" class="assumptions-panel">
       <h4>הנחות ושאלות פתוחות</h4>
-      <strong>הנחות:</strong><ul><li>העובדים מחוברים למערכת בתחילת המשמרת ומסמנים הזמנות כהושלמות עצמאית</li><li>הגדרת &apos;סיום המשמרת&apos; מונעת על ידי שעון (שיקול חיצוני) — לא מיוצגת בתרשים</li><li>ה-AND split מייצג את שתי הפעילויות המתרחשות במקביל: ניהול הזמנות וביצוע שטחי</li></ul>
+      <strong>הנחות:</strong><ul><li>העובדים מחוברים למערכת בתחילת המשמרת ומסמנים הזמנות כהושלמות עצמאית</li><li>הגדרת &apos;סיום המשמרת&apos; מונעת על ידי שעון — לא מיוצגת כאלמנט בתרשים</li><li>ה-AND split מייצג שתי פעילויות מקבילות: ניהול הזמנות חדשות וביצוע שטחי</li></ul>
       
     </div>
   <button class="vp-export-btn" onclick="exportBPMN()">Download .bpmn (Visual Paradigm)</button>
   <script>
   (function() {
-    const TOOLTIPS = {"start-1":"<strong>אירוע התחלה</strong><div>משמרת החלה</div>","t-briefing":"<strong>קבל תדריך ממנהל יוצא</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>קורא: מערכת ההזמנות</div>","gw-pending":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: יש הזמנות פתוחות ממשמרת קודמת?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>כן — יש ממתינות → הקצה הזמנות ממתינות לעובדים</li><li>לא — הכל נקי → gw-pending-merge</li></ul>","t-assign-pending":"<strong>הקצה הזמנות ממתינות לעובדים</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>קורא: רשימת העובדים</div><div>כותב: מערכת ההזמנות</div>","gw-pending-merge":"<strong>XOR (בלעדי) — איחוד</strong>","gw-and-split":"<strong>AND (מקבילי) — פיצול</strong><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>(ללא תנאי) → קבל ויצור הזמנות חדשות, עקוב אחר ביצוע</li><li>(ללא תנאי) → בצע הזמנות מוקצות וסמן הושלם</li></ul>","t-manage-orders":"<strong>קבל ויצור הזמנות חדשות, עקוב אחר ביצוע</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>כותב: מערכת ההזמנות</div>","t-execute":"<strong>בצע הזמנות מוקצות וסמן הושלם</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: עובד שטח</div><div>כותב: מערכת ההזמנות</div>","gw-and-merge":"<strong>AND (מקבילי) — איחוד</strong>","gw-all-done":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: כל הזמנות המשמרת הושלמו?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>כן — הכל הושלם → סגור משמרת במערכת</li><li>לא — יש פתוחות → תעד הזמנות פתוחות ועדכן מנהל הבא</li></ul>","t-transfer":"<strong>תעד הזמנות פתוחות ועדכן מנהל הבא</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>כותב: מערכת ההזמנות</div>","t-close-shift":"<strong>סגור משמרת במערכת</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>כותב: מערכת ההזמנות</div>","end-with-open":"<strong>אירוע סיום</strong>","end-clean":"<strong>אירוע סיום</strong>","ds-orders":"<strong>מאגר נתונים: מערכת ההזמנות</strong><div>נקרא ע״י: קבל תדריך ממנהל יוצא, gw-all-done</div><div>נכתב ע״י: הקצה הזמנות ממתינות לעובדים, קבל ויצור הזמנות חדשות, עקוב אחר ביצוע, בצע הזמנות מוקצות וסמן הושלם, תעד הזמנות פתוחות ועדכן מנהל הבא, סגור משמרת במערכת</div>","ds-workers":"<strong>מאגר נתונים: רשימת העובדים</strong><div>נקרא ע״י: הקצה הזמנות ממתינות לעובדים</div>"};
+    const TOOLTIPS = {"start-1":"<strong>אירוע התחלה</strong><div>חפיפת תחילת משמרת</div>","t-prepare-report":"<strong>הכן ומסור דיווח מצב לנכנס</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: חפיפת משמרת</div><div>קורא: מערכת ההזמנות</div>","t-transfer":"<strong>תעד הזמנות פתוחות ועדכן מנהל הבא</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: חפיפת משמרת</div><div>כותב: מערכת ההזמנות</div>","end-with-open":"<strong>אירוע סיום</strong>","t-briefing":"<strong>קבל תדריך ממנהל יוצא</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>קורא: מערכת ההזמנות</div>","gw-pending":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: יש הזמנות פתוחות ממשמרת קודמת?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>כן — יש ממתינות → הקצה הזמנות ממתינות לעובדים</li><li>לא — הכל נקי → gw-pending-merge</li></ul>","t-assign-pending":"<strong>הקצה הזמנות ממתינות לעובדים</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>קורא: רשימת העובדים</div><div>כותב: מערכת ההזמנות</div>","gw-pending-merge":"<strong>XOR (בלעדי) — איחוד</strong>","gw-and-split":"<strong>AND (מקבילי) — פיצול</strong><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>(ללא תנאי) → קבל ויצור הזמנות חדשות, עקוב אחר ביצוע</li><li>(ללא תנאי) → בצע הזמנות מוקצות וסמן הושלם</li></ul>","t-manage-orders":"<strong>קבל ויצור הזמנות חדשות, עקוב אחר ביצוע</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>כותב: מערכת ההזמנות</div>","gw-and-merge":"<strong>AND (מקבילי) — איחוד</strong>","gw-all-done":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: כל הזמנות המשמרת הושלמו?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>כן — הכל הושלם → סגור משמרת במערכת</li><li>לא — יש פתוחות → תעד הזמנות פתוחות ועדכן מנהל הבא</li></ul>","t-close-shift":"<strong>סגור משמרת במערכת</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: מנהל משמרת</div><div>כותב: מערכת ההזמנות</div>","end-clean":"<strong>אירוע סיום</strong>","t-execute":"<strong>בצע הזמנות מוקצות וסמן הושלם</strong><div>מאגר: קדם אספקה בע&quot;מ · נתיב: עובד שטח</div><div>כותב: מערכת ההזמנות</div>","ds-orders":"<strong>מאגר נתונים: מערכת ההזמנות</strong><div>נקרא ע״י: הכן ומסור דיווח מצב לנכנס, קבל תדריך ממנהל יוצא</div><div>נכתב ע״י: הקצה הזמנות ממתינות לעובדים, קבל ויצור הזמנות חדשות, עקוב אחר ביצוע, בצע הזמנות מוקצות וסמן הושלם, תעד הזמנות פתוחות ועדכן מנהל הבא, סגור משמרת במערכת</div>","ds-workers":"<strong>מאגר נתונים: רשימת העובדים</strong><div>נקרא ע״י: הקצה הזמנות ממתינות לעובדים</div>"};
     const tip = document.getElementById('bpmn-tooltip');
     document.querySelectorAll('.bpmn-element').forEach(function(g) {
       g.addEventListener('mouseenter', function() {
@@ -535,7 +524,7 @@
   }
 
   // Precomputed BPMN 2.0 XML — server generated from the layout
-  const BPMN_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:process id=\"process_1\" name=\"מנהל משמרת יוצא\" isExecutable=\"false\">\n\n      <bpmn:dataStoreReference id=\"ds-orders\" name=\"מערכת ההזמנות\"/>\n      <bpmn:dataStoreReference id=\"ds-workers\" name=\"רשימת העובדים\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_2\" name=\"קדם אספקה בע&quot;מ\" isExecutable=\"false\">\n      <bpmn:laneSet id=\"process_2_laneset\">\n        <bpmn:lane id=\"lane-manager\" name=\"מנהל משמרת\">\n          <bpmn:flowNodeRef>start-1</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-briefing</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-pending</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-assign-pending</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-pending-merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-and-split</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-manage-orders</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-and-merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-all-done</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-transfer</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-close-shift</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-with-open</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-clean</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"lane-worker\" name=\"עובד שטח\">\n          <bpmn:flowNodeRef>t-execute</bpmn:flowNodeRef>\n        </bpmn:lane>\n      </bpmn:laneSet>\n      <bpmn:startEvent id=\"start-1\" name=\"משמרת החלה\"/>\n      <bpmn:task id=\"t-briefing\" name=\"קבל תדריך ממנהל יוצא\"/>\n      <bpmn:exclusiveGateway id=\"gw-pending\" name=\"\"/>\n      <bpmn:task id=\"t-assign-pending\" name=\"הקצה הזמנות ממתינות לעובדים\"/>\n      <bpmn:exclusiveGateway id=\"gw-pending-merge\" name=\"\"/>\n      <bpmn:parallelGateway id=\"gw-and-split\" name=\"\"/>\n      <bpmn:task id=\"t-manage-orders\" name=\"קבל ויצור הזמנות חדשות, עקוב אחר ביצוע\"/>\n      <bpmn:task id=\"t-execute\" name=\"בצע הזמנות מוקצות וסמן הושלם\"/>\n      <bpmn:parallelGateway id=\"gw-and-merge\" name=\"\"/>\n      <bpmn:exclusiveGateway id=\"gw-all-done\" name=\"\"/>\n      <bpmn:task id=\"t-transfer\" name=\"תעד הזמנות פתוחות ועדכן מנהל הבא\"/>\n      <bpmn:task id=\"t-close-shift\" name=\"סגור משמרת במערכת\"/>\n      <bpmn:endEvent id=\"end-with-open\" name=\"\"/>\n      <bpmn:endEvent id=\"end-clean\" name=\"\"/>\n      <bpmn:dataStoreReference id=\"ds-orders\" name=\"מערכת ההזמנות\"/>\n      <bpmn:dataStoreReference id=\"ds-workers\" name=\"רשימת העובדים\"/>\n      <bpmn:sequenceFlow id=\"sf-1\" sourceRef=\"start-1\" targetRef=\"t-briefing\"/>\n      <bpmn:sequenceFlow id=\"sf-2\" sourceRef=\"t-briefing\" targetRef=\"gw-pending\"/>\n      <bpmn:sequenceFlow id=\"sf-3\" sourceRef=\"gw-pending\" targetRef=\"t-assign-pending\" name=\"כן — יש ממתינות\"/>\n      <bpmn:sequenceFlow id=\"sf-4\" sourceRef=\"gw-pending\" targetRef=\"gw-pending-merge\" name=\"לא — הכל נקי\"/>\n      <bpmn:sequenceFlow id=\"sf-5\" sourceRef=\"t-assign-pending\" targetRef=\"gw-pending-merge\"/>\n      <bpmn:sequenceFlow id=\"sf-6\" sourceRef=\"gw-pending-merge\" targetRef=\"gw-and-split\"/>\n      <bpmn:sequenceFlow id=\"sf-7\" sourceRef=\"gw-and-split\" targetRef=\"t-manage-orders\"/>\n      <bpmn:sequenceFlow id=\"sf-8\" sourceRef=\"gw-and-split\" targetRef=\"t-execute\"/>\n      <bpmn:sequenceFlow id=\"sf-9\" sourceRef=\"t-manage-orders\" targetRef=\"gw-and-merge\"/>\n      <bpmn:sequenceFlow id=\"sf-10\" sourceRef=\"t-execute\" targetRef=\"gw-and-merge\"/>\n      <bpmn:sequenceFlow id=\"sf-11\" sourceRef=\"gw-and-merge\" targetRef=\"gw-all-done\"/>\n      <bpmn:sequenceFlow id=\"sf-12\" sourceRef=\"gw-all-done\" targetRef=\"t-close-shift\" name=\"כן — הכל הושלם\"/>\n      <bpmn:sequenceFlow id=\"sf-13\" sourceRef=\"gw-all-done\" targetRef=\"t-transfer\" name=\"לא — יש פתוחות\"/>\n      <bpmn:sequenceFlow id=\"sf-14\" sourceRef=\"t-close-shift\" targetRef=\"end-clean\"/>\n      <bpmn:sequenceFlow id=\"sf-15\" sourceRef=\"t-transfer\" targetRef=\"end-with-open\"/>\n  </bpmn:process>\n  <bpmn:collaboration id=\"collab_1\">\n    <bpmn:participant id=\"pool-prev\" name=\"מנהל משמרת יוצא\" processRef=\"process_1\"/>\n    <bpmn:participant id=\"pool-org\" name=\"קדם אספקה בע&quot;מ\" processRef=\"process_2\"/>\n    <bpmn:messageFlow id=\"mf-1\" sourceRef=\"pool-prev\" targetRef=\"start-1\" name=\"דיווח מצב בסוף משמרת\"/>\n    <bpmn:messageFlow id=\"mf-2\" sourceRef=\"t-transfer\" targetRef=\"pool-prev\" name=\"דיווח הזמנות פתוחות\"/>\n  </bpmn:collaboration>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"collab_1\">\n      <bpmndi:BPMNShape id=\"pool-prev_di\" bpmnElement=\"pool-prev\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"72\" width=\"2100\" height=\"60\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"pool-org_di\" bpmnElement=\"pool-org\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"148\" width=\"2100\" height=\"364\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-manager_di\" bpmnElement=\"lane-manager\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"148\" width=\"2070\" height=\"224\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-worker_di\" bpmnElement=\"lane-worker\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"372\" width=\"2070\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"start-1_di\" bpmnElement=\"start-1\">\n        <dc:Bounds x=\"126\" y=\"214\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-briefing_di\" bpmnElement=\"t-briefing\">\n        <dc:Bounds x=\"260\" y=\"200\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-pending_di\" bpmnElement=\"gw-pending\">\n        <dc:Bounds x=\"492\" y=\"208\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-assign-pending_di\" bpmnElement=\"t-assign-pending\">\n        <dc:Bounds x=\"632\" y=\"200\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-pending-merge_di\" bpmnElement=\"gw-pending-merge\">\n        <dc:Bounds x=\"864\" y=\"208\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-and-split_di\" bpmnElement=\"gw-and-split\">\n        <dc:Bounds x=\"1050\" y=\"208\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-manage-orders_di\" bpmnElement=\"t-manage-orders\">\n        <dc:Bounds x=\"1190\" y=\"200\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-and-merge_di\" bpmnElement=\"gw-and-merge\">\n        <dc:Bounds x=\"1422\" y=\"208\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-all-done_di\" bpmnElement=\"gw-all-done\">\n        <dc:Bounds x=\"1608\" y=\"208\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-transfer_di\" bpmnElement=\"t-transfer\">\n        <dc:Bounds x=\"1748\" y=\"158\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-close-shift_di\" bpmnElement=\"t-close-shift\">\n        <dc:Bounds x=\"1748\" y=\"242\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-with-open_di\" bpmnElement=\"end-with-open\">\n        <dc:Bounds x=\"1986\" y=\"172\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-clean_di\" bpmnElement=\"end-clean\">\n        <dc:Bounds x=\"1986\" y=\"256\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-execute_di\" bpmnElement=\"t-execute\">\n        <dc:Bounds x=\"1004\" y=\"382\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds-orders_di\" bpmnElement=\"ds-orders\">\n        <dc:Bounds x=\"1232\" y=\"322\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds-workers_di\" bpmnElement=\"ds-workers\">\n        <dc:Bounds x=\"674\" y=\"322\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"sf-1_di\" bpmnElement=\"sf-1\">\n        <di:waypoint x=\"162\" y=\"232\"/>\n        <di:waypoint x=\"260\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-2_di\" bpmnElement=\"sf-2\">\n        <di:waypoint x=\"400\" y=\"232\"/>\n        <di:waypoint x=\"492\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-3_di\" bpmnElement=\"sf-3\">\n        <di:waypoint x=\"540\" y=\"228\"/>\n        <di:waypoint x=\"586\" y=\"228\"/>\n        <di:waypoint x=\"586\" y=\"232\"/>\n        <di:waypoint x=\"632\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-4_di\" bpmnElement=\"sf-4\">\n        <di:waypoint x=\"540\" y=\"236\"/>\n        <di:waypoint x=\"702\" y=\"236\"/>\n        <di:waypoint x=\"702\" y=\"232\"/>\n        <di:waypoint x=\"864\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-5_di\" bpmnElement=\"sf-5\">\n        <di:waypoint x=\"772\" y=\"232\"/>\n        <di:waypoint x=\"864\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-6_di\" bpmnElement=\"sf-6\">\n        <di:waypoint x=\"912\" y=\"232\"/>\n        <di:waypoint x=\"1050\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-7_di\" bpmnElement=\"sf-7\">\n        <di:waypoint x=\"1098\" y=\"228\"/>\n        <di:waypoint x=\"1144\" y=\"228\"/>\n        <di:waypoint x=\"1144\" y=\"232\"/>\n        <di:waypoint x=\"1190\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-8_di\" bpmnElement=\"sf-8\">\n        <di:waypoint x=\"1074\" y=\"256\"/>\n        <di:waypoint x=\"1074\" y=\"382\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-9_di\" bpmnElement=\"sf-9\">\n        <di:waypoint x=\"1330\" y=\"232\"/>\n        <di:waypoint x=\"1422\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-10_di\" bpmnElement=\"sf-10\">\n        <di:waypoint x=\"1074\" y=\"382\"/>\n        <di:waypoint x=\"1074\" y=\"319\"/>\n        <di:waypoint x=\"1446\" y=\"319\"/>\n        <di:waypoint x=\"1446\" y=\"256\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-11_di\" bpmnElement=\"sf-11\">\n        <di:waypoint x=\"1470\" y=\"232\"/>\n        <di:waypoint x=\"1608\" y=\"232\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-13_di\" bpmnElement=\"sf-13\">\n        <di:waypoint x=\"1656\" y=\"228\"/>\n        <di:waypoint x=\"1702\" y=\"228\"/>\n        <di:waypoint x=\"1702\" y=\"190\"/>\n        <di:waypoint x=\"1748\" y=\"190\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-12_di\" bpmnElement=\"sf-12\">\n        <di:waypoint x=\"1656\" y=\"236\"/>\n        <di:waypoint x=\"1702\" y=\"236\"/>\n        <di:waypoint x=\"1702\" y=\"274\"/>\n        <di:waypoint x=\"1748\" y=\"274\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-14_di\" bpmnElement=\"sf-14\">\n        <di:waypoint x=\"1888\" y=\"274\"/>\n        <di:waypoint x=\"1986\" y=\"274\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-15_di\" bpmnElement=\"sf-15\">\n        <di:waypoint x=\"1888\" y=\"190\"/>\n        <di:waypoint x=\"1986\" y=\"190\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf-1_di\" bpmnElement=\"mf-1\">\n        <di:waypoint x=\"96\" y=\"132\"/>\n        <di:waypoint x=\"96\" y=\"140\"/>\n        <di:waypoint x=\"130\" y=\"140\"/>\n        <di:waypoint x=\"130\" y=\"214\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf-2_di\" bpmnElement=\"mf-2\">\n        <di:waypoint x=\"1842\" y=\"158\"/>\n        <di:waypoint x=\"1842\" y=\"140\"/>\n        <di:waypoint x=\"1866\" y=\"140\"/>\n        <di:waypoint x=\"1866\" y=\"132\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>";
+  const BPMN_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:process id=\"process_1\" name=\"קדם אספקה בע&quot;מ\" isExecutable=\"false\">\n      <bpmn:laneSet id=\"process_1_laneset\">\n        <bpmn:lane id=\"lane-handover\" name=\"חפיפת משמרת\">\n          <bpmn:flowNodeRef>start-1</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-prepare-report</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-transfer</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-with-open</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"lane-manager\" name=\"מנהל משמרת\">\n          <bpmn:flowNodeRef>t-briefing</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-pending</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-assign-pending</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-pending-merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-and-split</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-manage-orders</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-and-merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-all-done</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-close-shift</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-clean</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"lane-worker\" name=\"עובד שטח\">\n          <bpmn:flowNodeRef>t-execute</bpmn:flowNodeRef>\n        </bpmn:lane>\n      </bpmn:laneSet>\n      <bpmn:startEvent id=\"start-1\" name=\"חפיפת תחילת משמרת\"/>\n      <bpmn:task id=\"t-prepare-report\" name=\"הכן ומסור דיווח מצב לנכנס\"/>\n      <bpmn:task id=\"t-transfer\" name=\"תעד הזמנות פתוחות ועדכן מנהל הבא\"/>\n      <bpmn:endEvent id=\"end-with-open\" name=\"\"/>\n      <bpmn:task id=\"t-briefing\" name=\"קבל תדריך ממנהל יוצא\"/>\n      <bpmn:exclusiveGateway id=\"gw-pending\" name=\"\"/>\n      <bpmn:task id=\"t-assign-pending\" name=\"הקצה הזמנות ממתינות לעובדים\"/>\n      <bpmn:exclusiveGateway id=\"gw-pending-merge\" name=\"\"/>\n      <bpmn:parallelGateway id=\"gw-and-split\" name=\"\"/>\n      <bpmn:task id=\"t-manage-orders\" name=\"קבל ויצור הזמנות חדשות, עקוב אחר ביצוע\"/>\n      <bpmn:parallelGateway id=\"gw-and-merge\" name=\"\"/>\n      <bpmn:exclusiveGateway id=\"gw-all-done\" name=\"\"/>\n      <bpmn:task id=\"t-close-shift\" name=\"סגור משמרת במערכת\"/>\n      <bpmn:endEvent id=\"end-clean\" name=\"\"/>\n      <bpmn:task id=\"t-execute\" name=\"בצע הזמנות מוקצות וסמן הושלם\"/>\n      <bpmn:dataStoreReference id=\"ds-orders\" name=\"מערכת ההזמנות\"/>\n      <bpmn:dataStoreReference id=\"ds-workers\" name=\"רשימת העובדים\"/>\n      <bpmn:sequenceFlow id=\"sf-0\" sourceRef=\"start-1\" targetRef=\"t-prepare-report\"/>\n      <bpmn:sequenceFlow id=\"sf-1\" sourceRef=\"t-prepare-report\" targetRef=\"t-briefing\"/>\n      <bpmn:sequenceFlow id=\"sf-2\" sourceRef=\"t-briefing\" targetRef=\"gw-pending\"/>\n      <bpmn:sequenceFlow id=\"sf-3\" sourceRef=\"gw-pending\" targetRef=\"t-assign-pending\" name=\"כן — יש ממתינות\"/>\n      <bpmn:sequenceFlow id=\"sf-4\" sourceRef=\"gw-pending\" targetRef=\"gw-pending-merge\" name=\"לא — הכל נקי\"/>\n      <bpmn:sequenceFlow id=\"sf-5\" sourceRef=\"t-assign-pending\" targetRef=\"gw-pending-merge\"/>\n      <bpmn:sequenceFlow id=\"sf-6\" sourceRef=\"gw-pending-merge\" targetRef=\"gw-and-split\"/>\n      <bpmn:sequenceFlow id=\"sf-7\" sourceRef=\"gw-and-split\" targetRef=\"t-manage-orders\"/>\n      <bpmn:sequenceFlow id=\"sf-8\" sourceRef=\"gw-and-split\" targetRef=\"t-execute\"/>\n      <bpmn:sequenceFlow id=\"sf-9\" sourceRef=\"t-manage-orders\" targetRef=\"gw-and-merge\"/>\n      <bpmn:sequenceFlow id=\"sf-10\" sourceRef=\"t-execute\" targetRef=\"gw-and-merge\"/>\n      <bpmn:sequenceFlow id=\"sf-11\" sourceRef=\"gw-and-merge\" targetRef=\"gw-all-done\"/>\n      <bpmn:sequenceFlow id=\"sf-12\" sourceRef=\"gw-all-done\" targetRef=\"t-close-shift\" name=\"כן — הכל הושלם\"/>\n      <bpmn:sequenceFlow id=\"sf-13\" sourceRef=\"gw-all-done\" targetRef=\"t-transfer\" name=\"לא — יש פתוחות\"/>\n      <bpmn:sequenceFlow id=\"sf-14\" sourceRef=\"t-close-shift\" targetRef=\"end-clean\"/>\n      <bpmn:sequenceFlow id=\"sf-15\" sourceRef=\"t-transfer\" targetRef=\"end-with-open\"/>\n  </bpmn:process>\n  <bpmn:collaboration id=\"collab_1\">\n    <bpmn:participant id=\"pool-org\" name=\"קדם אספקה בע&quot;מ\" processRef=\"process_1\"/>\n  </bpmn:collaboration>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"collab_1\">\n      <bpmndi:BPMNShape id=\"pool-org_di\" bpmnElement=\"pool-org\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"72\" width=\"2100\" height=\"420\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-handover_di\" bpmnElement=\"lane-handover\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"72\" width=\"2070\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-manager_di\" bpmnElement=\"lane-manager\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"212\" width=\"2070\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-worker_di\" bpmnElement=\"lane-worker\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"352\" width=\"2070\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"start-1_di\" bpmnElement=\"start-1\">\n        <dc:Bounds x=\"126\" y=\"96\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-prepare-report_di\" bpmnElement=\"t-prepare-report\">\n        <dc:Bounds x=\"260\" y=\"82\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-transfer_di\" bpmnElement=\"t-transfer\">\n        <dc:Bounds x=\"1562\" y=\"82\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-with-open_di\" bpmnElement=\"end-with-open\">\n        <dc:Bounds x=\"1800\" y=\"96\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-briefing_di\" bpmnElement=\"t-briefing\">\n        <dc:Bounds x=\"260\" y=\"222\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-pending_di\" bpmnElement=\"gw-pending\">\n        <dc:Bounds x=\"492\" y=\"230\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-assign-pending_di\" bpmnElement=\"t-assign-pending\">\n        <dc:Bounds x=\"632\" y=\"222\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-pending-merge_di\" bpmnElement=\"gw-pending-merge\">\n        <dc:Bounds x=\"864\" y=\"230\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-and-split_di\" bpmnElement=\"gw-and-split\">\n        <dc:Bounds x=\"1050\" y=\"230\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-manage-orders_di\" bpmnElement=\"t-manage-orders\">\n        <dc:Bounds x=\"1190\" y=\"222\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-and-merge_di\" bpmnElement=\"gw-and-merge\">\n        <dc:Bounds x=\"1422\" y=\"230\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-all-done_di\" bpmnElement=\"gw-all-done\">\n        <dc:Bounds x=\"1608\" y=\"230\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-close-shift_di\" bpmnElement=\"t-close-shift\">\n        <dc:Bounds x=\"1748\" y=\"222\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-clean_di\" bpmnElement=\"end-clean\">\n        <dc:Bounds x=\"1986\" y=\"236\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-execute_di\" bpmnElement=\"t-execute\">\n        <dc:Bounds x=\"1004\" y=\"362\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds-orders_di\" bpmnElement=\"ds-orders\">\n        <dc:Bounds x=\"1000\" y=\"302\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds-workers_di\" bpmnElement=\"ds-workers\">\n        <dc:Bounds x=\"674\" y=\"302\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"sf-0_di\" bpmnElement=\"sf-0\">\n        <di:waypoint x=\"162\" y=\"114\"/>\n        <di:waypoint x=\"260\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-1_di\" bpmnElement=\"sf-1\">\n        <di:waypoint x=\"330\" y=\"146\"/>\n        <di:waypoint x=\"330\" y=\"222\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-2_di\" bpmnElement=\"sf-2\">\n        <di:waypoint x=\"400\" y=\"254\"/>\n        <di:waypoint x=\"492\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-3_di\" bpmnElement=\"sf-3\">\n        <di:waypoint x=\"540\" y=\"250\"/>\n        <di:waypoint x=\"586\" y=\"250\"/>\n        <di:waypoint x=\"586\" y=\"254\"/>\n        <di:waypoint x=\"632\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-4_di\" bpmnElement=\"sf-4\">\n        <di:waypoint x=\"540\" y=\"258\"/>\n        <di:waypoint x=\"702\" y=\"258\"/>\n        <di:waypoint x=\"702\" y=\"254\"/>\n        <di:waypoint x=\"864\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-5_di\" bpmnElement=\"sf-5\">\n        <di:waypoint x=\"772\" y=\"254\"/>\n        <di:waypoint x=\"864\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-6_di\" bpmnElement=\"sf-6\">\n        <di:waypoint x=\"912\" y=\"254\"/>\n        <di:waypoint x=\"1050\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-7_di\" bpmnElement=\"sf-7\">\n        <di:waypoint x=\"1098\" y=\"250\"/>\n        <di:waypoint x=\"1144\" y=\"250\"/>\n        <di:waypoint x=\"1144\" y=\"254\"/>\n        <di:waypoint x=\"1190\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-8_di\" bpmnElement=\"sf-8\">\n        <di:waypoint x=\"1074\" y=\"278\"/>\n        <di:waypoint x=\"1074\" y=\"362\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-9_di\" bpmnElement=\"sf-9\">\n        <di:waypoint x=\"1330\" y=\"254\"/>\n        <di:waypoint x=\"1422\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-10_di\" bpmnElement=\"sf-10\">\n        <di:waypoint x=\"1074\" y=\"362\"/>\n        <di:waypoint x=\"1074\" y=\"320\"/>\n        <di:waypoint x=\"1446\" y=\"320\"/>\n        <di:waypoint x=\"1446\" y=\"278\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-11_di\" bpmnElement=\"sf-11\">\n        <di:waypoint x=\"1470\" y=\"254\"/>\n        <di:waypoint x=\"1608\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-13_di\" bpmnElement=\"sf-13\">\n        <di:waypoint x=\"1632\" y=\"230\"/>\n        <di:waypoint x=\"1632\" y=\"146\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-12_di\" bpmnElement=\"sf-12\">\n        <di:waypoint x=\"1656\" y=\"258\"/>\n        <di:waypoint x=\"1702\" y=\"258\"/>\n        <di:waypoint x=\"1702\" y=\"254\"/>\n        <di:waypoint x=\"1748\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-14_di\" bpmnElement=\"sf-14\">\n        <di:waypoint x=\"1888\" y=\"254\"/>\n        <di:waypoint x=\"1986\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-15_di\" bpmnElement=\"sf-15\">\n        <di:waypoint x=\"1702\" y=\"114\"/>\n        <di:waypoint x=\"1800\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>";
   const BPMN_FILENAME = "Shift_Management_Open_to_Close.bpmn";
   function exportBPMN() {
     const blob = new Blob([BPMN_XML], { type: 'application/xml' });
