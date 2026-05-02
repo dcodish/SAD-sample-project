@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מערכת ניהול הזמנות — דיאגרמת Use Case</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://themathbible.com/sad-mcp/uc-diagram-common.css" rel="stylesheet">
+  <style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="showDiagram(0)">לשונית 1 — הזמנות</button>
+  <button class="tab"        onclick="showDiagram(1)">לשונית 2 — ניהול עובדים וקטלוג</button>
+</div>
+<div class="split-rationale">פיצול לפי מספר UC: 11 UCs &gt; 8</div>
+<div style="text-align:center;margin:8px 0;">
+  <button onclick="fixLayout(currentLayout())" class="fix-btn">&#8635; תקן פריסה</button>
+</div>
+
+<!-- ═══════════ TAB 0 ═══════════ -->
+<div class="diagram-part" id="diagram-0">
+<svg id="diagram-svg-0" viewBox="0 0 1100 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dot-grid-0" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+    <marker id="arrow-extend-0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+    </marker>
+    <marker id="arrow-gen-0" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto">
+      <polygon points="0 0, 11 5, 0 10" fill="white" stroke="#334155" stroke-width="1.6"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="900" fill="#f8fafc"/>
+  <rect width="1100" height="900" fill="url(#dot-grid-0)"/>
+  <rect class="system-boundary" x="188" y="56" width="680" height="700" rx="12" fill="white" stroke="#3b82f6" stroke-width="2.5"/>
+  <rect x="188" y="56" width="680" height="38" rx="12" fill="#1e40af"/>
+  <rect x="188" y="76" width="680" height="18" fill="#1e40af"/>
+  <text x="528" y="81" text-anchor="middle" fill="white" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול הזמנות — הזמנות</text>
+
+  <!-- Association lines -->
+  <line data-conn-from="worker" data-conn-to="uc-view-orders" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-worker-vieworders" data-hitbox-from="worker" data-hitbox-to="uc-view-orders" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-worker-vieworders','assoc',event)"/>
+
+  <line data-conn-from="worker" data-conn-to="uc-view-details" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-worker-viewdetails" data-hitbox-from="worker" data-hitbox-to="uc-view-details" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-worker-viewdetails','assoc',event)"/>
+
+  <line data-conn-from="worker" data-conn-to="uc-mark-complete" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-worker-markcomplete" data-hitbox-from="worker" data-hitbox-to="uc-mark-complete" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-worker-markcomplete','assoc',event)"/>
+
+  <line data-conn-from="manager" data-conn-to="uc-create-delivery" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-manager-createdelivery" data-hitbox-from="manager" data-hitbox-to="uc-create-delivery" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-manager-createdelivery','assoc',event)"/>
+
+  <line data-conn-from="manager" data-conn-to="uc-create-pickup" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-manager-createpickup" data-hitbox-from="manager" data-hitbox-to="uc-create-pickup" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-manager-createpickup','assoc',event)"/>
+
+  <!-- «extend»: uc-mark-complete → uc-view-details -->
+  <line data-conn-from="uc-mark-complete" data-conn-to="uc-view-details" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-extend-0)"/>
+  <text data-label-for="uc-mark-complete uc-view-details" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«extend»</text>
+
+  <!-- Generalization: manager (child) → worker (parent) -->
+  <line data-conn-from="manager" data-conn-to="worker" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow-gen-0)"/>
+  <text data-label-for="manager worker" x="0" y="0" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace">generalization</text>
+
+  <!-- UC Ellipses -->
+  <g id="uc-group-uc-view-orders" data-uc-id="uc-view-orders" onclick="showDesc('uc-view-orders','uc',event)" style="cursor:pointer">
+    <ellipse cx="340" cy="200" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="340" y="204" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">צפייה בהזמנות שלי</text>
+  </g>
+
+  <g id="uc-group-uc-view-details" data-uc-id="uc-view-details" onclick="showDesc('uc-view-details','uc',event)" style="cursor:pointer">
+    <ellipse cx="340" cy="340" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="340" y="344" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">צפייה בפרטי הזמנה</text>
+  </g>
+
+  <g id="uc-group-uc-mark-complete" data-uc-id="uc-mark-complete" onclick="showDesc('uc-mark-complete','uc',event)" style="cursor:pointer">
+    <ellipse cx="528" cy="490" rx="110" ry="28" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.8"/>
+    <text x="528" y="486" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סימון הזמנה</text>
+    <text x="528" y="500" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">כהושלמה</text>
+  </g>
+
+  <g id="uc-group-uc-create-delivery" data-uc-id="uc-create-delivery" onclick="showDesc('uc-create-delivery','uc',event)" style="cursor:pointer">
+    <ellipse cx="716" cy="200" rx="112" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="716" y="196" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">יצירת הזמנת משלוח</text>
+  </g>
+
+  <g id="uc-group-uc-create-pickup" data-uc-id="uc-create-pickup" onclick="showDesc('uc-create-pickup','uc',event)" style="cursor:pointer">
+    <ellipse cx="716" cy="340" rx="112" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="716" y="344" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">יצירת הזמנת איסוף</text>
+  </g>
+
+  <!-- Actors -->
+  <g id="actor-group-worker" data-actor-id="worker" transform="translate(100,400)" onclick="showDesc('worker','actor',event)" style="cursor:pointer">
+    <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+    <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+    <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">עובד</text>
+  </g>
+
+  <g id="actor-group-manager" data-actor-id="manager" transform="translate(960,300)" onclick="showDesc('manager','actor',event)" style="cursor:pointer">
+    <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+    <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+    <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל משמרת</text>
+  </g>
+</svg>
+</div>
+
+<!-- ═══════════ TAB 1 ═══════════ -->
+<div class="diagram-part" id="diagram-1" hidden>
+<svg id="diagram-svg-1" viewBox="0 0 1100 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dot-grid-1" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+    <marker id="arrow-include-1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="900" fill="#f8fafc"/>
+  <rect width="1100" height="900" fill="url(#dot-grid-1)"/>
+  <rect class="system-boundary" x="188" y="56" width="680" height="700" rx="12" fill="white" stroke="#3b82f6" stroke-width="2.5"/>
+  <rect x="188" y="56" width="680" height="38" rx="12" fill="#1e40af"/>
+  <rect x="188" y="76" width="680" height="18" fill="#1e40af"/>
+  <text x="528" y="81" text-anchor="middle" fill="white" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול הזמנות — ניהול עובדים וקטלוג</text>
+
+  <!-- Association lines -->
+  <line data-conn-from="manager-t1" data-conn-to="uc-add-worker" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-mgr-addworker" data-hitbox-from="manager-t1" data-hitbox-to="uc-add-worker" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-mgr-addworker','assoc',event)"/>
+
+  <line data-conn-from="manager-t1" data-conn-to="uc-update-worker" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-mgr-updateworker" data-hitbox-from="manager-t1" data-hitbox-to="uc-update-worker" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-mgr-updateworker','assoc',event)"/>
+
+  <line data-conn-from="manager-t1" data-conn-to="uc-delete-worker" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-mgr-deleteworker" data-hitbox-from="manager-t1" data-hitbox-to="uc-delete-worker" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-mgr-deleteworker','assoc',event)"/>
+
+  <line data-conn-from="manager-t1" data-conn-to="uc-manage-product" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-mgr-manageproduct" data-hitbox-from="manager-t1" data-hitbox-to="uc-manage-product" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-mgr-manageproduct','assoc',event)"/>
+
+  <line data-conn-from="sysadmin" data-conn-to="uc-manage-titles" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="a-admin-managetitles" data-hitbox-from="sysadmin" data-hitbox-to="uc-manage-titles" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-admin-managetitles','assoc',event)"/>
+
+  <!-- «include» lines -->
+  <line data-conn-from="uc-update-worker" data-conn-to="uc-find-worker" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-1)"/>
+  <text data-label-for="uc-update-worker uc-find-worker" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+
+  <line data-conn-from="uc-delete-worker" data-conn-to="uc-find-worker" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-1)"/>
+  <text data-label-for="uc-delete-worker uc-find-worker" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+
+  <!-- UC Ellipses -->
+  <g id="uc-group-uc-add-worker" data-uc-id="uc-add-worker" onclick="showDesc('uc-add-worker','uc',event)" style="cursor:pointer">
+    <ellipse cx="340" cy="160" rx="108" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="340" y="164" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הוספת עובד חדש</text>
+  </g>
+
+  <g id="uc-group-uc-update-worker" data-uc-id="uc-update-worker" onclick="showDesc('uc-update-worker','uc',event)" style="cursor:pointer">
+    <ellipse cx="340" cy="290" rx="108" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="340" y="294" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עדכון פרטי עובד</text>
+  </g>
+
+  <g id="uc-group-uc-delete-worker" data-uc-id="uc-delete-worker" onclick="showDesc('uc-delete-worker','uc',event)" style="cursor:pointer">
+    <ellipse cx="340" cy="420" rx="108" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="340" y="424" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">מחיקת עובד</text>
+  </g>
+
+  <g id="uc-group-uc-find-worker" data-uc-id="uc-find-worker" onclick="showDesc('uc-find-worker','uc',event)" style="cursor:pointer">
+    <ellipse cx="528" cy="540" rx="112" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="528" y="536" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">חיפוש עובד לפי מזהה</text>
+  </g>
+
+  <g id="uc-group-uc-manage-product" data-uc-id="uc-manage-product" onclick="showDesc('uc-manage-product','uc',event)" style="cursor:pointer">
+    <ellipse cx="340" cy="610" rx="108" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="340" y="606" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול קטלוג מוצרים</text>
+  </g>
+
+  <g id="uc-group-uc-manage-titles" data-uc-id="uc-manage-titles" onclick="showDesc('uc-manage-titles','uc',event)" style="cursor:pointer">
+    <ellipse cx="716" cy="350" rx="112" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="716" y="346" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול תפקידי עובדים</text>
+  </g>
+
+  <!-- Actors -->
+  <g id="actor-group-manager-t1" data-actor-id="manager-t1" transform="translate(100,390)" onclick="showDesc('manager-t1','actor',event)" style="cursor:pointer">
+    <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+    <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+    <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל משמרת</text>
+  </g>
+
+  <g id="actor-group-sysadmin" data-actor-id="sysadmin" transform="translate(960,390)" onclick="showDesc('sysadmin','actor',event)" style="cursor:pointer">
+    <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+    <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+    <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מערכת</text>
+  </g>
+</svg>
+</div>
+
+<!-- Assumptions panel -->
+<div id="assumptions-panel" class="assumptions-panel" hidden>
+  <div class="assumptions-col" id="assumptions-col">
+    <h3>הנחות</h3><ul id="assumptions-list"></ul>
+  </div>
+  <div class="assumptions-col" id="open-questions-col">
+    <h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul>
+  </div>
+</div>
+
+<!-- User stories panel -->
+<div id="user-stories-panel" class="user-stories-panel" hidden>
+  <h3>סיפורי משתמש</h3>
+  <ul id="user-stories-list"></ul>
+</div>
+
+<!-- UC modal -->
+<div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+  <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+  <div class="uc-modal-body"></div>
+</div>
+
+<button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+<script>
+var diagramLayouts = [
+  {
+    svgId: 'diagram-svg-0',
+    boundary: { x: 188, y: 56, width: 680, height: 700 },
+    actors: [
+      { id: 'worker',  label: 'עובד',        side: 'left',  x: 100, y: 400,
+        ucIds: ['uc-view-orders','uc-view-details'] },
+      { id: 'manager', label: 'מנהל משמרת', side: 'right', x: 960, y: 300,
+        ucIds: ['uc-create-delivery','uc-create-pickup'] }
+    ],
+    useCases: [
+      { id: 'uc-view-orders',     cx: 340, cy: 200, rx: 100, ry: 28 },
+      { id: 'uc-view-details',    cx: 340, cy: 340, rx: 100, ry: 28 },
+      { id: 'uc-mark-complete',   cx: 528, cy: 490, rx: 110, ry: 28 },
+      { id: 'uc-create-delivery', cx: 716, cy: 200, rx: 112, ry: 28 },
+      { id: 'uc-create-pickup',   cx: 716, cy: 340, rx: 112, ry: 28 }
+    ],
+    connections: [
+      { from: 'worker',  to: 'uc-view-orders',     type: 'association', role: 'initiator' },
+      { from: 'worker',  to: 'uc-view-details',    type: 'association', role: 'initiator' },
+      { from: 'worker',  to: 'uc-mark-complete',   type: 'association', role: 'initiator' },
+      { from: 'manager', to: 'uc-create-delivery', type: 'association', role: 'initiator' },
+      { from: 'manager', to: 'uc-create-pickup',   type: 'association', role: 'initiator' },
+      { from: 'uc-mark-complete', to: 'uc-view-details', type: 'extend',
+        condition: 'כאשר סטטוס ההזמנה הוא "פתוחה" והעובד לוחץ על כפתור "סמן כהושלם"' },
+      { from: 'manager', to: 'worker', type: 'generalization' }
+    ],
+    assumptions: [
+      'אימות (Login) הוא דרישה לא-פונקציונלית — המערכת מאמתת אישורים דרך LoginPanel; עניין רוחבי זה אינו מוצג כ-UC.',
+      'מנהל משמרת הוא עובד בהתמחות (generalization). הוא יורש את כל ה-UC-ים של עובד ומוסיף UC-ים ייחודיים.'
+    ],
+    openQuestions: []
+  },
+  {
+    svgId: 'diagram-svg-1',
+    boundary: { x: 188, y: 56, width: 680, height: 700 },
+    actors: [
+      { id: 'manager-t1', label: 'מנהל משמרת', side: 'left',  x: 100, y: 390,
+        ucIds: ['uc-add-worker','uc-update-worker','uc-delete-worker','uc-manage-product'] },
+      { id: 'sysadmin',   label: 'מנהל מערכת', side: 'right', x: 960, y: 390,
+        ucIds: ['uc-manage-titles'] }
+    ],
+    useCases: [
+      { id: 'uc-add-worker',     cx: 340, cy: 160, rx: 108, ry: 28 },
+      { id: 'uc-update-worker',  cx: 340, cy: 290, rx: 108, ry: 28 },
+      { id: 'uc-delete-worker',  cx: 340, cy: 420, rx: 108, ry: 28 },
+      { id: 'uc-find-worker',    cx: 528, cy: 540, rx: 112, ry: 28 },
+      { id: 'uc-manage-product', cx: 340, cy: 610, rx: 108, ry: 28 },
+      { id: 'uc-manage-titles',  cx: 716, cy: 350, rx: 112, ry: 28 }
+    ],
+    connections: [
+      { from: 'manager-t1', to: 'uc-add-worker',     type: 'association', role: 'initiator' },
+      { from: 'manager-t1', to: 'uc-update-worker',  type: 'association', role: 'initiator' },
+      { from: 'manager-t1', to: 'uc-delete-worker',  type: 'association', role: 'initiator' },
+      { from: 'manager-t1', to: 'uc-manage-product', type: 'association', role: 'initiator' },
+      { from: 'sysadmin',   to: 'uc-manage-titles',  type: 'association', role: 'initiator' },
+      { from: 'uc-update-worker', to: 'uc-find-worker', type: 'include' },
+      { from: 'uc-delete-worker', to: 'uc-find-worker', type: 'include' }
+    ],
+    assumptions: [
+      'uc-find-worker הוא «include» target בלבד — אין לו קשר ישיר לשחקן.',
+      'מנהל המערכת מנהל נתוני master (תפקידים) בלבד; אינו יוצר הזמנות ואינו מנהל עובדים ישירות.'
+    ],
+    openQuestions: [
+      'האם "ניהול קטלוג מוצרים" יפוצל ל-UC-ים נפרדים (יצירה / עדכון / מחיקה) בשלב הבא?'
+    ]
+  }
+];
+
+var actorDescriptions = {
+  'worker':     { name: 'עובד',        desc: 'עובד רשום במערכת. יוזם צפייה ברשימת הזמנות, צפייה בפרטים, וסימון הזמנות כהושלמות.' },
+  'manager':    { name: 'מנהל משמרת', desc: 'מרחיב את עובד (generalization). יורש את כל UC-ים של עובד; בנוסף יוצר הזמנות משלוח ואיסוף.' },
+  'manager-t1': { name: 'מנהל משמרת', desc: 'מנהל רשומות עובדים (הוספה, עדכון, מחיקה) ואת קטלוג המוצרים.' },
+  'sysadmin':   { name: 'מנהל מערכת', desc: 'מנהל נתוני master: תפקידי עובד. אינו מנהל הזמנות או עובדים ישירות.' }
+};
+
+var assocDescriptions = {
+  'a-worker-vieworders':      { name: 'עובד ↔ צפייה בהזמנות שלי',         desc: 'העובד יוזם צפייה ברשימת ההזמנות המוקצות לו. תפקיד: Initiator.' },
+  'a-worker-viewdetails':     { name: 'עובד ↔ צפייה בפרטי הזמנה',         desc: 'העובד בוחר הזמנה מהרשימה לצפייה בפרטים המלאים ובפריטים. תפקיד: Initiator.' },
+  'a-worker-markcomplete':    { name: 'עובד ↔ סימון הזמנה כהושלמה',       desc: 'העובד מסמן הזמנה פתוחה כהושלמה מתוך מסך הפרטים (extend). תפקיד: Initiator.' },
+  'a-manager-createdelivery': { name: 'מנהל משמרת ↔ יצירת הזמנת משלוח',  desc: 'מנהל המשמרת יוזם יצירת הזמנת משלוח חדשה עם כתובת ותאריך. תפקיד: Initiator.' },
+  'a-manager-createpickup':   { name: 'מנהל משמרת ↔ יצירת הזמנת איסוף',  desc: 'מנהל המשמרת יוזם יצירת הזמנת איסוף חדשה עם זמן ייעוד וסניף. תפקיד: Initiator.' },
+  'a-mgr-addworker':          { name: 'מנהל משמרת ↔ הוספת עובד חדש',      desc: 'מנהל המשמרת מוסיף עובד חדש עם תעודת זהות, שם ותפקיד. תפקיד: Initiator.' },
+  'a-mgr-updateworker':       { name: 'מנהל משמרת ↔ עדכון פרטי עובד',     desc: 'מנהל המשמרת מחפש עובד (include) ומעדכן שם או תפקיד. תפקיד: Initiator.' },
+  'a-mgr-deleteworker':       { name: 'מנהל משמרת ↔ מחיקת עובד',          desc: 'מנהל המשמרת מחפש עובד (include) ומוחק לאחר אישור. תפקיד: Initiator.' },
+  'a-mgr-manageproduct':      { name: 'מנהל משמרת ↔ ניהול קטלוג מוצרים', desc: 'מנהל המשמרת מוסיף, מעדכן, ומוחק מוצרים מהקטלוג. תפקיד: Initiator.' },
+  'a-admin-managetitles':     { name: 'מנהל מערכת ↔ ניהול תפקידי עובדים', desc: 'מנהל המערכת מוסיף ומוחק תפקידי עובד זמינים. תפקיד: Initiator.' }
+};
+
+var useCaseDocs = {
+
+  'uc-view-orders': {
+    id: 'uc-view-orders', name: 'צפייה בהזמנות שלי',
+    primaryActor: 'worker', secondaryActors: [],
+    description: 'העובד צופה ברשימת ההזמנות המוקצות לו, כולל סטטוס, סוג ותאריכים.',
+    preconditions: ['המערכת פועלת ומחוברת למסד הנתונים.', 'העובד עבר אימות בתחילת ההפעלה.'],
+    postconditions: ['רשימת ההזמנות של העובד מוצגת.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',  actor: 'worker', text: 'בוחר "הזמנות שלי" מהתפריט הראשי' },
+          { kind: 'system', text: 'שולף מ-Program.orders את כל ההזמנות שמוקצות למזהה העובד המחובר' },
+          { kind: 'system', text: 'מציג את הרשימה בטבלה עם עמודות: מספר הזמנה, תאריך, סוג, מחיר כולל, סטטוס' },
+          { kind: 'actor',  actor: 'worker', text: 'לוחץ על שורת הזמנה לצפייה בפרטים המלאים' }
+        ],
+        extensions: [
+          { at: 3, text: 'אם אין הזמנות לעובד — המערכת מציגה הודעה "אין הזמנות להצגה".' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'עובד',        want: 'לצפות ברשימת ההזמנות שמוקצות לי',          so: 'שאדע מה עלי לטפל בו היום' },
+      { role: 'מנהל משמרת', want: 'לצפות בהזמנות הפתוחות בתחילת המשמרת',      so: 'שאוכל לתכנן את עומס העבודה' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">הזמנות העובדים</h3>
+  <table class="wf-table">
+    <thead><tr><th>מספר הזמנה</th><th>תאריך</th><th>סוג</th><th>מחיר כולל</th><th>סטטוס</th></tr></thead>
+    <tbody>
+      <tr><td>1001</td><td>12/04/2025</td><td>משלוח</td><td>₪240.00</td><td>פתוחה</td></tr>
+      <tr><td>1002</td><td>13/04/2025</td><td>איסוף</td><td>₪95.00</td><td>פתוחה</td></tr>
+      <tr><td>1003</td><td>11/04/2025</td><td>משלוח</td><td>₪180.00</td><td>הושלמה</td></tr>
+    </tbody>
+  </table>
+  <p class="wf-hint">לחיצה על שורה בטבלה מעבירה למסך פרטי ההזמנה.</p>
+  <div class="wf-actions">
+    <button class="wf-button" disabled>חזור</button>
+  </div>
+</div>`
+  },
+
+  'uc-view-details': {
+    id: 'uc-view-details', name: 'צפייה בפרטי הזמנה',
+    primaryActor: 'worker', secondaryActors: [],
+    description: 'העובד בוחר הזמנה מהרשימה וצופה בכל פרטיה, כולל רשימת הפריטים המוקצים.',
+    preconditions: ['העובד נמצא במסך רשימת ההזמנות.', 'קיימת לפחות הזמנה אחת ברשימה.'],
+    postconditions: ['פרטי ההזמנה והפריטים שבה מוצגים.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',  actor: 'worker', text: 'לוחץ על שורת הזמנה ברשימה' },
+          { kind: 'system', text: 'שולף את פרטי ההזמנה: מספר, תאריך, סוג, מחיר כולל, שם עובד' },
+          { kind: 'system', text: 'שולף את רשימת הפריטים של ההזמנה מרשימת OrderItem' },
+          { kind: 'system', text: 'מציג את פרטי ההזמנה ואת טבלת הפריטים' }
+        ],
+        extensions: [
+          { at: 2, text: 'אם ההזמנה לא נמצאת — המערכת מציגה הודעת שגיאה וחוזרת לרשימה.' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'עובד',        want: 'לראות את כל פרטי הזמנה שנבחרה',             so: 'שאוכל לבצע אותה בצורה מדויקת' },
+      { role: 'מנהל משמרת', want: 'לבדוק פרטי הזמנה ספציפית',                 so: 'שאוכל לפקח על תקינות הנתונים' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">פרטי הזמנה</h3>
+  <div class="wf-section">
+    <div class="wf-row"><label class="wf-label">מספר הזמנה:</label><span>1001</span></div>
+    <div class="wf-row"><label class="wf-label">תאריך:</label><span>12/04/2025</span></div>
+    <div class="wf-row"><label class="wf-label">עובד:</label><span>דוד כהן</span></div>
+    <div class="wf-row"><label class="wf-label">סוג:</label><span>משלוח</span></div>
+    <div class="wf-row"><label class="wf-label">סה"כ:</label><span>₪240.00</span></div>
+  </div>
+  <p class="wf-hint">פריטים בהזמנה:</p>
+  <table class="wf-table">
+    <thead><tr><th>מוצר</th><th>כמות</th><th>מחיר יחידה</th><th>סכום</th></tr></thead>
+    <tbody>
+      <tr><td>ווידג'ט A</td><td>2</td><td>₪80.00</td><td>₪160.00</td></tr>
+      <tr><td>ווידג'ט B</td><td>1</td><td>₪80.00</td><td>₪80.00</td></tr>
+    </tbody>
+  </table>
+  <div class="wf-actions">
+    <button class="wf-button" disabled>חזור</button>
+  </div>
+</div>`
+  },
+
+  'uc-mark-complete': {
+    id: 'uc-mark-complete', name: 'סימון הזמנה כהושלמה',
+    primaryActor: 'worker', secondaryActors: [],
+    description: 'העובד מסמן הזמנה פתוחה כהושלמה תוך כדי צפייה בפרטיה (extend של צפייה בפרטי הזמנה).',
+    preconditions: ['העובד מציג פרטי הזמנה.', 'סטטוס ההזמנה הוא "פתוחה".'],
+    postconditions: ['סטטוס ההזמנה עודכן ל-"הושלמה" ב-Program.orders ובמסד הנתונים.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',  actor: 'worker', text: 'לוחץ על "סמן כהושלם" במסך פרטי ההזמנה' },
+          { kind: 'system', text: 'מעדכן את סטטוס ההזמנה ל-"הושלמה" ב-Program.orders' },
+          { kind: 'system', text: 'קורא ל-SP_UpdateOrderStatus ומעדכן במסד הנתונים' },
+          { kind: 'system', text: 'מציג אישור: "ההזמנה סומנה כהושלמה בהצלחה" ומסתיר את הכפתור' }
+        ],
+        extensions: [
+          { at: 3, text: 'אם עדכון מסד הנתונים נכשל — המערכת מחזירה את הסטטוס הקודם ומציגה הודעת שגיאה.' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'עובד', want: 'לסמן הזמנה כהושלמה ישירות ממסך הפרטים', so: 'שהמצב יעודכן בזמן אמת ללא מסך נוסף' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">סימון הזמנה כהושלמה</h3>
+  <p class="wf-hint">הרחבה (extend) של מסך "פרטי הזמנה" — הכפתור מופיע רק כאשר סטטוס ההזמנה הוא "פתוחה".</p>
+  <div class="wf-section">
+    <div class="wf-row"><label class="wf-label">מספר הזמנה:</label><span>1001</span></div>
+    <div class="wf-row"><label class="wf-label">סטטוס נוכחי:</label><span class="wf-badge">פתוחה</span></div>
+  </div>
+  <div class="wf-actions">
+    <button class="wf-button wf-primary" disabled>✓ סמן כהושלם</button>
+    <button class="wf-button" disabled>חזור</button>
+  </div>
+  <p class="wf-hint">לאחר לחיצה: הסטטוס משתנה ל-"הושלמה" וכפתור הסימון נעלם.</p>
+</div>`
+  },
+
+  'uc-create-delivery': {
+    id: 'uc-create-delivery', name: 'יצירת הזמנת משלוח',
+    primaryActor: 'manager', secondaryActors: [],
+    description: 'מנהל המשמרת יוצר הזמנת משלוח חדשה ומקצה אותה לעובד עם כתובת ותאריך משלוח.',
+    preconditions: ['מנהל המשמרת עבר אימות.', 'קיימים עובדים רשומים במערכת.'],
+    postconditions: ['הזמנת המשלוח נשמרה עם סטטוס "פתוחה" ב-Program.orders ובמסד הנתונים.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',  actor: 'manager', text: 'בוחר "הזמנת משלוח חדשה" מלוח הניהול' },
+          { kind: 'system', text: 'פותח טופס הזמנת משלוח ומאכלס את הרשימה הנפתחת של עובדים' },
+          { kind: 'actor',  actor: 'manager', text: 'בוחר עובד מהרשימה הנפתחת' },
+          { kind: 'actor',  actor: 'manager', text: 'מזין כתובת משלוח ותאריך משלוח' },
+          { kind: 'actor',  actor: 'manager', text: 'מזין מחיר כולל ולוחץ "הוסף הזמנה"' },
+          { kind: 'system', text: 'מוודא שכל השדות החובה מולאו (עובד, כתובת, תאריך משלוח)' },
+          { kind: 'system', text: 'יוצר אובייקט DeliveryOrder ומוסיף ל-Program.orders' },
+          { kind: 'system', text: 'קורא ל-SP_InsertOrder ושומר במסד הנתונים' },
+          { kind: 'system', text: 'מציג הודעת אישור ומנקה את הטופס' }
+        ],
+        extensions: [
+          { at: 6, text: 'אם שדות חובה חסרים — מסמן שדות ריקים באדום ומציג "יש למלא את כל השדות הנדרשים".' },
+          { at: 8, text: 'אם קריאת מסד הנתונים נכשלת — מציג שגיאה; ההזמנה אינה נשמרת.' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'מנהל משמרת', want: 'ליצור הזמנת משלוח חדשה ולהקצות אותה לעובד', so: 'שהעובד יוכל לבצע את המשלוח' },
+      { role: 'מנהל משמרת', want: 'להזין כתובת ותאריך משלוח',                   so: 'שהמערכת תנהל את לוח הזמנים בצורה מסודרת' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">הזמנת משלוח חדשה</h3>
+  <div class="wf-row"><label class="wf-label">עובד</label><select class="wf-select" disabled><option>בחר עובד...</option><option>דוד כהן</option></select></div>
+  <div class="wf-row"><label class="wf-label">מספר הזמנה</label><input class="wf-input" disabled value="נוצר אוטומטית"/></div>
+  <div class="wf-row"><label class="wf-label">תאריך הזמנה</label><input class="wf-input" disabled value="02/05/2025"/></div>
+  <div class="wf-row"><label class="wf-label">מחיר כולל</label><input class="wf-input" disabled value="₪ 0.00"/></div>
+  <div class="wf-row"><label class="wf-label">כתובת משלוח ★</label><input class="wf-input" disabled placeholder="לדוגמה: הרצל 12, תל אביב"/></div>
+  <div class="wf-row"><label class="wf-label">תאריך משלוח ★</label><input class="wf-input" disabled value="09/05/2025"/></div>
+  <p class="wf-hint">★ שדות ייחודיים להזמנת משלוח. שדות ריקים יסומנו בשגיאה בעת שמירה.</p>
+  <div class="wf-actions">
+    <button class="wf-button wf-primary" disabled>הוסף הזמנה</button>
+    <button class="wf-button" disabled>חזרה</button>
+  </div>
+</div>`
+  },
+
+  'uc-create-pickup': {
+    id: 'uc-create-pickup', name: 'יצירת הזמנת איסוף',
+    primaryActor: 'manager', secondaryActors: [],
+    description: 'מנהל המשמרת יוצר הזמנת איסוף חדשה ומקצה אותה לעובד עם זמן איסוף וסניף.',
+    preconditions: ['מנהל המשמרת עבר אימות.', 'קיימים עובדים רשומים במערכת.'],
+    postconditions: ['הזמנת האיסוף נשמרה עם סטטוס "פתוחה" ב-Program.orders ובמסד הנתונים.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',  actor: 'manager', text: 'בוחר "הזמנת איסוף חדשה" מלוח הניהול' },
+          { kind: 'system', text: 'פותח טופס הזמנת איסוף ומאכלס את הרשימה הנפתחת של עובדים' },
+          { kind: 'actor',  actor: 'manager', text: 'בוחר עובד מהרשימה הנפתחת' },
+          { kind: 'actor',  actor: 'manager', text: 'מזין זמן איסוף (פורמט dd/MM/yyyy HH:mm) ושם סניף' },
+          { kind: 'actor',  actor: 'manager', text: 'מזין מחיר כולל ולוחץ "הוסף הזמנה"' },
+          { kind: 'system', text: 'מוודא שכל השדות החובה מולאו (עובד, זמן איסוף, סניף)' },
+          { kind: 'system', text: 'יוצר אובייקט PickupOrder ומוסיף ל-Program.orders' },
+          { kind: 'system', text: 'קורא ל-SP_InsertOrder ושומר במסד הנתונים' },
+          { kind: 'system', text: 'מציג הודעת אישור ומנקה את הטופס' }
+        ],
+        extensions: [
+          { at: 6, text: 'אם שדות חובה חסרים — מסמן שדות ריקים ומציג הודעת שגיאה.' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'מנהל משמרת', want: 'ליצור הזמנת איסוף ולהגדיר זמן ייעוד וסניף', so: 'שהלקוח יוכל לאסוף את ההזמנה בזמן ובמקום המתאים' },
+      { role: 'מנהל משמרת', want: 'להקצות הזמנת איסוף לעובד ספציפי',             so: 'שתהיה אחריות ברורה לכל הזמנה' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">הזמנת איסוף חדשה</h3>
+  <div class="wf-row"><label class="wf-label">עובד</label><select class="wf-select" disabled><option>בחר עובד...</option><option>דוד כהן</option></select></div>
+  <div class="wf-row"><label class="wf-label">מספר הזמנה</label><input class="wf-input" disabled value="נוצר אוטומטית"/></div>
+  <div class="wf-row"><label class="wf-label">תאריך הזמנה</label><input class="wf-input" disabled value="02/05/2025"/></div>
+  <div class="wf-row"><label class="wf-label">מחיר כולל</label><input class="wf-input" disabled value="₪ 0.00"/></div>
+  <div class="wf-row"><label class="wf-label">זמן איסוף ★</label><input class="wf-input" disabled value="02/05/2025 14:00"/></div>
+  <div class="wf-row"><label class="wf-label">סניף ★</label><input class="wf-input" disabled placeholder="לדוגמה: סניף 3 — באר שבע"/></div>
+  <p class="wf-hint">★ שדות ייחודיים להזמנת איסוף (משתנה זמן: dd/MM/yyyy HH:mm).</p>
+  <div class="wf-actions">
+    <button class="wf-button wf-primary" disabled>הוסף הזמנה</button>
+    <button class="wf-button" disabled>חזרה</button>
+  </div>
+</div>`
+  },
+
+  'uc-add-worker': {
+    id: 'uc-add-worker', name: 'הוספת עובד חדש',
+    primaryActor: 'manager-t1', secondaryActors: [],
+    description: 'מנהל המשמרת מוסיף עובד חדש למערכת עם תעודת זהות, שם מלא ותפקיד.',
+    preconditions: ['מנהל המשמרת עבר אימות.'],
+    postconditions: ['העובד החדש נשמר ב-Program.workers ובמסד הנתונים.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',  actor: 'manager-t1', text: 'בוחר "יצירת עובד חדש" מלוח הניהול' },
+          { kind: 'system', text: 'פותח טופס יצירת עובד ומאכלס את רשימת התפקידים מ-TitleHelper' },
+          { kind: 'actor',  actor: 'manager-t1', text: 'מזין תעודת זהות ושם מלא' },
+          { kind: 'actor',  actor: 'manager-t1', text: 'בוחר תפקיד מהרשימה הנפתחת ולוחץ "הוסף למערכת"' },
+          { kind: 'system', text: 'מוודא שמספר הזהות אינו קיים כבר ב-Program.workers' },
+          { kind: 'system', text: 'יוצר אובייקט Worker ומוסיף ל-Program.workers' },
+          { kind: 'system', text: 'קורא ל-SP_InsertWorker ושומר במסד הנתונים' },
+          { kind: 'system', text: 'מציג אישור "העובד נוסף בהצלחה" ומנקה את הטופס' }
+        ],
+        extensions: [
+          { at: 5, text: 'אם תעודת הזהות כבר קיימת — מציג "עובד עם מזהה זה כבר קיים".' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'מנהל משמרת', want: 'להוסיף עובד חדש למערכת',               so: 'שיוכל להתחבר ולקבל הזמנות' },
+      { role: 'מנהל משמרת', want: 'לבחור תפקיד מרשימת תפקידים מוגדרת',    so: 'שהנתונים יהיו תקניים ואחידים' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">הזן את הפרטים הבאים</h3>
+  <div class="wf-row"><label class="wf-label">תעודת זהות</label><input class="wf-input" disabled placeholder="9 ספרות"/></div>
+  <div class="wf-row"><label class="wf-label">שם מלא</label><input class="wf-input" disabled placeholder="שם פרטי ושם משפחה"/></div>
+  <div class="wf-row"><label class="wf-label">תפקיד</label><select class="wf-select" disabled><option>Worker</option><option>Shift Manager</option></select></div>
+  <div class="wf-actions">
+    <button class="wf-button wf-primary" disabled>הוסף למערכת</button>
+    <button class="wf-button" disabled>חזרה</button>
+  </div>
+</div>`
+  },
+
+  'uc-update-worker': {
+    id: 'uc-update-worker', name: 'עדכון פרטי עובד',
+    primaryActor: 'manager-t1', secondaryActors: [],
+    description: 'מנהל המשמרת מחפש עובד לפי תעודת זהות (include) ומעדכן את שמו או תפקידו.',
+    preconditions: ['מנהל המשמרת עבר אימות.', 'קיימים עובדים רשומים במערכת.'],
+    postconditions: ['פרטי העובד עודכנו ב-Program.workers ובמסד הנתונים.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',   actor: 'manager-t1',   text: 'בוחר "צפייה בעובד קיים" מלוח הניהול' },
+          { kind: 'system',  text: 'פותח את מסך עדכון/מחיקת עובד' },
+          { kind: 'include', uc: 'uc-find-worker',   text: 'מנהל מזין תעודת זהות ולוחץ "חפש"; המערכת מאתרת את העובד ב-Program.workers' },
+          { kind: 'system',  text: 'מציג את שם העובד ותפקידו הנוכחיים בשדות עריכה' },
+          { kind: 'actor',   actor: 'manager-t1',   text: 'משנה שם מלא ו/או תפקיד ולוחץ "עדכן"' },
+          { kind: 'system',  text: 'מעדכן את רשומת העובד ב-Program.workers' },
+          { kind: 'system',  text: 'קורא ל-SP_UpdateWorker ושומר שינויים במסד הנתונים' },
+          { kind: 'system',  text: 'מציג "פרטי העובד עודכנו בהצלחה"' }
+        ],
+        extensions: [
+          { at: 3, text: 'אם העובד לא נמצא — המערכת מציגה "עובד לא נמצא" ומנקה את שדות העריכה.' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'מנהל משמרת', want: 'לעדכן שם או תפקיד של עובד',           so: 'שנתוני העובד יהיו מעודכנים תמיד' },
+      { role: 'מנהל משמרת', want: 'לחפש עובד לפי מזהה לפני עדכון',       so: 'שאוכל לוודא שאני מעדכן את האדם הנכון' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">עדכון / מחיקת עובד</h3>
+  <div class="wf-section">
+    <p class="wf-hint">שלב 1 — חיפוש עובד לפי מזהה («include» → חיפוש עובד לפי מזהה)</p>
+    <div class="wf-row">
+      <label class="wf-label">תעודת זהות</label>
+      <input class="wf-input" disabled placeholder="הזן מזהה..."/>
+      <button class="wf-button" disabled>חפש</button>
+    </div>
+  </div>
+  <div class="wf-section">
+    <p class="wf-hint">שלב 2 — עריכת פרטים</p>
+    <div class="wf-row"><label class="wf-label">שם מלא</label><input class="wf-input" disabled value="דוד כהן"/></div>
+    <div class="wf-row"><label class="wf-label">תפקיד</label><select class="wf-select" disabled><option>Worker</option><option>Shift Manager</option></select></div>
+  </div>
+  <div class="wf-actions">
+    <button class="wf-button wf-primary" disabled>עדכן</button>
+    <button class="wf-button" disabled>חזרה</button>
+  </div>
+</div>`
+  },
+
+  'uc-delete-worker': {
+    id: 'uc-delete-worker', name: 'מחיקת עובד',
+    primaryActor: 'manager-t1', secondaryActors: [],
+    description: 'מנהל המשמרת מחפש עובד לפי תעודת זהות (include) ומוחק אותו לאחר אישור.',
+    preconditions: ['מנהל המשמרת עבר אימות.', 'קיימים עובדים רשומים במערכת.'],
+    postconditions: ['העובד הוסר מ-Program.workers ומבסיס הנתונים.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',   actor: 'manager-t1',  text: 'בוחר "צפייה בעובד קיים" מלוח הניהול' },
+          { kind: 'system',  text: 'פותח את מסך עדכון/מחיקת עובד' },
+          { kind: 'include', uc: 'uc-find-worker',  text: 'מנהל מזין תעודת זהות ולוחץ "חפש"; המערכת מאתרת את העובד ב-Program.workers' },
+          { kind: 'system',  text: 'מציג את פרטי העובד (שם ותפקיד) לאישור' },
+          { kind: 'actor',   actor: 'manager-t1',  text: 'לוחץ "מחק"' },
+          { kind: 'system',  text: 'מסיר את העובד מ-Program.workers' },
+          { kind: 'system',  text: 'קורא ל-SP_DeleteWorker ומוחק ממסד הנתונים' },
+          { kind: 'system',  text: 'מציג "העובד נמחק בהצלחה" ומנקה את המסך' }
+        ],
+        extensions: [
+          { at: 3, text: 'אם העובד לא נמצא — המערכת מציגה "עובד לא נמצא".' },
+          { at: 5, text: 'אם מנהל לוחץ "חזרה" — המסך מתנקה ללא ביצוע מחיקה.' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'מנהל משמרת', want: 'למחוק עובד שעזב את הארגון',          so: 'שלא יוכל עוד להתחבר למערכת' },
+      { role: 'מנהל משמרת', want: 'לאשר את המחיקה לאחר סקירת פרטים',   so: 'שלא אמחק עובד בשגגה' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">עדכון / מחיקת עובד</h3>
+  <div class="wf-section">
+    <p class="wf-hint">שלב 1 — חיפוש עובד לפי מזהה («include»)</p>
+    <div class="wf-row">
+      <label class="wf-label">תעודת זהות</label>
+      <input class="wf-input" disabled placeholder="הזן מזהה..."/>
+      <button class="wf-button" disabled>חפש</button>
+    </div>
+  </div>
+  <div class="wf-section">
+    <p class="wf-hint">שלב 2 — אישור מחיקה</p>
+    <div class="wf-row"><label class="wf-label">שם מלא:</label><span>דוד כהן</span></div>
+    <div class="wf-row"><label class="wf-label">תפקיד:</label><span>Worker</span></div>
+    <p class="wf-hint">פעולת מחיקה אינה הפיכה.</p>
+  </div>
+  <div class="wf-actions">
+    <button class="wf-button" disabled>מחק</button>
+    <button class="wf-button" disabled>חזרה</button>
+  </div>
+</div>`
+  },
+
+  'uc-find-worker': {
+    id: 'uc-find-worker', name: 'חיפוש עובד לפי מזהה',
+    primaryActor: 'manager-t1', secondaryActors: [],
+    description: 'תת-התנהגות משותפת: שולפת עובד מ-Program.workers לפי תעודת זהות. נקראת תמיד על ידי עדכון פרטי עובד ומחיקת עובד.',
+    preconditions: ['Program.workers אותחל.'],
+    postconditions: ['אובייקט עובד מוחזר לפי מזהה, או הודעת שגיאה אם לא נמצא.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'מסלול מרכזי',
+        flow: [
+          { kind: 'actor',  actor: 'manager-t1', text: 'מזין תעודת זהות בשדה החיפוש ולוחץ "חפש"' },
+          { kind: 'system', text: 'מחפש ב-Program.workers (Worker.Seek) לפי מזהה' },
+          { kind: 'system', text: 'מחזיר את אובייקט העובד לפעולה הקוראת (עדכון / מחיקה)' }
+        ],
+        extensions: [
+          { at: 2, text: 'אם העובד לא נמצא — מחזיר null ומציג "עובד לא נמצא".' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'מנהל משמרת', want: 'לאתר עובד קיים במהירות לפי מזהה', so: 'שאוכל לעדכן או למחוק אותו' }
+    ]
+  },
+
+  'uc-manage-product': {
+    id: 'uc-manage-product', name: 'ניהול קטלוג מוצרים',
+    primaryActor: 'manager-t1', secondaryActors: [],
+    description: 'מנהל המשמרת מוסיף, מעדכן, ומוחק מוצרים מקטלוג המוצרים.',
+    preconditions: ['מנהל המשמרת עבר אימות.'],
+    postconditions: ['קטלוג המוצרים עודכן ב-Program.products ובמסד הנתונים.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'הוספת מוצר חדש',
+        flow: [
+          { kind: 'actor',  actor: 'manager-t1', text: 'בוחר "הוספת מוצר" בממשק ניהול הקטלוג' },
+          { kind: 'system', text: 'מציג טופס הוספת מוצר עם שדות שם ומחיר' },
+          { kind: 'actor',  actor: 'manager-t1', text: 'מזין שם מוצר ומחיר ולוחץ "שמור"' },
+          { kind: 'system', text: 'מוודא שהשם אינו ריק ושהמחיר הוא מספר חיובי' },
+          { kind: 'system', text: 'יוצר אובייקט Product ומוסיף ל-Program.products' },
+          { kind: 'system', text: 'קורא ל-SP_InsertProduct ושומר במסד הנתונים' },
+          { kind: 'system', text: 'מרענן את הטבלה ומציג אישור' }
+        ],
+        extensions: [
+          { at: 4, text: 'אם שם המוצר ריק — מציג "שם המוצר הוא שדה חובה".' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'מנהל משמרת', want: 'להוסיף מוצר חדש לקטלוג',         so: 'שיהיה זמין לשיוך להזמנות' },
+      { role: 'מנהל משמרת', want: 'לעדכן מחיר מוצר קיים',            so: 'שהמחירון יהיה מעודכן תמיד' },
+      { role: 'מנהל משמרת', want: 'למחוק מוצר שיצא מהשימוש',        so: 'שהקטלוג יהיה נקי ורלוונטי' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">ניהול קטלוג מוצרים</h3>
+  <table class="wf-table">
+    <thead><tr><th>מזהה מוצר</th><th>שם מוצר</th><th>מחיר (₪)</th><th>פעולות</th></tr></thead>
+    <tbody>
+      <tr><td>P-01</td><td>ווידג'ט A</td><td>80.00</td><td><button class="wf-button" disabled>ערוך</button> <button class="wf-button" disabled>מחק</button></td></tr>
+      <tr><td>P-02</td><td>ווידג'ט B</td><td>80.00</td><td><button class="wf-button" disabled>ערוך</button> <button class="wf-button" disabled>מחק</button></td></tr>
+    </tbody>
+  </table>
+  <div class="wf-section">
+    <p class="wf-hint">הוספת / עריכת מוצר</p>
+    <div class="wf-row"><label class="wf-label">שם מוצר</label><input class="wf-input" disabled placeholder="שם המוצר..."/></div>
+    <div class="wf-row"><label class="wf-label">מחיר (₪)</label><input class="wf-input" disabled placeholder="0.00"/></div>
+  </div>
+  <div class="wf-actions">
+    <button class="wf-button wf-primary" disabled>שמור</button>
+    <button class="wf-button" disabled>חזרה</button>
+  </div>
+</div>`
+  },
+
+  'uc-manage-titles': {
+    id: 'uc-manage-titles', name: 'ניהול תפקידי עובדים',
+    primaryActor: 'sysadmin', secondaryActors: [],
+    description: 'מנהל המערכת מוסיף ומוחק תפקידי עובד זמינים המשמשים בכל מקום בו נבחר תפקיד.',
+    preconditions: ['מנהל המערכת עבר אימות.'],
+    postconditions: ['רשימת התפקידים עודכנה בטבלת Title.'],
+    scenarios: [
+      { id: 'sc-happy', name: 'הוספת תפקיד חדש',
+        flow: [
+          { kind: 'actor',  actor: 'sysadmin', text: 'פותח את ממשק ניהול תפקידי העובדים' },
+          { kind: 'system', text: 'מציג את רשימת התפקידים הקיימים בטבלה' },
+          { kind: 'actor',  actor: 'sysadmin', text: 'מזין שם תפקיד חדש ולוחץ "הוסף תפקיד"' },
+          { kind: 'system', text: 'מוודא שהתפקיד אינו קיים כבר ברשימה' },
+          { kind: 'system', text: 'מוסיף את התפקיד לטבלת Title ומרענן את הרשימה' }
+        ],
+        extensions: [
+          { at: 4, text: 'אם התפקיד כבר קיים — מציג "תפקיד זה כבר קיים במערכת".' }
+        ]
+      }
+    ],
+    userStories: [
+      { role: 'מנהל מערכת', want: 'להוסיף תפקיד חדש לרשימה',         so: 'שמנהלי משמרת יוכלו לשייך אותו לעובדים חדשים' },
+      { role: 'מנהל מערכת', want: 'למחוק תפקיד שאינו בשימוש',         so: 'שהרשימה תישאר נקייה ומסודרת' }
+    ],
+    wireframe: `<div class="wf-screen">
+  <h3 class="wf-heading">ניהול תפקידי עובדים</h3>
+  <table class="wf-table">
+    <thead><tr><th>תפקיד</th><th>פעולות</th></tr></thead>
+    <tbody>
+      <tr><td>Worker</td><td><button class="wf-button" disabled>מחק</button></td></tr>
+      <tr><td>Shift Manager</td><td><button class="wf-button" disabled>מחק</button></td></tr>
+    </tbody>
+  </table>
+  <div class="wf-section">
+    <p class="wf-hint">הוספת תפקיד חדש</p>
+    <div class="wf-row"><label class="wf-label">שם תפקיד</label><input class="wf-input" disabled placeholder="שם התפקיד..."/></div>
+  </div>
+  <div class="wf-actions">
+    <button class="wf-button wf-primary" disabled>הוסף תפקיד</button>
+    <button class="wf-button" disabled>חזרה</button>
+  </div>
+</div>`
+  }
+};
+
+var diagramModel = {
+  kind: 'use-case',
+  name: 'מערכת ניהול הזמנות',
+  parts: [
+    {
+      id: 'part-orders', name: 'הזמנות',
+      actors: [
+        { id: 'worker',  label: 'עובד',        actorType: 'human' },
+        { id: 'manager', label: 'מנהל משמרת', actorType: 'human', generalizesFrom: 'worker' }
+      ],
+      elements: [
+        'uc-view-orders','uc-view-details','uc-mark-complete','uc-create-delivery','uc-create-pickup'
+      ].map(function(id){ return { kind: 'useCase', id: id, doc: useCaseDocs[id] }; }),
+      relationships: [
+        { kind: 'association',    from: 'worker',           to: 'uc-view-orders',     role: 'initiator' },
+        { kind: 'association',    from: 'worker',           to: 'uc-view-details',    role: 'initiator' },
+        { kind: 'association',    from: 'worker',           to: 'uc-mark-complete',   role: 'initiator' },
+        { kind: 'association',    from: 'manager',          to: 'uc-create-delivery', role: 'initiator' },
+        { kind: 'association',    from: 'manager',          to: 'uc-create-pickup',   role: 'initiator' },
+        { kind: 'extend',         from: 'uc-mark-complete', to: 'uc-view-details',    condition: 'סטטוס הזמנה = פתוחה' },
+        { kind: 'generalization', child: 'manager',         parent: 'worker' }
+      ]
+    },
+    {
+      id: 'part-management', name: 'ניהול עובדים וקטלוג',
+      actors: [
+        { id: 'manager-t1', label: 'מנהל משמרת', actorType: 'human' },
+        { id: 'sysadmin',   label: 'מנהל מערכת', actorType: 'human' }
+      ],
+      elements: [
+        'uc-add-worker','uc-update-worker','uc-delete-worker','uc-find-worker','uc-manage-product','uc-manage-titles'
+      ].map(function(id){ return { kind: 'useCase', id: id, doc: useCaseDocs[id] }; }),
+      relationships: [
+        { kind: 'association', from: 'manager-t1',     to: 'uc-add-worker',     role: 'initiator' },
+        { kind: 'association', from: 'manager-t1',     to: 'uc-update-worker',  role: 'initiator' },
+        { kind: 'association', from: 'manager-t1',     to: 'uc-delete-worker',  role: 'initiator' },
+        { kind: 'association', from: 'manager-t1',     to: 'uc-manage-product', role: 'initiator' },
+        { kind: 'association', from: 'sysadmin',       to: 'uc-manage-titles',  role: 'initiator' },
+        { kind: 'include',     from: 'uc-update-worker', to: 'uc-find-worker' },
+        { kind: 'include',     from: 'uc-delete-worker', to: 'uc-find-worker' }
+      ]
+    }
+  ],
+  assumptions: [
+    'אימות (Login) הוא דרישה לא-פונקציונלית.',
+    'מנהל משמרת יורש את כל UC-ים של עובד (generalization).',
+    'uc-find-worker הוא include target בלבד — אין לו קשר ישיר לשחקן.',
+    'מנהל המערכת מנהל נתוני master בלבד.'
+  ],
+  openQuestions: [
+    'האם "ניהול קטלוג מוצרים" יפוצל ל-UC-ים נפרדים בשלב הבא?'
+  ]
+};
+</script>
+<script src="https://themathbible.com/sad-mcp/uc-diagram-common.js"></script>
+</body>
+</html>

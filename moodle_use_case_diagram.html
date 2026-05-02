@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Moodle LMS — Use Case Diagram</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f8fafc; font-family: 'Noto Sans Hebrew', sans-serif; padding: 16px; }
+  h1 { text-align: center; color: #1e40af; font-size: 18px; margin-bottom: 12px; font-weight: 700; }
+  .controls { text-align: center; margin: 8px 0 16px; }
+  .fix-btn {
+    padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+    color: #1e40af; font-family: 'Noto Sans Hebrew', sans-serif;
+    font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 6px; transition: background 0.2s;
+  }
+  .fix-btn:hover { background: #dbeafe; }
+  [data-uc-id] { cursor: pointer; }
+  [data-uc-id]:hover ellipse { stroke: #1e6aa5 !important; stroke-width: 2.5px !important; }
+  svg { display: block; margin: 0 auto; max-width: 100%; }
+</style>
+</head>
+<body>
+
+<h1>Moodle LMS — Use Case Diagram</h1>
+<div class="controls">
+  <button class="fix-btn" onclick="fixLayout(diagramLayout)">&#8635; Fix Layout</button>
+</div>
+
+<svg id="diagram-svg" width="1060" height="840" viewBox="0 0 1060 840" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+  </defs>
+
+  <!-- 1. Background -->
+  <rect width="1060" height="840" fill="#f8fafc"/>
+  <rect width="1060" height="840" fill="url(#dot-grid)"/>
+
+  <!-- 2. System Boundary -->
+  <rect class="system-boundary" id="boundary-rect" x="188" y="56" width="646" height="730" rx="12"
+        fill="white" stroke="#3b82f6" stroke-width="2.5"/>
+  <!-- Title header -->
+  <rect x="188" y="56" width="646" height="38" rx="12" fill="#1e40af"/>
+  <rect x="188" y="76" width="646" height="18" fill="#1e40af"/>
+  <text x="511" y="81" text-anchor="middle" fill="white" font-size="14" font-weight="700"
+        font-family="'Noto Sans Hebrew', sans-serif">Moodle LMS</text>
+
+  <!-- 3. Association Lines (drawn before ellipses so ellipses render on top) -->
+
+  <!-- Student → Log In to System -->
+  <line data-conn-from="a1" data-conn-to="uc1"   x1="80"  y1="380" x2="428" y2="126" stroke="#334155" stroke-width="1.8"/>
+  <!-- Student → Browse Course Content -->
+  <line data-conn-from="a1" data-conn-to="uc2"   x1="80"  y1="380" x2="246" y2="220" stroke="#334155" stroke-width="1.8"/>
+  <!-- Student → Submit Assignment -->
+  <line data-conn-from="a1" data-conn-to="uc3"   x1="80"  y1="380" x2="233" y2="308" stroke="#334155" stroke-width="1.8"/>
+  <!-- Student → Participate in Discussion Forum -->
+  <line data-conn-from="a1" data-conn-to="uc4"   x1="80"  y1="380" x2="228" y2="393" stroke="#334155" stroke-width="1.8"/>
+  <!-- Student → View Grades & Feedback -->
+  <line data-conn-from="a1" data-conn-to="uc5"   x1="80"  y1="380" x2="237" y2="480" stroke="#334155" stroke-width="1.8"/>
+  <!-- Student → Take Online Quiz -->
+  <line data-conn-from="a1" data-conn-to="uc6"   x1="80"  y1="380" x2="251" y2="569" stroke="#334155" stroke-width="1.8"/>
+
+  <!-- Instructor → Log In to System -->
+  <line data-conn-from="a2" data-conn-to="uc1"   x1="978" y1="380" x2="595" y2="125" stroke="#334155" stroke-width="1.8"/>
+  <!-- Instructor → Manage Course Materials -->
+  <line data-conn-from="a2" data-conn-to="uc7"   x1="978" y1="380" x2="783" y2="218" stroke="#334155" stroke-width="1.8"/>
+  <!-- Instructor → Create and Manage Assignments -->
+  <line data-conn-from="a2" data-conn-to="uc8"   x1="978" y1="380" x2="794" y2="307" stroke="#334155" stroke-width="1.8"/>
+  <!-- Instructor → Grade Student Submissions -->
+  <line data-conn-from="a2" data-conn-to="uc9"   x1="978" y1="380" x2="798" y2="394" stroke="#334155" stroke-width="1.8"/>
+  <!-- Instructor → Facilitate Discussion Forum -->
+  <line data-conn-from="a2" data-conn-to="uc10"  x1="978" y1="380" x2="791" y2="481" stroke="#334155" stroke-width="1.8"/>
+  <!-- Instructor → Deploy Online Quizzes -->
+  <line data-conn-from="a2" data-conn-to="uc11"  x1="978" y1="380" x2="778" y2="570" stroke="#334155" stroke-width="1.8"/>
+
+  <!-- System Time → Send Deadline Reminders (rect left edge → ellipse right edge) -->
+  <line data-conn-from="a3" data-conn-to="uc12"  x1="923" y1="710" x2="798" y2="710" stroke="#334155" stroke-width="1.8"/>
+
+  <!-- LTI Provider → Integrate External Learning Tool (rect right edge → ellipse left edge) -->
+  <line data-conn-from="a4" data-conn-to="uc13"  x1="138" y1="710" x2="224" y2="710" stroke="#334155" stroke-width="1.8"/>
+
+  <!-- 4. Use Case Ellipses -->
+
+  <!-- uc1: Log In to System (shared — top centre) -->
+  <g id="uc-group-uc1" data-uc-id="uc1" onclick="showDescription('uc1', event)">
+    <ellipse cx="511" cy="112" rx="98" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="511" y="116" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Log In to System</text>
+  </g>
+
+  <!-- uc2: Browse Course Content (Student — left col) -->
+  <g id="uc-group-uc2" data-uc-id="uc2" onclick="showDescription('uc2', event)">
+    <ellipse cx="330" cy="205" rx="102" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="330" y="202" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Browse Course</text>
+    <text x="330" y="215" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Content</text>
+  </g>
+
+  <!-- uc3: Submit Assignment -->
+  <g id="uc-group-uc3" data-uc-id="uc3" onclick="showDescription('uc3', event)">
+    <ellipse cx="330" cy="300" rx="102" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="330" y="304" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Submit Assignment</text>
+  </g>
+
+  <!-- uc4: Participate in Discussion Forum -->
+  <g id="uc-group-uc4" data-uc-id="uc4" onclick="showDescription('uc4', event)">
+    <ellipse cx="330" cy="395" rx="102" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="330" y="392" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Participate in</text>
+    <text x="330" y="405" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Discussion Forum</text>
+  </g>
+
+  <!-- uc5: View Grades & Feedback -->
+  <g id="uc-group-uc5" data-uc-id="uc5" onclick="showDescription('uc5', event)">
+    <ellipse cx="330" cy="490" rx="102" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="330" y="487" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">View Grades</text>
+    <text x="330" y="500" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">&amp; Feedback</text>
+  </g>
+
+  <!-- uc6: Take Online Quiz -->
+  <g id="uc-group-uc6" data-uc-id="uc6" onclick="showDescription('uc6', event)">
+    <ellipse cx="330" cy="585" rx="102" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="330" y="589" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Take Online Quiz</text>
+  </g>
+
+  <!-- uc7: Manage Course Materials (Instructor — right col) -->
+  <g id="uc-group-uc7" data-uc-id="uc7" onclick="showDescription('uc7', event)">
+    <ellipse cx="693" cy="205" rx="106" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="693" y="202" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Manage Course</text>
+    <text x="693" y="215" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Materials</text>
+  </g>
+
+  <!-- uc8: Create and Manage Assignments -->
+  <g id="uc-group-uc8" data-uc-id="uc8" onclick="showDescription('uc8', event)">
+    <ellipse cx="693" cy="300" rx="106" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="693" y="297" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Create and Manage</text>
+    <text x="693" y="310" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Assignments</text>
+  </g>
+
+  <!-- uc9: Grade Student Submissions -->
+  <g id="uc-group-uc9" data-uc-id="uc9" onclick="showDescription('uc9', event)">
+    <ellipse cx="693" cy="395" rx="106" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="693" y="399" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Grade Student Submissions</text>
+  </g>
+
+  <!-- uc10: Facilitate Discussion Forum -->
+  <g id="uc-group-uc10" data-uc-id="uc10" onclick="showDescription('uc10', event)">
+    <ellipse cx="693" cy="490" rx="106" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="693" y="487" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Facilitate</text>
+    <text x="693" y="500" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Discussion Forum</text>
+  </g>
+
+  <!-- uc11: Deploy Online Quizzes -->
+  <g id="uc-group-uc11" data-uc-id="uc11" onclick="showDescription('uc11', event)">
+    <ellipse cx="693" cy="585" rx="106" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="693" y="589" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Deploy Online Quizzes</text>
+  </g>
+
+  <!-- uc12: Send Deadline Reminders (System Time) -->
+  <g id="uc-group-uc12" data-uc-id="uc12" onclick="showDescription('uc12', event)">
+    <ellipse cx="693" cy="710" rx="106" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="693" y="707" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Send Deadline</text>
+    <text x="693" y="720" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Reminders</text>
+  </g>
+
+  <!-- uc13: Integrate External Learning Tool (LTI Provider) -->
+  <g id="uc-group-uc13" data-uc-id="uc13" onclick="showDescription('uc13', event)">
+    <ellipse cx="330" cy="710" rx="106" ry="26" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+    <text x="330" y="707" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Integrate External</text>
+    <text x="330" y="720" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="500"
+          font-family="'Noto Sans Hebrew', sans-serif">Learning Tool</text>
+  </g>
+
+  <!-- 5. Actors (drawn last — on top of everything) -->
+
+  <!-- Student (left, primary human actor) -->
+  <g id="actor-group-a1" transform="translate(80,380)">
+    <circle cx="0" cy="-42" r="11" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-31" x2="0"   y2="2"  stroke="#334155" stroke-width="2"/>
+    <line x1="-16" y1="-18" x2="16" y2="-18" stroke="#334155" stroke-width="2"/>
+    <line x1="0"  y1="2"  x2="-13" y2="26" stroke="#334155" stroke-width="2"/>
+    <line x1="0"  y1="2"  x2="13"  y2="26" stroke="#334155" stroke-width="2"/>
+    <text x="0" y="43" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="600"
+          font-family="'Noto Sans Hebrew', sans-serif">Student</text>
+  </g>
+
+  <!-- Instructor (right, primary human actor) -->
+  <g id="actor-group-a2" transform="translate(978,380)">
+    <circle cx="0" cy="-42" r="11" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="-31" x2="0"   y2="2"  stroke="#334155" stroke-width="2"/>
+    <line x1="-16" y1="-18" x2="16" y2="-18" stroke="#334155" stroke-width="2"/>
+    <line x1="0"  y1="2"  x2="-13" y2="26" stroke="#334155" stroke-width="2"/>
+    <line x1="0"  y1="2"  x2="13"  y2="26" stroke="#334155" stroke-width="2"/>
+    <text x="0" y="43" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="600"
+          font-family="'Noto Sans Hebrew', sans-serif">Instructor</text>
+  </g>
+
+  <!-- System Time (right, secondary — «system» rectangle) -->
+  <g id="actor-group-a3" transform="translate(978,710)">
+    <rect x="-55" y="-28" width="110" height="56" rx="5" fill="#f0f9ff" stroke="#334155" stroke-width="2"/>
+    <text x="0" y="-10" text-anchor="middle" fill="#334155" font-size="9"
+          font-family="'Noto Sans Hebrew', sans-serif">&#171;system&#187;</text>
+    <text x="0" y="8" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="600"
+          font-family="'Noto Sans Hebrew', sans-serif">System Time</text>
+    <text x="0" y="22" text-anchor="middle" fill="#334155" font-size="9"
+          font-family="'Noto Sans Hebrew', sans-serif">(Scheduler)</text>
+  </g>
+
+  <!-- LTI Provider (left, secondary — «external system» rectangle) -->
+  <g id="actor-group-a4" transform="translate(78,710)">
+    <rect x="-62" y="-32" width="124" height="62" rx="5" fill="#f0f9ff" stroke="#334155" stroke-width="2"/>
+    <text x="0" y="-14" text-anchor="middle" fill="#334155" font-size="8.5"
+          font-family="'Noto Sans Hebrew', sans-serif">&#171;external system&#187;</text>
+    <text x="0" y="4" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="600"
+          font-family="'Noto Sans Hebrew', sans-serif">LTI Provider</text>
+    <text x="0" y="19" text-anchor="middle" fill="#334155" font-size="8.5"
+          font-family="'Noto Sans Hebrew', sans-serif">(e.g. H5P, Kaltura)</text>
+  </g>
+
+</svg>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// USE CASE DESCRIPTIONS
+// ─────────────────────────────────────────────────────────
+const useCaseDescriptions = {
+  uc1:  { name: 'Log In to System',
+          description: 'The user (Student or Instructor) authenticates with their Moodle credentials to gain access to their personalised course dashboard and available features.' },
+  uc2:  { name: 'Browse Course Content',
+          description: 'The student navigates enrolled courses, views resources uploaded by the instructor (documents, videos, links), and accesses lecture materials organised by topic or week.' },
+  uc3:  { name: 'Submit Assignment',
+          description: 'The student uploads or types a completed assignment before the deadline. The system records the submission timestamp and notifies the instructor.' },
+  uc4:  { name: 'Participate in Discussion Forum',
+          description: 'The student reads forum threads, posts new messages, and replies to peers or the instructor within a course discussion board to exchange ideas.' },
+  uc5:  { name: 'View Grades & Feedback',
+          description: 'The student views marks and written feedback for completed activities such as assignments and quizzes, as recorded in the Moodle gradebook by the instructor.' },
+  uc6:  { name: 'Take Online Quiz',
+          description: 'The student completes a timed or untimed quiz online. The system records answers and calculates the score automatically upon submission.' },
+  uc7:  { name: 'Manage Course Materials',
+          description: 'The instructor uploads, organises, and updates learning resources (files, pages, URLs, books) within the course structure, controlling availability to students.' },
+  uc8:  { name: 'Create and Manage Assignments',
+          description: 'The instructor defines assignment parameters: instructions, accepted file types, maximum marks, and due dates. Assignments can be edited or removed at any time.' },
+  uc9:  { name: 'Grade Student Submissions',
+          description: 'The instructor reviews student work, enters numeric or rubric-based grades, and provides written feedback through the Moodle online grader or gradebook.' },
+  uc10: { name: 'Facilitate Discussion Forum',
+          description: 'The instructor creates forum topics, pins important posts, moderates student interactions, and responds to questions to guide course discussions.' },
+  uc11: { name: 'Deploy Online Quizzes',
+          description: 'The instructor builds question banks, configures timing rules and attempt limits, and publishes quizzes to students within specified availability windows.' },
+  uc12: { name: 'Send Deadline Reminders',
+          description: 'The system clock automatically triggers notification emails and in-app alerts to students when assignment or quiz deadlines are approaching or have passed.' },
+  uc13: { name: 'Integrate External Learning Tool',
+          description: 'An external LTI-compliant tool (e.g. H5P, Kaltura, Turnitin) communicates with Moodle via the LTI standard to embed interactive content or assessments directly in courses.' }
+};
+
+// ─────────────────────────────────────────────────────────
+// DESCRIPTION POPUP
+// ─────────────────────────────────────────────────────────
+function showDescription(ucId, event) {
+  hideDescription();
+  const uc = useCaseDescriptions[ucId];
+  if (!uc) return;
+  const panel = document.createElement('div');
+  panel.id = 'uc-description-panel';
+  panel.innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+      '<strong style="font-size:12px;color:#1e40af;">' + uc.name + '</strong>' +
+      '<span onclick="hideDescription()" style="cursor:pointer;color:#94a3b8;font-size:16px;margin-left:10px;">&#x00D7;</span>' +
+    '</div>' +
+    '<div style="font-size:11px;color:#334155;line-height:1.55;">' + uc.description + '</div>';
+  Object.assign(panel.style, {
+    position: 'fixed', background: '#fff', border: '1px solid #2980b9',
+    borderRadius: '8px', padding: '12px 16px', maxWidth: '300px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: '1000',
+    left: event.clientX + 'px', top: event.clientY + 'px'
+  });
+  document.body.appendChild(panel);
+  const rect = panel.getBoundingClientRect();
+  if (rect.bottom > window.innerHeight)
+    panel.style.top  = (event.clientY - rect.height - 10) + 'px';
+  if (rect.right > window.innerWidth)
+    panel.style.left = (window.innerWidth - rect.width - 10) + 'px';
+  event.stopPropagation();
+}
+function hideDescription() {
+  const p = document.getElementById('uc-description-panel');
+  if (p) p.remove();
+}
+document.addEventListener('click', hideDescription);
+
+// ─────────────────────────────────────────────────────────
+// DIAGRAM LAYOUT (for Fix Layout)
+// ─────────────────────────────────────────────────────────
+const diagramLayout = {
+  svgId: 'diagram-svg',
+  boundary: { x: 188, y: 56, width: 646, height: 730 },
+  actors: [
+    { id: 'a1', label: 'Student',      side: 'left',  x: 80,  y: 380, ucIds: ['uc1','uc2','uc3','uc4','uc5','uc6'] },
+    { id: 'a2', label: 'Instructor',   side: 'right', x: 978, y: 380, ucIds: ['uc1','uc7','uc8','uc9','uc10','uc11'] },
+    { id: 'a3', label: 'System Time',  side: 'right', x: 978, y: 710, ucIds: ['uc12'] },
+    { id: 'a4', label: 'LTI Provider', side: 'left',  x: 78,  y: 710, ucIds: ['uc13'] }
+  ],
+  useCases: [
+    { id: 'uc1',  cx: 511, cy: 112, rx: 98,  ry: 26 },
+    { id: 'uc2',  cx: 330, cy: 205, rx: 102, ry: 26 },
+    { id: 'uc3',  cx: 330, cy: 300, rx: 102, ry: 26 },
+    { id: 'uc4',  cx: 330, cy: 395, rx: 102, ry: 26 },
+    { id: 'uc5',  cx: 330, cy: 490, rx: 102, ry: 26 },
+    { id: 'uc6',  cx: 330, cy: 585, rx: 102, ry: 26 },
+    { id: 'uc7',  cx: 693, cy: 205, rx: 106, ry: 26 },
+    { id: 'uc8',  cx: 693, cy: 300, rx: 106, ry: 26 },
+    { id: 'uc9',  cx: 693, cy: 395, rx: 106, ry: 26 },
+    { id: 'uc10', cx: 693, cy: 490, rx: 106, ry: 26 },
+    { id: 'uc11', cx: 693, cy: 585, rx: 106, ry: 26 },
+    { id: 'uc12', cx: 693, cy: 710, rx: 106, ry: 26 },
+    { id: 'uc13', cx: 330, cy: 710, rx: 106, ry: 26 }
+  ],
+  connections: [
+    { from: 'a1', to: 'uc1',  type: 'association' },
+    { from: 'a1', to: 'uc2',  type: 'association' },
+    { from: 'a1', to: 'uc3',  type: 'association' },
+    { from: 'a1', to: 'uc4',  type: 'association' },
+    { from: 'a1', to: 'uc5',  type: 'association' },
+    { from: 'a1', to: 'uc6',  type: 'association' },
+    { from: 'a2', to: 'uc1',  type: 'association' },
+    { from: 'a2', to: 'uc7',  type: 'association' },
+    { from: 'a2', to: 'uc8',  type: 'association' },
+    { from: 'a2', to: 'uc9',  type: 'association' },
+    { from: 'a2', to: 'uc10', type: 'association' },
+    { from: 'a2', to: 'uc11', type: 'association' },
+    { from: 'a3', to: 'uc12', type: 'association' },
+    { from: 'a4', to: 'uc13', type: 'association' }
+  ]
+};
+
+// ─────────────────────────────────────────────────────────
+// FIX LAYOUT (idempotent — always sets absolute attributes)
+// ─────────────────────────────────────────────────────────
+function fixLayout(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  const pad = 80;
+
+  // Group UCs by actor side
+  const ucActorSide = {};
+  layout.actors.forEach(a => {
+    a.ucIds.forEach(uid => {
+      if (!ucActorSide[uid]) ucActorSide[uid] = a.side;
+      else if (ucActorSide[uid] !== a.side) ucActorSide[uid] = 'center';
+    });
+  });
+  const leftUCs = [], rightUCs = [], centerUCs = [];
+  layout.useCases.forEach(uc => {
+    const s = ucActorSide[uc.id] || 'center';
+    if (s === 'left') leftUCs.push(uc);
+    else if (s === 'right') rightUCs.push(uc);
+    else centerUCs.push(uc);
+  });
+
+  function sortByActorOrder(ucs, side) {
+    const ordered = layout.actors.filter(a => a.side === side).sort((a,b) => a.y - b.y);
+    ucs.sort((a, b) => {
+      const ai = ordered.findIndex(act => act.ucIds.includes(a.id));
+      const bi = ordered.findIndex(act => act.ucIds.includes(b.id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  }
+  sortByActorOrder(leftUCs,  'left');
+  sortByActorOrder(rightUCs, 'right');
+
+  const bx = layout.boundary.x, bw = layout.boundary.width;
+  function redistribute(ucs, colX) {
+    if (!ucs.length) return;
+    const startY = layout.boundary.y + 70;
+    ucs.forEach((uc, i) => {
+      uc.cy = startY + i * (uc.ry * 2 + pad) + uc.ry;
+      uc.cx = colX;
+    });
+  }
+  redistribute(leftUCs,   bx + bw * 0.28);
+  redistribute(rightUCs,  bx + bw * 0.72);
+  redistribute(centerUCs, bx + bw * 0.50);
+
+  // Re-centre actors on their UC groups
+  layout.actors.forEach(actor => {
+    const mine = layout.useCases.filter(u => actor.ucIds.includes(u.id));
+    if (mine.length) actor.y = mine.reduce((s, u) => s + u.cy, 0) / mine.length;
+  });
+
+  // Grow boundary if needed
+  const maxUCy = Math.max(...layout.useCases.map(u => u.cy + u.ry));
+  layout.boundary.height = Math.max(layout.boundary.height, maxUCy - layout.boundary.y + 60);
+
+  // Apply UC positions
+  layout.useCases.forEach(uc => {
+    const g = document.getElementById('uc-group-' + uc.id);
+    if (!g) return;
+    const el = g.querySelector('ellipse');
+    if (!el) return;
+    const dx = uc.cx - parseFloat(el.getAttribute('cx'));
+    const dy = uc.cy - parseFloat(el.getAttribute('cy'));
+    el.setAttribute('cx', uc.cx);
+    el.setAttribute('cy', uc.cy);
+    g.querySelectorAll('text').forEach(t => {
+      t.setAttribute('x', parseFloat(t.getAttribute('x')) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y')) + dy);
+    });
+    g.removeAttribute('transform');
+  });
+
+  // Apply actor positions
+  layout.actors.forEach(actor => {
+    const g = document.getElementById('actor-group-' + actor.id);
+    if (g) g.setAttribute('transform', 'translate(' + actor.x + ',' + actor.y + ')');
+  });
+
+  // Recalculate all connection line endpoints
+  svg.querySelectorAll('[data-conn-from][data-conn-to]').forEach(line => {
+    const fromId = line.getAttribute('data-conn-from');
+    const toId   = line.getAttribute('data-conn-to');
+    const fromUC    = layout.useCases.find(u => u.id === fromId);
+    const fromActor = layout.actors.find(a => a.id === fromId);
+    const toUC      = layout.useCases.find(u => u.id === toId);
+    const toActor   = layout.actors.find(a => a.id === toId);
+    const from = fromActor ? { x: fromActor.x, y: fromActor.y }
+               : fromUC   ? { x: fromUC.cx,   y: fromUC.cy   } : null;
+    const to   = toActor  ? { x: toActor.x,   y: toActor.y   }
+               : toUC     ? { x: toUC.cx,     y: toUC.cy     } : null;
+    if (!from || !to) return;
+    let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+    if (toUC) {
+      const a = Math.atan2(from.y - toUC.cy, from.x - toUC.cx);
+      x2 = toUC.cx + toUC.rx * Math.cos(a);
+      y2 = toUC.cy + toUC.ry * Math.sin(a);
+    }
+    if (fromUC) {
+      const a = Math.atan2(to.y - fromUC.cy, to.x - fromUC.cx);
+      x1 = fromUC.cx + fromUC.rx * Math.cos(a);
+      y1 = fromUC.cy + fromUC.ry * Math.sin(a);
+    }
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+  });
+
+  // Resize boundary rect + viewBox
+  const boundRect = svg.querySelector('.system-boundary');
+  if (boundRect) boundRect.setAttribute('height', layout.boundary.height);
+  const vb = svg.getAttribute('viewBox');
+  if (vb) {
+    const parts = vb.split(/\s+/);
+    const totalH = layout.boundary.y + layout.boundary.height + 40;
+    parts[3] = Math.max(parseFloat(parts[3]), totalH);
+    svg.setAttribute('viewBox', parts.join(' '));
+    svg.setAttribute('height', parts[3]);
+  }
+}
+</script>
+</body>
+</html>

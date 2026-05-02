@@ -18,6 +18,12 @@
 
 | # | מדריך | תיאור |
 |---|-------|-------|
+| 🏢 | [תיאור ארגון](docs/org-analysis/01-organization.md) | פרופיל קדם אספקה בע"מ, מבנה ארגוני, מערכות קיימות |
+| 🎤 | [ראיונות בעלי עניין](docs/org-analysis/02-interviews.md) | סיכומי ראיונות עם מנהלת משמרת, עובד שטח ומנכ"ל |
+| ⚠️ | [טבלת בעיות](docs/org-analysis/03-problems.md) | בעיות עסקיות, גורמים, ומיפוי לדרישות ולהחלטות עיצוב |
+| 00 | [מסמך דרישות](docs/00-requirements.md) | User Stories, דרישות פונקציונליות ולא-פונקציונליות, Traceability Matrix |
+| 00e | [מפרטי Use Cases](docs/00e-use-cases.md) | מפרטי VP18 ל-5 UC מפורטים — קלט ישיר לפיתוח ול-AI agents |
+| 00e 🖼 | [דיאגרמת Use Cases (HTML)](order_management_use_case_diagram.html) | דיאגרמה אינטראקטיבית — לחיצה על UC מציגה מפרט מלא |
 | 01 | [התקנה](docs/01-installation.md) | Visual Studio, .NET 8, SQL Server, SSMS |
 | 02 | [הקמת DB](docs/02-database-setup.md) | הרצת סקריפט, אימות טבלאות ו-SPs |
 | 03 | [סקירת הפרויקט](docs/03-project-overview.md) | מבנה, ארכיטקטורה, מחלקות |
