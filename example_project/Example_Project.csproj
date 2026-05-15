@@ -7,6 +7,7 @@
     <RootNamespace>Example_Project</RootNamespace>
     <AssemblyName>Example_Project</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NoWarn>CA1416</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
