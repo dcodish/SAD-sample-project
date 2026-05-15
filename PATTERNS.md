@@ -34,10 +34,21 @@ Project artifacts are produced in this order: organization/problem context → r
 ### Entity Pattern
 Every entity class is self-contained. Each one owns:
 - Private fields + getters/setters
-- Constructor with `bool is_new` — if `true`, calls `createXYZ()` and adds to `Program.list`; if `false`, just sets fields (used during loading)
+- Constructor with `bool is_new` — if `true`, calls `getNextXYZId()` to assign a new PK, then calls `createXYZ()`, then adds to `Program.list`; if `false`, just sets fields (used during loading)
 - `createXYZ()`, `updateXYZ()`, `deleteXYZ()` — each builds a `SqlCommand` with a stored procedure
 - `static initXYZs()` — loads all records from DB into `Program.XYZs`, always calls constructor with `is_new = false`
 - `static seekXYZ(id)` — searches `Program.XYZs` by ID
+- `static getNextXYZId()` — returns `max(id) + 1` over `Program.XYZs` (or `1` if the list is empty). See "Primary Key Strategy" below.
+
+### Primary Key Strategy
+**Primary keys are assigned in C#, not by the database.**
+
+- DDL: every PK is `INT NOT NULL PRIMARY KEY`. Do **not** use `IDENTITY(1,1)`.
+- The entity class's `static getNextXYZId()` returns `max(id) + 1` over the in-memory list.
+- The `is_new` constructor calls `getNextXYZId()` before `createXYZ()` to assign the new row's PK.
+- Create stored procedures take the PK as the first parameter (`@<entity>_id`). They do **not** use `SCOPE_IDENTITY()` and do **not** return the new ID.
+
+This is deliberate: students can read the full lifecycle of an ID in one place (the C# constructor), and DB writes are deterministic from the entity's state. Concurrency is not a concern in the single-user teaching context.
 
 ### In-Memory Lists
 All data lives in `Program.*` static lists after startup. No DB calls during normal use except writes.
