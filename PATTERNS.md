@@ -102,6 +102,16 @@ This separation is intentional and pedagogically important. Do not merge them.
 | Requirements and UC spec documents | English |
 | UC diagram text (actor labels, UC names, flow steps) | Hebrew |
 
+### RTL Layout for Hebrew UI
+
+Every `Form` and `UserControl` with Hebrew visible text **must** be set up for right-to-left rendering:
+
+- `RightToLeft = Yes` on the form/panel (mirrors text direction, button alignment, scrollbar position).
+- `RightToLeftLayout = true` on the root form (mirrors the entire layout, including TabControl direction and DataGridView column order).
+- Set these on the parent — children inherit unless overridden.
+
+Generate panels with these properties set from the start. Retrofitting RTL onto LTR-built panels is painful — labels overlap, alignment breaks, the designer file fights you.
+
 ---
 
 ## Decisions Already Made — Do Not Revisit Without Discussion
