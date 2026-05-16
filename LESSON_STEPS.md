@@ -696,13 +696,143 @@ If the diff doesn't match the state diagram, the transition is buggy — fix the
 
 ---
 
-## Phase 8+ — Out of Scope for the Lesson
+## Phase 8 — Reports (Homework)
 
-What's left after Phase 7 — report UCs, polish, deployment, integration testing against the central server — is the group's homework. They have:
+**Not covered in class.** Same structure as the in-class phases — drafted here so you can follow it on your own.
 
-- A working scaffold to extend
-- A working CLAUDE.md Claude reads automatically every session
-- A working MCP-driven DB workflow
-- Documented patterns for entities, panels, entry flow, and state machines
+Reports are a different UI shape from CRUD: read-only, parameterized (date ranges, filters, drop-down selectors), and the data they show is **aggregated** (counts, sums, percentages, groupings) — not raw rows. The SP behind a report uses `JOIN` / `GROUP BY` / window functions, not single-table SELECTs. The panel has filters at the top and a results grid below, no Save/Update/Delete buttons.
 
-Everything from here on is "ask Claude to do X following the established patterns." Students who internalized Phases 1–7 will move fast. Students who skipped the review steps will spend the rest of the semester debugging silent errors that compounded.
+### Step 8.1 — Identify report UCs in your scope
+
+> Read `docs/00e-use-cases.md` and `docs/design/sequence-diagram.md` (or wherever your reports are specified). List every UC whose primary actor is a manager/admin and whose behavior is "view summarized data over some range." For each, name: the input parameters (date range, filter values), the columns shown in the output, and any grouping or aggregation rules.
+
+Review the list against your group's intent. Pick the simplest report to implement first.
+
+### Step 8.2 — Generate the report SP
+
+> Generate `sp_<reportName>` and append it to `scripts/stored_procedures.sql`, then run it via the mssql MCP. The SP takes the report's input parameters (use sensible SQL types — `DATETIME2` for dates, `NVARCHAR` for filter strings, etc.) and returns the aggregated rows defined in Step 8.1's inventory. Use `JOIN` / `GROUP BY` as needed. Hebrew column aliases where the output is user-facing.
+>
+> Before running, show me the SP and let me review the joins and groupings.
+
+### Step 8.3 — Generate the report panel
+
+> Generate `<ReportName>Panel.cs` (+ Designer + resx) — a read-only panel with: filter controls at the top matching the SP's input parameters (DateTimePickers, ComboBoxes, etc.), a "Generate" button, and a DataGridView below. On click, the panel calls the report SP with the user-entered parameters and binds the result set to the grid. RTL layout. Hebrew labels. No Save/Update/Delete buttons — this is read-only.
+>
+> Wire the panel into the appropriate manager role home (replacing a TODO button if one exists for this report).
+
+### Step 8.4 — Verify the report
+
+Run it through the UI. Spot-check a few rows manually:
+- Pick one row from the report output.
+- Walk back through the source data via MCP (`SELECT * FROM <table> WHERE <criteria>`) and verify the aggregation matches by hand.
+
+If the numbers are wrong, the bug is almost always in the SP's `GROUP BY` or `JOIN`. Have Claude re-derive the SP from the requirements and compare against the version it generated.
+
+---
+
+## Phase 9 — Complex UC Flows (Homework)
+
+**Not covered in class.** Drafted here so you can follow it on your own.
+
+Some UCs are **orchestrated transactions** — a single user action that touches multiple entities atomically. "Register for a class" is the canonical example: it decrements credits on a `CustomerSubscription`, increments `registrationCount` on a `ScheduleSlot`, creates a `Registration` row, and triggers a notification. All four happen or none of them happen.
+
+The structure is similar to a state-machine transition (Phase 7), but at the UC level rather than tied to a single entity's lifecycle. You'll reuse the same transaction discipline.
+
+### Step 9.1 — Identify the complex flows
+
+> Read `docs/00e-use-cases.md` and list every UC whose main scenario touches more than one entity in a single user action. For each, name: the entities involved, the operation on each, the order they must happen in, and any guards (preconditions that must be true before any side effect fires).
+>
+> Distinguish these from simple CRUD UCs (touch one entity) and state-machine transitions (touch one entity's state column plus minor side effects).
+
+### Step 9.2 — Pick the most central UC first
+
+The "first runnable end-to-end flow" should be the one that exercises the most of your domain — typically a primary actor's most common action. Once it works, the others follow the same pattern.
+
+### Step 9.3 — Generate the orchestration SP
+
+> Generate `sp_<flowName>` and append to `scripts/stored_procedures.sql`. The SP takes the operation's inputs as parameters, validates every guard (returns an error code or `RAISERROR` if any fails), then performs every entity update inside a single `BEGIN TRAN ... COMMIT TRAN` block with `ROLLBACK` on any error.
+>
+> Before running, show me the SP. I want to verify: every guard is enforced; the order of operations is correct; nothing is left for the application code to "remember" to do.
+
+### Step 9.4 — Generate the orchestrating method on the originating entity
+
+> Add a domain-verb method to the originating entity (e.g., `UserProfile.registerForClass(slotId)`). The method calls the SP, on success updates the in-memory state of every affected entity (`Program.Registrations` adds the new row, the affected `ScheduleSlot.registrationCount` increments, the affected `CustomerSubscription.remainingCredits` decrements), and on failure surfaces the SP's error message to the caller as a Hebrew string the UI can show.
+
+### Step 9.5 — Wire UI to the flow
+
+> Add a button/control on the relevant panel that triggers this flow. On click, gather user input (the slot to register for, etc.), call the orchestrating method, show a Hebrew success or failure message, and refresh any visible lists so the change is immediately visible.
+
+### Step 9.6 — Walk the flow end-to-end
+
+For each guard case (every "what if this fails" scenario):
+1. Set up the precondition (e.g., empty the subscription's credits).
+2. Trigger the flow through the UI.
+3. Verify: the right Hebrew error appears, and **no partial state change happened in the DB** (the most important check — open SSMS or use MCP to confirm).
+
+For the success case:
+1. Set up valid preconditions.
+2. Trigger the flow.
+3. Verify all expected updates happened in the DB, every affected in-memory list is consistent, and the UI reflects the new state.
+
+---
+
+## Phase 10 — UI Polish With Claude (Homework)
+
+**Not covered in class.** Drafted here so you can follow it on your own.
+
+The panels generated in Phases 5–9 are functional but visually plain — gray controls, default fonts, no spacing discipline, no branding. Claude can read your existing panels and propose richer designs: better layouts, color schemes, fonts, icons, hover/feedback states, real wireframe-grade designs grounded in your project's domain.
+
+This is also the path to **closing the gap between the UC wireframes you drew in design and what your app actually looks like.** If a wireframe specified a tabbed view or a card grid, this is where you bring it to life.
+
+### Step 10.1 — Decide what to polish
+
+Polish is taste-driven. Pick a target: one signature screen (your app's landing/dashboard for the main role), or a consistent visual upgrade across every panel. Don't try to do both in one prompt.
+
+### Step 10.2 — Feed Claude the source material
+
+Claude designs better when it sees what you want, not what you have. Give it:
+- A description of your domain in one line ("a pilates studio management app, intimate small-group atmosphere, target users are women, brand colors are warm/feminine").
+- A screenshot of the current panel (drag-and-drop into the Claude Code chat — it can read images).
+- The matching wireframe from `order_management_use_case_diagram.html` (or your UC diagram modal), if one exists.
+- A reference look you like — a screenshot from another app, a Figma frame, a Dribbble link, anything Claude can see or fetch.
+
+### Step 10.3 — Ask for a redesign with constraints
+
+> Read `<EntityName>Panel.cs` and `<EntityName>Panel.Designer.cs`. Propose a redesign of this panel that:
+> - Keeps all the existing controls and event handlers wired exactly as they are (no behavior changes)
+> - Improves visual hierarchy, spacing, font choices, and color usage
+> - Stays RTL and Hebrew per `PATTERNS.md`
+> - Targets the look-and-feel of [reference image or description]
+>
+> Show me the proposed Designer.cs changes first as a diff. Don't write yet — I want to see the design choices and approve them before they land.
+
+### Step 10.4 — Iterate
+
+Visual design rarely lands first try. Common back-and-forth: "the buttons are too close together", "use a lighter shade of pink", "increase the font size on the list view headers". Each round is cheap because Claude already has full context.
+
+### Step 10.5 — Apply consistently
+
+Once one panel looks right, make the design language explicit so other panels inherit it:
+
+> Document the design choices we made for `<EntityName>Panel.cs` — color palette (hex values), font choices, spacing rules, button styling — as a short "Visual Design" section in `CLAUDE.md`. Then apply the same rules to all the other panels in one pass.
+
+After this, future panels Claude generates will pick up the design language without re-asking.
+
+### What to avoid
+
+- Don't break behavior in pursuit of looks. The redesign is Designer.cs (layout + styling), not the panel's .cs (logic).
+- Don't switch UI frameworks mid-project (no jumping from WinForms to WPF here — that's a rewrite, see `ROADMAP.md`).
+- Don't introduce third-party UI libraries (Telerik, DevExpress) without first checking whether plain WinForms can carry the visual ambition. Most of the time it can.
+
+---
+
+## What's Genuinely Out of Scope
+
+Beyond Phase 10, the remaining work on a student project is no longer pattern-following — it's project-specific decisions and operational concerns:
+
+- **Deployment** to the central course server (connection-string switch, running scripts against the shared DB, the dev/test/prod separation).
+- **Group git workflow** — branches, conflict resolution, PRs. The course explicitly skipped teamwork in class; figure it out as a group.
+- **Submission preparation** — README, demo video, walkthrough document.
+- **Performance tuning** if you somehow generate enough seed data to need it (unlikely in a teaching project).
+
+Students who internalized Phases 1–7 will move through Phases 8–10 quickly. Students who skipped the review steps will spend the rest of the semester debugging silent errors that compounded.
