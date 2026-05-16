@@ -523,7 +523,7 @@ Pick a Tier 1 base entity for the first panel — `UserProfile` if Customers man
 
 > Generate `<EntityName>Panel.cs` (UserControl + Designer + resx) — full CRUD for `<EntityName>`: list view of all rows, fields to view/edit one row, Save / Update / Delete / Back buttons. Hebrew UI text. Wire each button to the entity's `createXyz / updateXyz / deleteXyz` methods.
 >
-> Then replace the TODO placeholder button in the appropriate role's home panel (per the entry flow you designed in 5.5) so it now calls `mainForm.showPanel(new <EntityName>Panel())`. Back button on the CRUD panel returns to that role's home.
+> Then replace the TODO placeholder button in the appropriate role's home panel (per the "Entry Flow" section in `CLAUDE.md`) so it now calls `mainForm.showPanel(new <EntityName>Panel())`. Back button on the CRUD panel returns to that role's home.
 >
 > Match the sample's panel patterns exactly — event-handler shape, return-to-home mechanism, Designer.cs structure.
 
@@ -644,7 +644,7 @@ If your project has only one state-bearing entity (common), this step is trivial
 
 ### Step 7.3 — Generate transition methods + SPs together
 
-> For `<EntityName>`, generate the transition methods listed in Step 7.1 and the matching stored procedures.
+> For `<EntityName>`, read `docs/design/state-diagram.md` and enumerate the state transitions for this entity. Then generate the transition methods on the entity class and the matching stored procedures.
 >
 > For each transition:
 > - Method on the entity class named after the domain verb (`cancel()`, `lateCancel()`, `promoteFromWaitlist()`) — NOT `update(...)`. Encode the guard inline; if the guard fails, throw or return false with a Hebrew message the UI can show.
@@ -668,7 +668,7 @@ Focus on the silent errors:
 
 Open the relevant CRUD panel for the state-bearing entity. Replace the generic "Update" / "Save" button with **verb buttons** for each transition that's user-triggered.
 
-> On `<EntityName>Panel.cs`, replace the generic Update button with verb buttons matching the user-triggered transitions from Step 7.1 — one button per transition, Hebrew label describing the verb. Each button calls the corresponding transition method on the entity, handles guard failures by showing the Hebrew error message in a `MessageBox`, and refreshes the list view on success.
+> On `<EntityName>Panel.cs`, replace the generic Update button with verb buttons matching the user-triggered state transitions for this entity (read `docs/design/state-diagram.md` to enumerate them) — one button per transition, Hebrew label describing the verb. Each button calls the corresponding transition method on the entity, handles guard failures by showing the Hebrew error message in a `MessageBox`, and refreshes the list view on success.
 
 Some transitions are system-triggered (`promoteFromWaitlist` runs when a slot frees up, not from a button) — those don't get UI buttons; they're called from other transition methods.
 
