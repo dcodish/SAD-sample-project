@@ -488,21 +488,25 @@ This step has Claude inspect your project's actors and design an entry flow appr
 
 > Read `docs/design/class-diagram.md`, `docs/00e-use-cases.md`, and the UC and actor information in `CLAUDE.md`. Identify the human actors in this project.
 >
+> **Login is the first screen** for multi-actor projects. Authentication is not in our requirements — the requirements describe what each actor *does*, not how the system identifies them. Derive the login design from the **class diagram**, not from the requirements:
+> - Find every entity that has credential-like fields (`email`/`username` + `password`). There may be more than one — e.g., `UserProfile` for customers, `Employee` for staff. Each one is a login source.
+> - The role that the logged-in user has determines which home panel they land on after login. Map each credential-holding entity to its corresponding role home.
+>
 > Decide whether the entry flow should be:
 > (a) **Login → per-role home panels** — when there are multiple human actors with distinct screens (e.g., Customer vs Manager). Each role gets its own home panel that hosts only the UCs that actor performs.
-> (b) **Flat menu on `mainForm`** — when there's only one human actor, or no meaningful role distinction.
+> (b) **Flat menu on `mainForm`** — only when there's a single human actor, no credentials on any entity, or no meaningful role distinction.
 >
-> Tell me which design you've chosen and why, and ask for my confirmation before generating any files.
+> Tell me which design you've chosen, name every credential-holding entity and the home panel each one routes to, and ask for my confirmation before generating any files.
 >
 > Once I confirm, generate the entry-flow files in one batch (so they compile together):
-> - `mainForm.cs` (+ Designer + resx) — match the sample's `cloned/example_project/mainForm.cs` pattern: hosts a single content area and a `showPanel(UserControl)` method.
+> - `mainForm.cs` (+ Designer + resx) — match the sample's `cloned/example_project/mainForm.cs` pattern: hosts a single content area and a `showPanel(UserControl)` method. **`mainForm`'s entry point loads `LoginPanel` first**, not a home panel directly.
 > - If you chose (a):
->   - `LoginPanel.cs` (+ Designer + resx) — username + password fields, login button. On success, authenticate against `UserProfile` / `Employee` (or whichever entities hold credentials in our model), determine the actor's role, and call `mainForm.showPanel(new <Role>Home())`. Per `PATTERNS.md`, login is a technical artifact, not a UC — that's fine here.
+>   - `LoginPanel.cs` (+ Designer + resx) — email + password fields, login button, Hebrew error message for missing/wrong credentials. On click, iterate through every credential-holding entity's in-memory list (`Program.Employees`, `Program.UserProfiles`, etc.) in priority order, match email+password, and `mainForm.showPanel(new <Role>Home())` on the first match. Show a Hebrew "wrong credentials" message if no match. Per `PATTERNS.md`, login is a technical artifact, not a UC — that's fine here.
+>   - **Optional dev shortcut**: a small secondary button labelled "כניסת מפתח" (dev login) or similar that bypasses authentication and opens a debug panel listing every panel in the app. Useful for development; remove or hide before submission.
 >   - One `<Role>HomePanel.cs` (+ Designer + resx) per role identified. Each home panel has placeholder buttons for that role's UCs (read them from the UC diagram). Buttons can be wired to `MessageBox.Show("TODO")` for now — they'll get real handlers as later CRUD panels are added.
->   - `mainForm`'s entry point shows `LoginPanel` first.
 > - If you chose (b): `mainForm` opens directly to a flat menu with placeholder buttons for each UC.
 >
-> Add a short "Entry Flow" section to `CLAUDE.md` documenting the design you chose, so future sessions don't second-guess it.
+> Add a short "Entry Flow" section to `CLAUDE.md` documenting the design you chose, including the list of credential-holding entities and which home each routes to.
 
 Review before moving on:
 - The actor identification matches the UC diagram (no actors invented, none missed).
