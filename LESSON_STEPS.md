@@ -841,66 +841,110 @@ What you'll need from the course (ask your instructor or TA):
 - A database name allocated to your group
 - A SQL login (username + password) — central servers use **SQL authentication**, not Windows authentication
 
-### Option B — Azure SQL Database (free tier, recommended fallback)
+### Option B — Azure SQL Database (free tier)
 
-If the central server is unreliable or you'd rather have your own shared cloud DB, Azure SQL Database has a free tier suitable for a teaching project.
+If the central server is unreliable or you'd rather have your own shared cloud DB, this section walks the whole setup end-to-end. One member of the group does the Azure-portal steps once; everyone else just receives the credentials.
 
-**Best path for students:** sign up for **[Azure for Students](https://azure.microsoft.com/en-us/free/students/)**. With a verified `.ac.il` (or other recognized institutional) email, you get:
-- $100 of Azure credit (renewable each year you're a student)
-- Free access to the Azure SQL Database free tier (~100k vCore-seconds/month, 32 GB storage — plenty for a teaching project)
-- **No credit card required** — your institutional email is the verification
+**Setup time:** ~15 minutes for the first-time setup. Subsequent connections from teammates: under a minute.
 
-Once signed up:
-1. In the Azure Portal, create a new **SQL Database** → choose the **free** offer when prompted.
-2. Set up a **server admin login** (username + password) — write these down.
-3. Under the database's "Networking" settings, allow your IP address (or "any IP" for class testing — be aware this is less secure).
-4. Copy the ADO.NET connection string from the database's "Connection strings" page.
+#### Step B.1 — One team member: sign up for Azure for Students
 
-### Step 11.1 — Run your scripts against the shared DB
+Done once per group, by whoever is willing to be the "DB owner."
 
-Whichever option you picked, you need the schema + SPs + seed data to exist on the shared DB too. Your local DB and the shared DB will live in parallel — same scripts, different targets.
+1. Go to **[azure.microsoft.com/free/students](https://azure.microsoft.com/en-us/free/students/)**.
+2. Click **Start free**.
+3. Sign in with your institutional account (`.ac.il` email).
+4. Microsoft will verify your student status against the email domain. **No credit card is required.** If it asks for one, you're on the wrong signup page — you want the Students path, not the regular Free Trial.
+5. After verification, you have a free Azure account with $100 credit (renewable annually while you're a student) and access to the Azure SQL Database free tier.
 
-Edit `.mcp.json` (the gitignored config) to point at the shared server:
+#### Step B.2 — Create the SQL Database
 
-```json
-{
-  "mcpServers": {
-    "mssql": {
-      "command": "uvx",
-      "args": ["microsoft_sql_server_mcp"],
-      "env": {
-        "MSSQL_SERVER": "<shared_server_hostname>",
-        "MSSQL_DATABASE": "<shared_db_name>",
-        "MSSQL_USER": "<sql_login_username>",
-        "MSSQL_PASSWORD": "<sql_login_password>",
-        "TrustServerCertificate": "true"
-      }
-    }
-  }
-}
-```
+In the **[Azure Portal](https://portal.azure.com)**:
 
-Notice: `MSSQL_WINDOWS_AUTH` is gone, replaced by `MSSQL_USER` and `MSSQL_PASSWORD`. Shared servers don't trust your Windows identity — they need an explicit SQL login.
+1. Top search bar → **SQL databases** → **+ Create**.
+2. Fill in:
+   - **Subscription:** Azure for Students (auto-selected if it's your only one).
+   - **Resource group:** click "Create new" → name it `sad-<groupname>-rg`.
+   - **Database name:** pick a descriptive name (e.g., `sharona_pilates_shared`). This is what you'll put in `MSSQL_DATABASE`.
+   - **Server:** click "Create new":
+     - **Server name:** must be globally unique (e.g., `sad-<groupname>-sql`). This becomes `<servername>.database.windows.net`.
+     - **Location:** pick the nearest region (e.g., West Europe).
+     - **Authentication method:** **"Use SQL authentication"**.
+     - **Server admin login:** pick a username (NOT `admin`, NOT `root` — those are blocked). Pick a strong password. **Write both down.** These are the credentials your whole group will use.
+     - Click **OK**.
+3. **Compute + storage:** click **Configure database** → pick the **General Purpose Serverless** tier with the **free offer** checkbox (it'll be highlighted). The free offer gives you ~100k vCore-seconds/month and 32 GB storage at no cost.
+4. **Networking** (tab at the top of the Create wizard):
+   - **Connectivity method:** Public endpoint.
+   - **Firewall rules:**
+     - Set **"Allow Azure services and resources to access this server"** → **Yes**.
+     - Set **"Add current client IP address"** → **No** (we'll set a wider rule in the next step, since IPs change constantly).
+5. Skip the other tabs (defaults are fine) → **Review + create** → **Create**. Wait ~3 minutes for deployment.
 
-Restart Claude Code so it picks up the new config. Then run your scripts via the MCP:
+#### Step B.3 — Open the firewall to anywhere
 
-> Run `scripts/create_database.sql`, `scripts/stored_procedures.sql`, and `scripts/seed_data.sql` against the shared database via the mssql MCP, in that order.
+Azure SQL rejects all incoming connections by default. For a teaching project, the simplest workable policy is "allow connections from any IP; security is enforced by the SQL login":
 
-This is exactly the same workflow as your local DB — that's the point of versioning scripts instead of databases.
+1. Once the database is deployed, click **Go to resource**.
+2. In the database overview, click the **server name** at the top (a link, ends in `.database.windows.net`).
+3. In the server's left sidebar, click **Networking**.
+4. Under **Public network access**, choose **Selected networks**.
+5. Under **Firewall rules**, click **+ Add a firewall rule**:
+   - **Rule name:** `allow-all-teaching-context`
+   - **Start IP:** `0.0.0.0`
+   - **End IP:** `255.255.255.255`
+6. Click **OK**, then **Save** at the top of the Networking page.
 
-### Step 11.2 — Switch the C# app to the shared DB
+**Why this is acceptable here:** the real access control is the SQL login. Without the username + password, an open firewall still rejects every connection. For a teaching DB with throwaway data, this trade-off — slightly weaker network filtering in exchange for not having to re-add IP rules every time a teammate's IP changes — is the right call. Don't use this pattern for production.
 
-Edit `<ProjectName>/app.config` (also gitignored) — replace the local connection string with the shared one. For Azure SQL or a remote server with SQL auth, the format is:
+#### Step B.4 — Share credentials with your team
 
-```
-Server=<shared_server_hostname>;Database=<shared_db_name>;User Id=<sql_login_username>;Password=<sql_login_password>;TrustServerCertificate=True;Encrypt=True;
-```
+Write down these four values from Steps B.2 and B.3 and share them privately with teammates (Bitwarden, 1Password, your group's private chat — **never in a public channel, never committed to git**):
 
-`Encrypt=True` is required for Azure SQL (it rejects unencrypted connections). It's optional but recommended for the BGU central server too.
+- **Server:** `<servername>.database.windows.net`
+- **Database:** `<database name from B.2>`
+- **User:** `<admin login from B.2>`
+- **Password:** `<admin password from B.2>`
 
-Build and run the C# app. It should now read from and write to the shared DB instead of your local one.
+Each teammate uses these credentials in their own local `.mcp.json` and `app.config`. Same server, same DB, same login — everyone hits the same data.
 
-### Step 11.3 — Switching back and forth
+#### Step B.5 — Hand off to Claude
+
+The Azure portal work is done. From here, everything is in Claude Code. Skip ahead to **Step 11.1** below — the prompt there does the file edits, runs the scripts against Azure, switches `app.config`, and verifies the connection.
+
+### Step 11.1 — Hand the switch off to Claude
+
+Once you have the four credentials from either Option A (BGU server) or Option B (Azure SQL), one prompt does the rest. Open Claude Code, fill in the four placeholders, and paste:
+
+> Switch this project to use a shared SQL Server database in addition to my local one.
+>
+> Shared SQL connection details:
+> - Server: `<server>`
+> - Database: `<database>`
+> - User: `<username>`
+> - Password: `<password>`
+>
+> Steps:
+>
+> 1. Rename my current `.mcp.json` to `.mcp.json.local` (so I can switch back). Then create a new `.mcp.json` pointing at the shared server above — `MSSQL_SERVER` and `MSSQL_DATABASE` set to the shared values, replace `MSSQL_WINDOWS_AUTH=true` with `MSSQL_USER` and `MSSQL_PASSWORD`, keep `TrustServerCertificate=true`.
+>
+> 2. Tell me to restart Claude Code so the new MCP config takes effect. After I confirm I've restarted, in your first action verify the new connection by calling `list_tables` against the shared DB — it should be empty.
+>
+> 3. Once verified, run `scripts/create_database.sql`, then `scripts/stored_procedures.sql`, then `scripts/seed_data.sql` against the shared DB via the mssql MCP, in that order. Report any errors per script.
+>
+> 4. Rename `<ProjectName>/app.config` to `app.config.local`. Then create a new `app.config` with a connection string for the shared server using SQL authentication. Format: `Server=<server>;Database=<database>;User Id=<username>;Password=<password>;TrustServerCertificate=True;Encrypt=True;`. The `Encrypt=True` is required for Azure SQL and harmless elsewhere.
+>
+> 5. Update the "Database" section in `CLAUDE.md` to note that the project now has two targets: local (`.mcp.json.local` / `app.config.local`) and shared (the currently active configs). Document the rename-swap convention to switch between them.
+>
+> 6. Build the C# project. Then tell me to F5 and confirm the panels show data from the shared DB.
+
+That's the whole switch. Claude does the file renames, the MCP-driven script execution, the verification, and the docs update. You only handle the Claude Code restart and one F5.
+
+**If something fails:**
+- "Cannot connect" / timeout → firewall. For Azure: re-check the Networking → Firewall rules in the portal; the `0.0.0.0–255.255.255.255` rule should be saved. For BGU: VPN or network policy.
+- "Login failed for user" → username/password typo in the prompt. Retry.
+- Scripts fail partway → re-run them; they're idempotent.
+
+### Step 11.2 — Switching back and forth
 
 You'll want to keep doing exploratory dev locally and only push to shared periodically. Two options:
 
