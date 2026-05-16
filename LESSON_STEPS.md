@@ -608,13 +608,101 @@ These are real student projects' "remaining 30%" — done in their own time afte
 
 ---
 
-## Phase 7+ — Out of Scope for the Lesson
+## Phase 7 — State Machines: Bring Your State Diagrams to Life
 
-The lesson stops at "all CRUD screens running against a real DB." Anything beyond — report SPs, state machines, complex UC flows, polish, deployment — is the group's homework. They have:
+This is the first thing in your project that **isn't CRUD**. You drew state diagrams in your design — every state, every transition, every guard. This phase translates them into code so the diagrams stop being documentation and become the actual logic.
+
+### Why state machines deserve their own phase
+
+CRUD treats every entity as a bag of fields you can mutate freely. A state-bearing entity isn't like that — its lifecycle has rules:
+
+- **Guards.** Not every transition is always legal. Cancelling a registration <24h before the lesson is allowed but triggers a different path (late cancel + charge) than cancelling earlier.
+- **Side effects in other entities.** Cancelling a registration frees a slot on `ScheduleSlot`, refunds a credit on `CustomerSubscription`, and may promote the next person from the waitlist. One verb, multiple tables.
+- **Atomicity.** Those side effects must succeed or fail together. Half-cancelled registrations corrupt the domain.
+- **Domain verbs, not symmetric CRUD.** `cancel()`, `lateCancel()`, `promoteFromWaitlist()`, `confirm()` — these are the methods, not `update(status='Cancelled')`.
+
+If a student tries to model these as CRUD updates, the app compiles and runs but the data quietly goes wrong. The state diagram is the upstream artifact that prevents this; this phase is where it pays off.
+
+### Step 7.1 — Identify state-bearing entities
+
+In Claude Code:
+
+> Read `docs/design/state-diagram.md` (and any other state diagrams in `docs/design/`). For each entity that has a non-trivial state machine, list:
+> - The entity name
+> - Every state in the diagram
+> - Every transition, including the source state, target state, the trigger (event/method name), the guard (condition for the transition to fire), and any side effects in other entities
+>
+> Do not implement anything yet. Just produce the inventory and ask for confirmation that it matches my design.
+
+Review against your own state diagram. If Claude missed a transition or invented one, fix it now — same review-and-challenge discipline as Phase 3.
+
+### Step 7.2 — Pick the first state machine to implement
+
+Same logic as picking the first CRUD panel: pick the simplest state-bearing entity first. Validate the pattern, then scale.
+
+If your project has only one state-bearing entity (common), this step is trivial. If it has more than one, start with the one whose transitions touch the fewest other entities.
+
+### Step 7.3 — Generate transition methods + SPs together
+
+> For `<EntityName>`, generate the transition methods listed in Step 7.1 and the matching stored procedures.
+>
+> For each transition:
+> - Method on the entity class named after the domain verb (`cancel()`, `lateCancel()`, `promoteFromWaitlist()`) — NOT `update(...)`. Encode the guard inline; if the guard fails, throw or return false with a Hebrew message the UI can show.
+> - Matching stored procedure (`sp_<entity>_<verb>`) that updates the state column and applies any side effects in other tables — all inside a `BEGIN TRAN ... COMMIT TRAN` block with `ROLLBACK` on error. This is the first time we use transactions; do it explicitly.
+> - In-memory list updates that mirror the DB changes (so the running app sees consistent state without reloading).
+>
+> Append the SPs to `scripts/stored_procedures.sql` and run them against the DB via the mssql MCP. Then add the methods to the entity class.
+>
+> Do not change any existing CRUD methods (`create*`, `update*`, `delete*`) — state transitions are new methods alongside them.
+
+### Step 7.4 — Review the state-machine code
+
+Focus on the silent errors:
+
+- **Guards present and correct.** Every transition that should have a guard, has one. Late cancellation actually checks the 24-hour boundary; doesn't just trust the caller.
+- **Side effects atomic.** Each transition SP uses `BEGIN TRAN ... COMMIT TRAN`. If the slot-free or credit-refund fails, the state change rolls back too.
+- **No state changes via `update<Entity>(...)`.** The generic CRUD update should not touch the state column. State changes go through the named transition methods only. (If you don't enforce this, students will eventually do `reg.update(status='Cancelled')` and silently bypass every guard.)
+- **In-memory list mirrors DB.** After a transition, the entity's state in `Program.<entity>s` matches what's in the DB. Easy way to check: SELECT the row via MCP after a UI-driven transition.
+
+### Step 7.5 — Wire UI buttons that trigger transitions, not CRUD updates
+
+Open the relevant CRUD panel for the state-bearing entity. Replace the generic "Update" / "Save" button with **verb buttons** for each transition that's user-triggered.
+
+> On `<EntityName>Panel.cs`, replace the generic Update button with verb buttons matching the user-triggered transitions from Step 7.1 (e.g., "ביטול הרשמה" for `cancel`). Each button calls the corresponding transition method on the entity, handles guard failures by showing the Hebrew error message in a `MessageBox`, and refreshes the list view on success.
+
+Some transitions are system-triggered (`promoteFromWaitlist` runs when a slot frees up, not from a button) — those don't get UI buttons; they're called from other transition methods.
+
+### Step 7.6 — Walk the state paths
+
+For each transition, exercise it end-to-end through the UI:
+
+1. Set up a row in the source state (via seed data or another transition).
+2. Click the verb button (or trigger the system event).
+3. Verify the row is now in the target state, and that side effects in other tables happened.
+
+For the canonical test path, ask Claude:
+
+> Use the mssql MCP to verify the state machine end-to-end:
+> 1. SELECT the relevant rows BEFORE the transition.
+> 2. After I trigger the transition through the UI, SELECT them again.
+> 3. Compare and confirm both the state change and every documented side effect happened.
+
+If the diff doesn't match the state diagram, the transition is buggy — fix the method or the SP and re-test.
+
+### What's deliberately not in Phase 7
+
+- **Report UCs** (monthly attendance, monthly income) — different shape, gets its own phase if you reach it.
+- **Cross-aggregate flows** (e.g., a single user action that traverses multiple state machines on different entities) — rare in student projects; handle case-by-case.
+
+---
+
+## Phase 8+ — Out of Scope for the Lesson
+
+What's left after Phase 7 — report UCs, polish, deployment, integration testing against the central server — is the group's homework. They have:
 
 - A working scaffold to extend
 - A working CLAUDE.md Claude reads automatically every session
 - A working MCP-driven DB workflow
-- A documented entity pattern, panel pattern, and entry flow
+- Documented patterns for entities, panels, entry flow, and state machines
 
-Everything from here on is "ask Claude to do X following the established patterns." Students who internalized Phases 1–6 will move fast. Students who skipped the review steps will spend the rest of the semester debugging silent errors that compounded.
+Everything from here on is "ask Claude to do X following the established patterns." Students who internalized Phases 1–7 will move fast. Students who skipped the review steps will spend the rest of the semester debugging silent errors that compounded.
