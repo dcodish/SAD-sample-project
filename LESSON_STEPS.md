@@ -552,4 +552,65 @@ If anything fails: Claude has full context (sample, your code, DB). Describe the
 
 ---
 
-## Phase 6 — (next steps to be added as we work them out)
+## Phase 6 — Generate the Remaining CRUD Panels
+
+Phase 5 produced one CRUD panel end-to-end and validated the pattern. Now scale to the rest of your entities — every base entity, every association class, every entity that has a CRUD UC in your scope.
+
+You have two paths. Pick one based on how much you trust the pattern from Phase 5 and how much you enjoy a good demo.
+
+### Option A — One at a time (cautious)
+
+Generate one panel, review, wire it under the right role's home, build. Then the next. Repeat until done.
+
+> Generate `<EntityName>Panel.cs` (+ Designer + resx) for `<EntityName>`, following the same pattern as `<AlreadyDonePanel>.cs`. Wire it under `<RoleHomePanel>` (replacing the TODO placeholder). Match the entity pattern, RTL settings, and Hebrew labels from existing panels.
+
+Pros: catch any pattern drift early. Easy to review each panel against the source.
+Cons: slower, more prompts, more context-switching.
+
+### Option B — All at once (the wow path)
+
+One prompt that generates every remaining CRUD panel, wires each under the appropriate role's home, and reports what it built. Watch Claude crank out 8–10 panels in one go.
+
+> Generate CRUD panels for every entity in `CLAUDE.md` that doesn't already have one. For each:
+> - Follow the same pattern as `<AlreadyDonePanel>.cs` exactly — entity-method wiring, RTL settings, Hebrew labels, Back-button mechanism.
+> - Wire each panel under the role home panel whose actor owns that UC (read the UC diagram and `CLAUDE.md` to decide).
+> - Replace each role home's TODO placeholder buttons with real handlers as you go.
+>
+> Report at the end which panels you generated and which role home each was wired under.
+
+Pros: dramatic, fast, hits Phase 5's "lesson goal" in one shot. Token-cheaper too — context is read once, not 10 times.
+Cons: if Claude misread the pattern in Phase 5, the error propagates to every panel. The review step (next) is more important.
+
+### Step 6.1 — Review (regardless of which path)
+
+After Option A or B, build and walk through every panel:
+
+- **Build:** clean compile, no new warnings beyond CA1416 (still suppressed).
+- **Visual sweep:** for each panel, F5 → log in as the relevant actor → click into the panel → confirm Hebrew labels look right (RTL alignment, no `?????`), the list view shows real data from your seed, the buttons are present.
+- **Wiring spot-check:** create one row, update one row, delete one row, in two or three panels. If all three operations work on a base entity and an association class, the others are very likely fine.
+- **Role home coverage:** every role's home panel should have buttons wired to real panels (no TODOs remaining for UCs that are in scope).
+
+When you find a systematic problem (e.g., "every panel uses the wrong stored proc naming convention"), push back at Claude with a single fix-everything prompt:
+
+> Every CRUD panel calls `<wrong>` instead of `<right>`. Fix all of them in one pass and rebuild.
+
+### What's still not done after Phase 6
+
+- **State-transition methods** for entities with state machines (e.g., Registration's cancel / late-cancel / waitlist promotion logic). The CRUD panel handles only basic create/update/delete; the state transitions are separate methods/SPs.
+- **Report UCs** (monthly attendance, monthly income, etc.). These call multi-table SPs and have read-only panels — different shape from CRUD.
+- **Cross-entity flows** (e.g., "register for a class" touches Registration + ScheduleSlot + CustomerSubscription in one transaction).
+
+These are real student projects' "remaining 30%" — done in their own time after the lesson, with Claude as the agent. The lesson itself ends here.
+
+---
+
+## Phase 7+ — Out of Scope for the Lesson
+
+The lesson stops at "all CRUD screens running against a real DB." Anything beyond — report SPs, state machines, complex UC flows, polish, deployment — is the group's homework. They have:
+
+- A working scaffold to extend
+- A working CLAUDE.md Claude reads automatically every session
+- A working MCP-driven DB workflow
+- A documented entity pattern, panel pattern, and entry flow
+
+Everything from here on is "ask Claude to do X following the established patterns." Students who internalized Phases 1–6 will move fast. Students who skipped the review steps will spend the rest of the semester debugging silent errors that compounded.
