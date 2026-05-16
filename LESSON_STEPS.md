@@ -826,6 +826,98 @@ After this, future panels Claude generates will pick up the design language with
 
 ---
 
+## Phase 11 — Switching to a Shared Database (Homework)
+
+**Not covered in class.** Drafted here so you can follow it on your own.
+
+Throughout the lesson you've been running against your own local SQL Server. That's fine for development, but eventually your group needs to test against a shared DB so everyone sees the same data and the app can be demoed. Two paths.
+
+### Option A — The course's central SQL Server (BGU)
+
+If you have access to the course's central SQL Server, this is the simplest path — same SQL dialect, no extra signup, no cost.
+
+What you'll need from the course (ask your instructor or TA):
+- Server name (e.g., `BGUIEDB2\SQL2008` or similar)
+- A database name allocated to your group
+- A SQL login (username + password) — central servers use **SQL authentication**, not Windows authentication
+
+### Option B — Azure SQL Database (free tier, recommended fallback)
+
+If the central server is unreliable or you'd rather have your own shared cloud DB, Azure SQL Database has a free tier suitable for a teaching project.
+
+**Best path for students:** sign up for **[Azure for Students](https://azure.microsoft.com/en-us/free/students/)**. With a verified `.ac.il` (or other recognized institutional) email, you get:
+- $100 of Azure credit (renewable each year you're a student)
+- Free access to the Azure SQL Database free tier (~100k vCore-seconds/month, 32 GB storage — plenty for a teaching project)
+- **No credit card required** — your institutional email is the verification
+
+Once signed up:
+1. In the Azure Portal, create a new **SQL Database** → choose the **free** offer when prompted.
+2. Set up a **server admin login** (username + password) — write these down.
+3. Under the database's "Networking" settings, allow your IP address (or "any IP" for class testing — be aware this is less secure).
+4. Copy the ADO.NET connection string from the database's "Connection strings" page.
+
+### Step 11.1 — Run your scripts against the shared DB
+
+Whichever option you picked, you need the schema + SPs + seed data to exist on the shared DB too. Your local DB and the shared DB will live in parallel — same scripts, different targets.
+
+Edit `.mcp.json` (the gitignored config) to point at the shared server:
+
+```json
+{
+  "mcpServers": {
+    "mssql": {
+      "command": "uvx",
+      "args": ["microsoft_sql_server_mcp"],
+      "env": {
+        "MSSQL_SERVER": "<shared_server_hostname>",
+        "MSSQL_DATABASE": "<shared_db_name>",
+        "MSSQL_USER": "<sql_login_username>",
+        "MSSQL_PASSWORD": "<sql_login_password>",
+        "TrustServerCertificate": "true"
+      }
+    }
+  }
+}
+```
+
+Notice: `MSSQL_WINDOWS_AUTH` is gone, replaced by `MSSQL_USER` and `MSSQL_PASSWORD`. Shared servers don't trust your Windows identity — they need an explicit SQL login.
+
+Restart Claude Code so it picks up the new config. Then run your scripts via the MCP:
+
+> Run `scripts/create_database.sql`, `scripts/stored_procedures.sql`, and `scripts/seed_data.sql` against the shared database via the mssql MCP, in that order.
+
+This is exactly the same workflow as your local DB — that's the point of versioning scripts instead of databases.
+
+### Step 11.2 — Switch the C# app to the shared DB
+
+Edit `<ProjectName>/app.config` (also gitignored) — replace the local connection string with the shared one. For Azure SQL or a remote server with SQL auth, the format is:
+
+```
+Server=<shared_server_hostname>;Database=<shared_db_name>;User Id=<sql_login_username>;Password=<sql_login_password>;TrustServerCertificate=True;Encrypt=True;
+```
+
+`Encrypt=True` is required for Azure SQL (it rejects unencrypted connections). It's optional but recommended for the BGU central server too.
+
+Build and run the C# app. It should now read from and write to the shared DB instead of your local one.
+
+### Step 11.3 — Switching back and forth
+
+You'll want to keep doing exploratory dev locally and only push to shared periodically. Two options:
+
+- **Two `.mcp.json` files**, swap them as needed (`.mcp.json.local`, `.mcp.json.shared` — rename the active one to `.mcp.json`).
+- **Two app.config files**, same pattern.
+- Or just edit the active config when you need to switch. For a group of 4-5 students, the manual-edit approach usually works fine.
+
+Whatever you pick, **never commit `.mcp.json` or `app.config`** — they contain credentials. The `.gitignore` already covers them.
+
+### What this does NOT cover
+
+- **Concurrent writes from multiple teammates** — Phase 7's transactions and Phase 9's orchestrated flows handle the per-operation atomicity; nothing in this course addresses pessimistic locking or optimistic concurrency at the table level. For a 4-5 person group doing exploratory testing, conflicts are rare.
+- **Migrations** — when one teammate adds a column locally, the shared DB needs the same change. The discipline is the one we already established: schema changes go into `scripts/create_database.sql` first, commit, push, teammates pull and re-run scripts against their own targets (local AND shared, if applicable).
+- **Backup of the shared DB** — Azure SQL handles this automatically; BGU's server should too. Don't rely on your teammates' machines as a backup.
+
+---
+
 ## What's Genuinely Out of Scope
 
 Beyond Phase 10, the remaining work on a student project is no longer pattern-following — it's project-specific decisions and operational concerns:
