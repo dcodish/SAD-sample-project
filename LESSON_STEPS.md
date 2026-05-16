@@ -668,7 +668,7 @@ Focus on the silent errors:
 
 Open the relevant CRUD panel for the state-bearing entity. Replace the generic "Update" / "Save" button with **verb buttons** for each transition that's user-triggered.
 
-> On `<EntityName>Panel.cs`, replace the generic Update button with verb buttons matching the user-triggered transitions from Step 7.1 (e.g., "ביטול הרשמה" for `cancel`). Each button calls the corresponding transition method on the entity, handles guard failures by showing the Hebrew error message in a `MessageBox`, and refreshes the list view on success.
+> On `<EntityName>Panel.cs`, replace the generic Update button with verb buttons matching the user-triggered transitions from Step 7.1 — one button per transition, Hebrew label describing the verb. Each button calls the corresponding transition method on the entity, handles guard failures by showing the Hebrew error message in a `MessageBox`, and refreshes the list view on success.
 
 Some transitions are system-triggered (`promoteFromWaitlist` runs when a slot frees up, not from a button) — those don't get UI buttons; they're called from other transition methods.
 
