@@ -1,4 +1,20 @@
-# Prompts Cheat Sheet — In-Class Copy-Paste Guide
+::: {custom-style="Centered"}
+![](bgu-logo.png){width=3.2in}
+:::
+
+::: {custom-style="Title"}
+Software Analysis and Design
+:::
+
+::: {custom-style="Subtitle"}
+Prompts Cheat Sheet — In-Class Copy-Paste Guide
+:::
+
+::: {custom-style="Author"}
+Lecturer: David Codish
+:::
+
+# Before You Start
 
 Every prompt you'll paste into Claude Code during the lesson, in order. For the *why* behind each step (review discipline, error categories, troubleshooting), see `LESSON_STEPS.md`. For installation prerequisites, see `PREREQS.md`.
 
@@ -11,9 +27,7 @@ uvx --version
 sqlcmd -L              # lists local SQL Server instances
 ```
 
----
-
-## Phase 1 — Project Setup
+# Phase 1 — Project Setup
 
 Do these manually:
 
@@ -42,7 +56,7 @@ Then open Claude Code in your project folder and paste:
 
 ---
 
-## Phase 2 — Extract Analysis Into Structured Markdown
+# Phase 2 — Extract Analysis Into Structured Markdown
 
 > Read all the PDFs in `docs/`. Extract our group's analysis and design into structured markdown files matching this layout:
 >
@@ -75,7 +89,7 @@ Then open Claude Code in your project folder and paste:
 
 ---
 
-## Phase 3 — Generate Your Project's CLAUDE.md
+# Phase 3 — Generate Your Project's CLAUDE.md
 
 > I have my group's project documents in `docs/` — extracted markdown files (organization, problems, interviews, business processes, requirements, use cases, and design diagrams under `docs/design/`) plus the original PDFs as backup. Prefer the markdown files; consult the PDFs only when the markdown is unclear or when you need to look at a diagram.
 >
@@ -89,15 +103,15 @@ Then open Claude Code in your project folder and paste:
 
 ---
 
-## Phase 4 — Database Schema + Stored Procedures
+# Phase 4 — Database Schema + Stored Procedures
 
-### 4.0 — Create the project database
+## 4.0 — Create the project database
 
 > Use the mssql MCP tool's execute_sql to create a database named `<your_project_db_name>`. Then verify with `SELECT name FROM sys.databases WHERE name = '<your_project_db_name>'`.
 >
 > From now on, every execute_sql call must start with `USE <your_project_db_name>;`. Add a "Database" section to `CLAUDE.md` documenting the DB name and this rule.
 
-### 4.1 — Generate the schema
+## 4.1 — Generate the schema
 
 > Read `docs/design/class-diagram.md` and the load-order section of `CLAUDE.md`. Generate `scripts/create_database.sql` with `CREATE TABLE` statements for every entity, with these defaults:
 >
@@ -112,13 +126,13 @@ Then open Claude Code in your project folder and paste:
 >
 > Do not invent columns. If a type or nullability is genuinely ambiguous, leave a `-- TODO: <question>` comment. Write the file but do not run it yet.
 
-### 4.2 — Review the schema (manual, against the class diagram)
+## 4.2 — Review the schema (manual, against the class diagram)
 
-### 4.3 — Execute the schema
+## 4.3 — Execute the schema
 
 > Run the contents of `scripts/create_database.sql` against the database via the mssql MCP tool. Execute as one batch. If it fails, tell me which statement failed and the error — don't silently retry. After success, use list_tables to confirm every table exists.
 
-### 4.4 — Generate stored procedures
+## 4.4 — Generate stored procedures
 
 > Generate `scripts/stored_procedures.sql` with basic CRUD stored procedures for every table. For each entity:
 >
@@ -136,13 +150,13 @@ Then:
 
 > Run `scripts/stored_procedures.sql` via the mssql MCP tool.
 
-### 4.5 — Spot-check one entity end-to-end
+## 4.5 — Spot-check one entity end-to-end
 
 > Using execute_sql via the mssql MCP, run sp_<entity>_create with realistic test values, then sp_<entity>_get_all to confirm it landed, then sp_<entity>_update on the new row, then sp_<entity>_delete. Report each result.
 
 ---
 
-## Phase 4.5 — Seed Test Data
+# Phase 4.5 — Seed Test Data
 
 > Generate `scripts/seed_data.sql` with realistic test data for every table, in load order. Guidelines:
 > - Real-feeling Hebrew names, real-looking emails, plausible dates. No "Test User 1".
@@ -160,27 +174,27 @@ Then:
 
 ---
 
-## Phase 5 — C# Project Scaffold and First Runnable Panel
+# Phase 5 — C# Project Scaffold and First Runnable Panel
 
-### 5.1 — Scaffold
+## 5.1 — Scaffold
 
 > Look at the C# project structure under `cloned/example_project/`. Create a matching scaffold for my project at the root of this folder — a Visual Studio solution + project, same .NET version and references as the sample, same folder layout. Use my project name (read `CLAUDE.md`). Do not copy any of the sample's *.cs files.
 >
 > Copy `<NoWarn>CA1416</NoWarn>` from the sample's csproj into ours.
 
-### 5.2 — Wire the DB connection
+## 5.2 — Wire the DB connection
 
 > Look at how the sample project handles the SQL connection (`cloned/example_project/SQL_CON.cs`). Create the equivalent in our project, reading the connection string from `app.config`. Match the sample's pattern.
 
-### 5.3 — Generate all entity classes
+## 5.3 — Generate all entity classes
 
 > For every entity in the class diagram, generate `<EntityName>.cs` following the entity pattern in `CLAUDE.md` (and the sample's `cloned/example_project/Worker.cs` as a reference). Use column names and types from `scripts/create_database.sql` and SP names from `scripts/stored_procedures.sql`. Add each entity's static list to `Program.cs` and call its `initXyzs()` in `Program.initLists()` in correct load order.
 >
 > Do not invent fields. Do not invent SP names. If anything is unclear, ask before writing.
 
-### 5.4 — Review entities (manual)
+## 5.4 — Review entities (manual)
 
-### 5.5 — Design and generate the entry flow
+## 5.5 — Design and generate the entry flow
 
 > Read `docs/design/class-diagram.md`, `docs/00e-use-cases.md`, and the UC and actor information in `CLAUDE.md`. Identify the human actors in this project.
 >
@@ -202,7 +216,7 @@ Then:
 >
 > Add an "Entry Flow" section to `CLAUDE.md` documenting the design.
 
-### 5.6 — Generate the first CRUD panel
+## 5.6 — Generate the first CRUD panel
 
 > Pick `<EntityName>` (a Tier 1 base entity) for the first CRUD panel. Generate `<EntityName>Panel.cs` (UserControl + Designer + resx) — full CRUD: list view, view/edit fields, Save / Update / Delete / Back buttons. Hebrew UI text. Wire each button to the entity's `createXyz / updateXyz / deleteXyz` methods.
 >
@@ -210,7 +224,7 @@ Then:
 >
 > Match the sample's panel patterns: event-handler shape, return-to-home mechanism, Designer.cs structure.
 
-### 5.7 — Run
+## 5.7 — Run
 
 Build (Ctrl+Shift+B). F5. Walk through: login → role home → CRUD panel → exercise CRUD. Then:
 
@@ -218,15 +232,15 @@ Build (Ctrl+Shift+B). F5. Walk through: login → role home → CRUD panel → e
 
 ---
 
-## Phase 6 — Generate Remaining CRUDs
+# Phase 6 — Generate Remaining CRUDs
 
 Pick one path.
 
-### Option A — One at a time (cautious)
+## Option A — One at a time (cautious)
 
 > Generate `<EntityName>Panel.cs` (+ Designer + resx) for `<EntityName>`, following the same pattern as `<AlreadyDonePanel>.cs`. Wire it under `<RoleHomePanel>` (replacing the TODO placeholder). Match the entity pattern, RTL settings, and Hebrew labels from existing panels.
 
-### Option B — All at once (the wow path)
+## Option B — All at once (the wow path)
 
 > Generate CRUD panels for every entity in `CLAUDE.md` that doesn't already have one. For each:
 > - Follow the same pattern as `<AlreadyDonePanel>.cs` exactly — entity-method wiring, RTL settings, Hebrew labels, Back-button mechanism.
@@ -239,13 +253,13 @@ After either path, build, F5, walk through every panel.
 
 ---
 
-## Phase 7 — State Machines (in class if time permits, otherwise homework)
+# Phase 7 — State Machines (in class if time permits, otherwise homework)
 
-### 7.1 — Identify state-bearing entities
+## 7.1 — Identify state-bearing entities
 
 > Read `docs/design/state-diagram.md` and any other state diagrams. For each entity with a non-trivial state machine, list: the entity, every state, every transition (source, target, trigger, guard, side effects in other entities). Do not implement anything yet — produce the inventory and ask for confirmation.
 
-### 7.3 — Generate transition methods + SPs
+## 7.3 — Generate transition methods + SPs
 
 > For `<EntityName>`, read `docs/design/state-diagram.md` and enumerate the state transitions for this entity. Then generate the transition methods on the entity class and the matching stored procedures.
 >
@@ -258,12 +272,12 @@ After either path, build, F5, walk through every panel.
 >
 > Do not change any existing CRUD methods.
 
-### 7.5 — Verb buttons
+## 7.5 — Verb buttons
 
 > On `<EntityName>Panel.cs`, replace the generic Update button with verb buttons matching the user-triggered state transitions for this entity — one button per transition, Hebrew label describing the verb. Each button calls the corresponding transition method, handles guard failures with a Hebrew MessageBox, and refreshes the list view on success.
 
 ---
 
-## Phases 8–11 — Homework
+# Phases 8–11 — Homework
 
 For Reports, Complex UC Flows, UI Polish, and Shared DB switching, see the full prompts in `LESSON_STEPS.md` (Phases 8 through 11). Each follows the same paste-prompt-then-review pattern.
