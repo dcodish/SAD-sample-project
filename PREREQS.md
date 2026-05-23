@@ -116,11 +116,20 @@ GO
 
 Expected: version info, a row showing `שלום` (not `?????`), no errors. Paste any error into Claude Code — it'll diagnose.
 
-## C3. GitHub account (optional but recommended)
+## C3. GitHub account (required for your group)
 
-Your group will probably push your project to GitHub.
-- The course sample repo is **public** — clone needs no account.
-- For your own repo: sign up at <https://github.com>, then ask Claude to help set up authentication (GitHub CLI is easiest).
+You work in groups, and your group needs a shared place to version the project — the schema scripts, the C# code, the docs. GitHub is the default. So **every group member needs a GitHub account.**
+
+- Cloning the course sample repo needs **no** account (it's public).
+- But pushing to your group's own repo, or being added as a collaborator on it, **does** need an account.
+- The "source of truth lives in git" workflow (schema changes go into `.sql` files, commit, teammates pull and re-run) only works once you have a shared remote.
+
+Steps:
+1. Each member signs up at <https://github.com> (free).
+2. One member creates the group repo and adds the others as collaborators (Settings → Collaborators).
+3. Each member sets up authentication for pushing. Ask Claude: *"Help me set up GitHub authentication so I can push — I'm on Windows."* (GitHub CLI is the easiest path; Claude can install and configure it.)
+
+If your group has decided to host elsewhere (GitLab, BGU's internal Git), that's fine — the lesson doesn't depend on GitHub specifically, but you still each need an account on whatever host you chose.
 
 ---
 
@@ -147,6 +156,7 @@ The day of class:
 - [ ] VS 2025 opens
 - [ ] SSMS connects to your local instance with Windows Authentication
 - [ ] `dotnet --version`, `git --version`, `uvx --version`, `sqlcmd -L` all work in a fresh terminal
+- [ ] You have a GitHub account and can push (or your group's chosen Git host)
 - [ ] Your group's Part A + Part B PDFs are accessible
 
 If anything fails the morning of class, message the group chat *immediately*.

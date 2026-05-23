@@ -16,6 +16,7 @@ date: ""
 
 - Your group's Part A + Part B analysis
 - A laptop with all prerequisites installed
+- A GitHub account (every group member needs one)
 - Your group's project folder, ready to go
 
 # The Big Picture — In Class
