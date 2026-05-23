@@ -50,7 +50,16 @@ All documented with full prompts in `LESSON_STEPS.md`.
 
 **Review what Claude produces.** Fast but not careful. Skipping review = silent errors all semester.
 
-# Prerequisites (Done Before Class)
+# Prerequisites — Bootstrap First
+
+The smart install order (student-tested):
+
+1. Install **VSCode + Claude Code** by hand (~10 min)
+2. **Let Claude install the rest** — Git, uv, .NET, VS, SQL Server
+
+When installs break, Claude reads the error and fixes it — no googling stack traces alone.
+
+# Prerequisites — Verify
 
 In a fresh terminal, all four must succeed:
 
@@ -63,7 +72,7 @@ sqlcmd -L
 
 Plus: Claude Code signed in, VS 2025 open, SSMS connects.
 
-Full details in `PREREQS.md`.
+Full details + the install prompt in `PREREQS.md`.
 
 # Phase 1 — Project Setup
 
