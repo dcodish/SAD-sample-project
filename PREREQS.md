@@ -1,3 +1,19 @@
+::: {custom-style="Centered"}
+![](bgu-logo.png){width=3.2in}
+:::
+
+::: {custom-style="Title"}
+Software Analysis and Design
+:::
+
+::: {custom-style="Subtitle"}
+Pre-Class Setup Guide
+:::
+
+::: {custom-style="Author"}
+Lecturer: David Codish
+:::
+
 # Prerequisites — SAD Course Pre-Class Setup
 
 Everything in this document must be installed and working **before** the lesson. Doing this in class wastes everyone's time and blocks the rest of your group.
