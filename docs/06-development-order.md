@@ -3,18 +3,23 @@
 קיבלתם את פרויקט הדוגמה, יש לכם User Stories, Class Diagram ובסיס נתונים מוכן.
 עכשיו צריך לבנות את המערכת שלכם. מאיפה מתחילים?
 
+> **המסמך הזה מפרק את העבודה הידנית ל-5 צעדים**, והם **אינם** שלבי השיעור.
+> ‏"שלב N" מופיע רק ב-[`LESSON_STEPS`](../LESSON_STEPS.md) ומתייחס לשלבי השיעור (0–11).
+> כל התוכן כאן נכנס לשלב 5 של השיעור — כאן הוא מוסבר צעד-צעד כדי שתבינו מה Claude מייצר.
+
 ## סדר העבודה המומלץ
 
-| שלב | מה עושים |
+| צעד | מה עושים |
 |-----|---------|
 | 1 | הגדרת חיבור לבסיס הנתונים (SQL_CON + Connection String) |
-| 2 | בניית מחלקות Entity + כתיבת Stored Procedures ופעולות DB (ניתן לעבוד במקביל) |
-| 3 | טעינה לזיכרון ב-Program.cs |
-| 4 | בניית פאנל ראשון להצגת נתונים |
+| 2 | בניית מחלקות Entity לפי ה-Class Diagram |
+| 3 | חיבור המחלקות לבסיס הנתונים (Stored Procedures ופעולות DB) |
+| 4 | טעינה לזיכרון ב-`Program.cs` (`initLists`) |
+| 5 | בניית הפאנל הראשון להצגת נתונים |
 
 ---
 
-## שלב 1: הגדרת החיבור לבסיס הנתונים
+## צעד 1: הגדרת החיבור לבסיס הנתונים
 
 **מה עושים:** מעדכנים את `SQL_CON.cs` עם ה-Connection String שלכם.
 
@@ -26,7 +31,7 @@
 ```csharp
 conn = new SqlConnection("Server=tcp:<servername>.database.windows.net,1433;Initial Catalog=<database>;User ID=<username>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 ```
-3. מלאו את ארבעת הערכים של בסיס הנתונים של הקבוצה (ראו [`PREREQS.md`](../PREREQS.md) חלק C)
+3. מלאו את ארבעת הערכים של בסיס הנתונים של הקבוצה (ראו [`PREREQS.md`](../PREREQS.md) חלק ג׳)
 4. הריצו את הפרויקט וודאו שאין שגיאת חיבור
 
 > **אזהרה:** השורה הזו מכילה סיסמה. אל תעלו אותה ל-git.
@@ -35,7 +40,7 @@ conn = new SqlConnection("Server=tcp:<servername>.database.windows.net,1433;Init
 
 ---
 
-## שלב 2: בניית מחלקות ה-Entity
+## צעד 2: בניית מחלקות ה-Entity
 
 **מה עושים:** יוצרים מחלקת C# לכל ישות (Entity) ב-Class Diagram — **בלי** קוד של בסיס נתונים בשלב זה.
 
@@ -58,7 +63,7 @@ public class Customer
         this.customerId = id;
         this.customerName = name;
         this.phone = phone;
-        // is_new - נטפל בזה בשלב 3
+        // is_new - נטפל בזה בצעד 3
     }
 
     // Getters
@@ -107,7 +112,7 @@ public static Customer seekCustomer(string id)
 
 ---
 
-## שלב 3: חיבור המחלקות לבסיס הנתונים
+## צעד 3: חיבור המחלקות לבסיס הנתונים
 
 **מה עושים:** כותבים Stored Procedures ומוסיפים פעולות DB בכל מחלקה.
 
@@ -115,7 +120,13 @@ public static Customer seekCustomer(string id)
 
 **איך — לכל ישות:**
 
-### א. כתבו Stored Procedures ב-SQL Server (דרך SSMS):
+### א. כתבו Stored Procedures והריצו אותם מ-Claude Code:
+
+> **כל ה-SQL רץ מתוך Claude Code**, דרך שרת ה-MSSQL MCP שהגדרתם בשלב 1 של השיעור —
+> לא מתוך SSMS. השמרו את ה-SQL בקובץ `.sql` תחת `scripts/` (הוא מקור האמת ונשמר ב-git),
+> ובקשו מ-Claude להריץ אותו. ‏SSMS שימושי להצצה מהירה בנתונים, אבל אינו המקום שבו
+> מריצים את הסקריפטים.
+
 
 ```sql
 -- הוספה
@@ -176,7 +187,7 @@ public Customer(string id, string name, string phone, bool is_new)
 
 ---
 
-## שלב 4: טעינה לזיכרון (Program.cs)
+## צעד 4: טעינה לזיכרון (Program.cs)
 
 **מה עושים:** ב-`Program.cs` יוצרים רשימות ומילאים אותן מבסיס הנתונים בעת הפעלת התוכנית.
 
@@ -238,7 +249,7 @@ public static void initLists()
 
 ---
 
-## שלב 5: בניית הטופס הראשון
+## צעד 5: בניית הטופס הראשון
 
 **מה עושים:** יוצרים טופס WinForms שמציג נתונים מהרשימות בזיכרון.
 
@@ -290,7 +301,7 @@ private void MyForm_Load(object sender, EventArgs e)
 
 כשמוסיפים ישות חדשה (למשל `Customer`), אלו **כל הקבצים שצריך לגעת בהם** ובאיזה סדר:
 
-### קובץ 1: SQL Server (דרך SSMS)
+### קובץ 1: בסיס הנתונים (מ-Claude Code, דרך ה-MCP)
 - [ ] יצירת טבלה ב-DB
 - [ ] יצירת Stored Procedures: הוספה, עדכון, מחיקה, שליפה
 - [ ] הוספת נתוני דוגמה לבדיקה

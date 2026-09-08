@@ -54,36 +54,46 @@ git config --global user.email "your.email@example.com"
 2. צרו חשבון חינמי
 3. **כל חברי הצוות** צריכים חשבון GitHub
 
-## 3. יצירת הפרויקט מתוך ה-Template
+## 3. יצירת ה-Repository של הצוות
 
-פרויקט הדוגמה נמצא ב-GitHub בכתובת:
-**https://github.com/dcodish/SAD-sample-project**
+> **⚠️ ה-repository של הצוות מתחיל ריק — לא מעותק של פרויקט הדוגמה.**
+> אל תשתמשו בכפתור **"Use this template"** של `SAD-sample-project`. הפרויקט שלכם
+> מתאר את **התחום שלכם**, ואתם בונים אותו מאפס לאורך השיעור. פרויקט הדוגמה משוכפל
+> בשלב 1 לתת-תיקייה `cloned/` **לעיון בלבד**, והיא נכנסת ל-`.gitignore` כדי שלא
+> תיכנס ל-repository שלכם.
 
-**חבר צוות אחד** (ה"מנהל") יוצר את הפרויקט של הצוות מתוך ה-Template:
+התהליך המלא מתואר ב-[`GIT_GROUP_WORKFLOW`](../GIT_GROUP_WORKFLOW.md); זה התקציר.
 
-### א. יצירת Repository מהתבנית
-1. היכנסו ל: https://github.com/dcodish/SAD-sample-project
-2. לחצו על הכפתור הירוק **"Use this template"** > **"Create a new repository"**
-3. תנו שם (למשל: `sad-project-team1`)
-4. סמנו **Private** (פרטי — רק הצוות רואה)
-5. לחצו **Create Repository**
+### א. חבר צוות אחד יוצר Repository ריק
+1. היכנסו ל-<https://github.com> ← **New repository**
+2. תנו שם (למשל: `sad-groupname`)
+3. סמנו **Private** (פרטי — רק הצוות רואה)
+4. **אל תאתחלו אותו עם README** — כבר יש לכם קבצים בתיקייה המקומית
+5. לחצו **Create repository** והעתיקו את הכתובת שמוצגת
 
-> **מה קורה?** GitHub יוצר עותק חדש של כל הקבצים ב-Repository שלכם.
-> זה לא fork — זה פרויקט עצמאי לגמרי, בלי קשר למאגר המקור.
+### ב. חיבור התיקייה המקומית ל-Repository
+אותו חבר צוות, מתוך תיקיית הפרויקט (זו שיצרתם בשלב 0 ועבדתם בה בשלב 1), מבקש מ-Claude Code:
 
-### ב. הוספת חברי הצוות
-1. ב-GitHub, היכנסו ל-**Settings > Collaborators**
+> Initialize a git repository here if one doesn't exist, then add the remote:
+> `git remote add origin https://github.com/username/sad-groupname.git`
+> Then commit all current files and push: `git push -u origin main`
+
+### ג. הוספת חברי הצוות
+1. ב-GitHub: **Settings > Collaborators > Add people**
 2. הוסיפו את שאר חברי הצוות לפי שם המשתמש שלהם ב-GitHub
 
-### ג. הורדת הפרויקט למחשב שלכם
-ה"מנהל" וכל חברי הצוות מריצים:
-```
-git clone https://github.com/YOUR_USERNAME/sad-project-team1.git
-```
+> **כל מוזמן חייב לאשר את ההזמנה** — במייל שאיתו נרשם ל-GitHub, או ב-<https://github.com/notifications>.
+> בלי אישור אין לו גישה וה-`git clone` ייכשל. זה השלב שהכי הרבה קבוצות מפספסות.
 
-> **שימו לב:** החליפו `YOUR_USERNAME` ו-`sad-project-team1` בפרטים האמיתיים שלכם.
+### ד. שאר חברי הצוות משכפלים
+כל אחד פותח **תיקייה ריקה חדשה** ומבקש מ-Claude Code:
 
-פתחו את ה-`.sln` ב-Visual Studio — הפרויקט מוכן לעבודה.
+> Clone our group repo: `git clone https://github.com/username/sad-groupname.git .`
+
+(הנקודה `.` בסוף משכפלת לתוך התיקייה הנוכחית.)
+
+פתחו את ה-`.sln` ב-Visual Studio — אבל שימו לב: הוא קיים רק אחרי ששלב 5 הושלם.
+לפני כן ה-repository מכיל את המסמכים והסקריפטים בלבד.
 
 ## 4. ה-Commit הראשון שלכם
 
@@ -112,6 +122,10 @@ git add .
 git commit -m "הוספת מחלקת Customer"
 git push
 ```
+
+> **אפשר להריץ את הפקודות האלה גם דרך Claude Code** — פשוט בקשו ממנו ("commit and push
+> my changes with the message ..."). זה שימושי במיוחד אם `git` לא נמצא ב-PATH של הטרמינל
+> שלכם, תקלה נפוצה שגורמת ל-`command not found`.
 
 ### סיכום הזרימה:
 ```
