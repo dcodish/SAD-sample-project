@@ -278,8 +278,6 @@ unicode-bidi: isolate;
 הפרויקט</a></li>
 <li><a href="#שלב-4-סכמת-בסיס-הנתונים-ו-stored-procedures-בסיסיים" id="toc-שלב-4-סכמת-בסיס-הנתונים-ו-stored-procedures-בסיסיים">שלב 4 —
 סכמת בסיס הנתונים ו-Stored Procedures בסיסיים</a></li>
-<li><a href="#שלב-4.5-נתוני-דמה" id="toc-שלב-4.5-נתוני-דמה">שלב 4.5 —
-נתוני דמה</a></li>
 <li><a href="#שלב-5-שלד-פרויקט-ה-c-והישות-הראשונה-מקצה-לקצה" id="toc-שלב-5-שלד-פרויקט-ה-c-והישות-הראשונה-מקצה-לקצה">שלב 5 — שלד
 פרויקט ה-C# והישות הראשונה מקצה לקצה</a></li>
 <li><a href="#שלב-6-יצירת-שאר-מסכי-ה-crud" id="toc-שלב-6-יצירת-שאר-מסכי-ה-crud">שלב 6 — יצירת שאר מסכי
@@ -578,9 +576,9 @@ VSCode ← File ← Open Folder</strong> ← נווטו לתיקיית
 <p><strong>זמן צפוי:</strong> 15–20 דקות. הגדרת ה-MCP היא החלק שהכי נוטה
 להשתבש — אל תיבהלו.</p>
 <ol type="1">
-<li><p><strong>צרו תיקייה לפרויקט של הקבוצה</strong> (למשל
-<code>sad-&lt;groupname&gt;</code>). זו תיקיית העבודה שלכם — היא אינה
-פרויקט הדוגמה.</p></li>
+<li><p><strong>ודאו שאתם בתיקייה שיצרתם בשלב 0</strong> — היא פתוחה
+ב-VSCode והיא עדיין ריקה למעט תת-התיקייה <code>docs</code>. זו תיקיית
+העבודה שלכם — היא אינה פרויקט הדוגמה.</p></li>
 <li><p><strong>הכניסו את קובצי הניתוח והעיצוב הקיימים שלכם
 ל-<code>docs/</code></strong> — קובצי ה-PDF של חלק א׳ וחלק ב׳ (ניתוח
 ארגוני, דרישות, דיאגרמת UC, דיאגרמת מחלקות וכו׳).</p></li>
@@ -609,8 +607,6 @@ with two entries: <code>cloned/</code> and <code>.mcp.json</code></p>
 לתקשר עם בסיס הנתונים של הקבוצה ב-Azure SQL.</p>
 <p>דרישת קדם: בסיס הנתונים של הקבוצה חייב כבר להתקיים (הוקם
 ב-<code>PREREQS</code> חלק ג׳ לפני השיעור).</p>
-<p>ה-Prompt שלמטה מתאים ל<strong>מסלול Azure</strong> (המומלץ), ודרושים
-לו ארבעת ערכי החיבור: שרת, שם בסיס הנתונים, שם משתמש וסיסמה.</p>
 <p><strong>☁️ מסלול Azure:</strong> ה-Prompt שלמטה מתאים לכם כמו שהוא.
 דרושים ארבעת ערכי החיבור: שרת, שם בסיס הנתונים, שם משתמש וסיסמה.</p>
 <p><strong>💻 מסלול מקומי:</strong> השתמשו ב-Prompt שלמטה, עם שני
@@ -651,7 +647,7 @@ uv installs to, because the location varies by uv version:</p>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">$uvx</span></span></code></pre></div>
 <p>Do not search only under <code>WinGet\Packages</code> — recent uv
 versions install to <code>%USERPROFILE%\.local\bin</code> and that
-search finds nothing..</p></li>
+search finds nothing.</p></li>
 </ol>
 <p><strong>Use exactly this MCP server — do not substitute a different
 one.</strong> The package is <code>microsoft_sql_server_mcp</code>
@@ -1275,46 +1271,7 @@ that involves more than one table. Those come later.</p>
 <p>Run <code>scripts/stored_procedures.sql</code> via the mssql MCP
 tool.</p>
 </blockquote>
-<h3 id="שלב-4.6-בדיקת-ישות-אחת-מקצה-לקצה-דרך-ה-mcp">שלב 4.6 — בדיקת ישות
-אחת מקצה לקצה דרך ה-MCP</h3>
-<p>בחרו ישות אחת. בקשו מ-Claude להריץ עליה מחזור CRUD מלא דרך ה-MCP:</p>
-<blockquote class="prompt">
-<p>Using execute_sql via the mssql MCP, run
-<code>sp_&lt;entity&gt;_create</code> with realistic test values, then
-<code>sp_&lt;entity&gt;_get_all</code> to confirm it landed, then
-<code>sp_&lt;entity&gt;_update</code> on the new row, then
-<code>sp_&lt;entity&gt;_delete</code>. Report each result.</p>
-</blockquote>
-<p>אם מערכת ה-Stored Procedures של ישות אחת עובדת מקצה לקצה, כמעט
-בוודאות גם של האחרות — הייצור מכני. המשיכו הלאה.</p>
-<h3 id="מה-בכוונה-לא-נכלל-בשלב-4">מה בכוונה לא נכלל בשלב 4</h3>
-<ul>
-<li><strong>Stored Procedures לדוחות</strong> (נוכחות חודשית, הכנסה
-חודשית) — הם מקודדים לוגיקה עסקית שברור יותר לכתוב כשיש נקודת קריאה
-אמיתית שמכתיבה אותה.</li>
-<li><strong>Stored Procedures למעברי מצבים</strong> עבור
-<code>Registration</code> (ביטול, ביטול מאוחר, קידום מרשימת המתנה) —
-מאותה סיבה; כתבו אותם כשה-UC שקורא להם ימומש.</li>
-<li><strong>טרנזקציות מרובות טבלאות</strong> — נכתבות לפי UC, לא לפי
-ישות.</li>
-</ul>
-<p>אלה שייכים לשלב 5 ואילך.</p>
-<p><strong>נקודת Commit:</strong> בצעו commit לסקריפטי ה-SQL:</p>
-<blockquote class="prompt">
-<p>Commit <code>scripts/</code> — database schema, stored procedures,
-and seed data. Commit message: “Phase 4: database schema and stored
-procedures”</p>
-</blockquote>
-<p>בצעו push ל-GitHub.</p>
-<p><strong>התחילו Session חדש לפני השלב הבא.</strong> פלט ה-SQL וההרצות
-כבר לא נחוץ — הסקריפטים שמורים בקבצים.</p>
-<p>הריצו <code>/clear</code> (חינם) — או פתחו שיחה חדשה.</p>
-<blockquote class="note">
-<p>מכאן והלאה <code>CLAUDE.md</code> נטען אוטומטית בכל שיחה חדשה, כך
-שאין צורך להסביר מחדש כלום.</p>
-</blockquote>
-<hr />
-<h2 id="שלב-4.5-נתוני-דמה">שלב 4.5 — נתוני דמה</h2>
+<h3 id="שלב-4.5-נתוני-דמה">שלב 4.5 — נתוני דמה</h3>
 <p><strong>מה השלב הזה עושה:</strong> ממלא את הטבלאות בנתונים
 ריאליסטיים, לפני שכותבים שורת C# אחת.</p>
 <p><strong>בסיום השלב יהיה לכם:</strong> בסיס נתונים עם משתמשים אמיתיים
@@ -1359,11 +1316,48 @@ the mssql MCP. Report any errors per statement.</p>
 <p>הספירות צריכות להתאים למה ש-<code>seed_data.sql</code> היה אמור
 להכניס. אם טבלה ריקה כשהיא לא אמורה להיות — משהו נכשל בשקט ו-Claude צריך
 לחקור.</p>
-<h3 id="למה-זה-שלב-נפרד">למה זה שלב נפרד</h3>
-<p>אפשר היה לשלב את זה בשלב 4 או בשלב 5, אבל הוא נשאר נפרד כי: - זו
-פעולת אתחול חד-פעמית, לא שלב חוזר. - דילוג עליו (או ביצוע רשלני שלו)
-שובר את חוויית האימות בשלב 5 בלי לשבור את הבנייה — בדיוק סוג הבעיה
-שצריכה נראות משלה.</p>
+<p><strong>למה זה צעד נפרד ולא חלק מ-4.4:</strong> זו פעולת אתחול
+חד-פעמית ולא שלב חוזר, ודילוג עליו (או ביצוע רשלני שלו) שובר את חוויית
+האימות בשלב 5 בלי לשבור את הבנייה — בדיוק סוג הבעיה שצריכה נראות
+משלה.</p>
+<h3 id="שלב-4.6-בדיקת-ישות-אחת-מקצה-לקצה-דרך-ה-mcp">שלב 4.6 — בדיקת ישות
+אחת מקצה לקצה דרך ה-MCP</h3>
+<p>בחרו ישות אחת. בקשו מ-Claude להריץ עליה מחזור CRUD מלא דרך ה-MCP:</p>
+<blockquote class="prompt">
+<p>Using execute_sql via the mssql MCP, run
+<code>sp_&lt;entity&gt;_create</code> with realistic test values, then
+<code>sp_&lt;entity&gt;_get_all</code> to confirm it landed, then
+<code>sp_&lt;entity&gt;_update</code> on the new row, then
+<code>sp_&lt;entity&gt;_delete</code>. Report each result.</p>
+</blockquote>
+<p>אם מערכת ה-Stored Procedures של ישות אחת עובדת מקצה לקצה, כמעט
+בוודאות גם של האחרות — הייצור מכני. המשיכו הלאה.</p>
+<h3 id="מה-בכוונה-לא-נכלל-בשלב-4">מה בכוונה לא נכלל בשלב 4</h3>
+<ul>
+<li><strong>Stored Procedures לדוחות</strong> (נוכחות חודשית, הכנסה
+חודשית) — הם מקודדים לוגיקה עסקית שברור יותר לכתוב כשיש נקודת קריאה
+אמיתית שמכתיבה אותה.</li>
+<li><strong>Stored Procedures למעברי מצבים</strong> עבור
+<code>Registration</code> (ביטול, ביטול מאוחר, קידום מרשימת המתנה) —
+מאותה סיבה; כתבו אותם כשה-UC שקורא להם ימומש.</li>
+<li><strong>טרנזקציות מרובות טבלאות</strong> — נכתבות לפי UC, לא לפי
+ישות.</li>
+</ul>
+<p>אלה שייכים לשלב 5 ואילך.</p>
+<p><strong>נקודת Commit:</strong> בצעו commit לסקריפטי ה-SQL:</p>
+<blockquote class="prompt">
+<p>Commit <code>scripts/</code> — database schema, stored procedures,
+and seed data. Commit message: “Phase 4: database schema and stored
+procedures”</p>
+</blockquote>
+<p>בצעו push ל-GitHub.</p>
+<p><strong>התחילו Session חדש לפני השלב הבא.</strong> פלט ה-SQL וההרצות
+כבר לא נחוץ — הסקריפטים שמורים בקבצים.</p>
+<p>הריצו <code>/clear</code> (חינם) — או פתחו שיחה חדשה.</p>
+<blockquote class="note">
+<p>מכאן והלאה <code>CLAUDE.md</code> נטען אוטומטית בכל שיחה חדשה, כך
+שאין צורך להסביר מחדש כלום.</p>
+</blockquote>
 <hr />
 <h2 id="שלב-5-שלד-פרויקט-ה-c-והישות-הראשונה-מקצה-לקצה">שלב 5 — שלד
 פרויקט ה-C# והישות הראשונה מקצה לקצה</h2>
@@ -1614,14 +1608,28 @@ first entity end-to-end”</p>
 <p>שלב 5 ייצר מסך CRUD אחד מקצה לקצה ואימת את התבנית. עכשיו מרחיבים לשאר
 הישויות — כל ישות בסיס, כל מחלקת קישור, וכל ישות שיש לה UC מסוג CRUD
 בהיקף שלכם.</p>
+<blockquote class="note">
+<p><strong>שימו לב: לכל ישות צריך גם מחלקה וגם מסך.</strong> בשלב 5.3
+יצרתם מחלקת ישות <strong>אחת</strong> בלבד. לשאר הישויות עדיין אין קובץ
+<code>.cs</code> ואין רשימה סטטית ב-<code>Program.cs</code> — ולכן כל
+מסך כאן נוצר יחד עם מחלקת הישות שמאחוריו. מסך שנוצר בלי המחלקה שלו פשוט
+לא יתקמפל.</p>
+</blockquote>
 <p>יש שתי דרכים. בחרו לפי מידת האמון שלכם בתבנית משלב 5 וכמה אתם נהנים
 מהדגמה טובה.</p>
 <h3 id="אפשרות-א-אחד-אחד-זהירה">אפשרות א׳ — אחד-אחד (זהירה)</h3>
 <p>צרו מסך אחד, בדקו, חברו אותו תחת מסך הבית של התפקיד הנכון, ובנו. אחר
 כך הבא בתור. חזרו עד שסיימתם.</p>
 <blockquote class="prompt">
-<p>Generate <code>&lt;EntityName&gt;Panel.cs</code> (+ Designer + resx)
-for <code>&lt;EntityName&gt;</code>, following the same pattern as
+<p>For <code>&lt;EntityName&gt;</code>: first generate the entity class
+<code>&lt;EntityName&gt;.cs</code> if it doesn’t exist yet — same
+pattern as <code>&lt;AlreadyDoneEntity&gt;.cs</code>, using the columns
+from <code>scripts/create_database.sql</code> and the stored procedure
+names from <code>scripts/stored_procedures.sql</code>, and add its
+static list to <code>Program.cs</code> in the load order from
+<code>CLAUDE.md</code>.</p>
+<p>Then generate <code>&lt;EntityName&gt;Panel.cs</code> (+ Designer +
+resx), following the same pattern as
 <code>&lt;AlreadyDonePanel&gt;.cs</code>. Wire it under
 <code>&lt;RoleHomePanel&gt;</code> (replacing the TODO placeholder).
 Match the entity pattern, RTL settings, and Hebrew labels from existing
@@ -1634,15 +1642,22 @@ panels.</p>
 <p>‏Prompt אחד שמייצר את כל מסכי ה-CRUD הנותרים, מחבר כל אחד תחת מסך הבית
 המתאים, ומדווח מה נבנה. צפו ב-Claude מייצר 8–10 מסכים במכה אחת.</p>
 <blockquote class="prompt">
-<p>Generate CRUD panels for every entity in <code>CLAUDE.md</code> that
-doesn’t already have one. For each: - Follow the same pattern as
+<p>For every entity in <code>CLAUDE.md</code> that doesn’t already have
+one, generate <strong>both</strong> its entity class and its CRUD panel.
+For each: - <strong>The entity class first</strong> —
+<code>&lt;EntityName&gt;.cs</code> following the same pattern as
+<code>&lt;AlreadyDoneEntity&gt;.cs</code>, using the columns from
+<code>scripts/create_database.sql</code> and the stored procedure names
+from <code>scripts/stored_procedures.sql</code>. Add each entity’s
+static list to <code>Program.cs</code> in the load order documented in
+<code>CLAUDE.md</code>. - Then the panel, following the same pattern as
 <code>&lt;AlreadyDonePanel&gt;.cs</code> exactly — entity-method wiring,
 RTL settings, Hebrew labels, Back-button mechanism. - Wire each panel
 under the role home panel whose actor owns that UC (read the UC diagram
 and <code>CLAUDE.md</code> to decide). - Replace each role home’s TODO
 placeholder buttons with real handlers as you go.</p>
-<p>Report at the end which panels you generated and which role home each
-was wired under.</p>
+<p>Report at the end which entity classes and which panels you
+generated, and which role home each panel was wired under.</p>
 </blockquote>
 <p>יתרונות: דרמטי, מהיר, ומשיג את “מטרת השיעור” של שלב 5 בבת אחת. גם
 חסכוני יותר בטוקנים — ההקשר נקרא פעם אחת ולא עשר פעמים. חסרונות: אם
@@ -1652,6 +1667,10 @@ Claude הבין את התבנית לא נכון בשלב 5, השגיאה מתפ�
 מהמסלולים)</h3>
 <p>אחרי אפשרות א׳ או ב׳, בנו ועברו על כל מסך:</p>
 <ul>
+<li><strong>מחלקות הישויות:</strong> לכל ישות שקיבלה מסך יש גם קובץ
+<code>&lt;Entity&gt;.cs</code> ורשימה סטטית ב-<code>Program.cs</code>,
+וסדר הטעינה ב-<code>initLists()</code> עדיין תואם
+ל-<code>CLAUDE.md</code> (ישויות בסיס קודם, מחלקות קישור אחרונות).</li>
 <li><strong>בנייה:</strong> קומפילציה נקייה, בלי אזהרות חדשות מעבר
 ל-CA1416 (שעדיין מושתקת).</li>
 <li><strong>סריקה ויזואלית:</strong> לכל מסך — F5 ← התחברו כשחקן
@@ -1737,7 +1756,7 @@ Stored Procedures טרנזקציוניים, וכפתורי פעולה בממשק
 השלב הזה הוא המקום שבו היא משתלמת.</p>
 <h3 id="שלב-7.1-איתור-ישויות-עם-מצבים">שלב 7.1 — איתור ישויות עם
 מצבים</h3>
-<p>In Claude Code:</p>
+<p>ב-Claude Code:</p>
 <blockquote class="prompt">
 <p>Read <code>docs/design/state-diagram.md</code> (and any other state
 diagrams in <code>docs/design/</code>). For each entity that has a

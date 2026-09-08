@@ -192,7 +192,7 @@ dir: rtl
 
 **זמן צפוי:** 15–20 דקות. הגדרת ה-MCP היא החלק שהכי נוטה להשתבש — אל תיבהלו.
 
-1. **צרו תיקייה לפרויקט של הקבוצה** (למשל `sad-<groupname>`). זו תיקיית העבודה שלכם — היא אינה פרויקט הדוגמה.
+1. **ודאו שאתם בתיקייה שיצרתם בשלב 0** — היא פתוחה ב-VSCode והיא עדיין ריקה למעט תת-התיקייה `docs`. זו תיקיית העבודה שלכם — היא אינה פרויקט הדוגמה.
 2. **הכניסו את קובצי הניתוח והעיצוב הקיימים שלכם ל-`docs/`** — קובצי ה-PDF של חלק א׳ וחלק ב׳ (ניתוח ארגוני, דרישות, דיאגרמת UC, דיאגרמת מחלקות וכו׳).
 3. **שכפלו את פרויקט הדוגמה של הקורס לתוך `cloned/`** על ידי בקשה מ-Claude Code:
 
@@ -211,8 +211,6 @@ dir: rtl
 5. **התקינו את שרת ה-MSSQL MCP** כדי ש-Claude Code יוכל לתקשר עם בסיס הנתונים של הקבוצה ב-Azure SQL.
 
    דרישת קדם: בסיס הנתונים של הקבוצה חייב כבר להתקיים (הוקם ב-`PREREQS` חלק ג׳ לפני השיעור).
-
-   ה-Prompt שלמטה מתאים ל**מסלול Azure** (המומלץ), ודרושים לו ארבעת ערכי החיבור: שרת, שם בסיס הנתונים, שם משתמש וסיסמה.
 
    **☁️ מסלול Azure:** ה-Prompt שלמטה מתאים לכם כמו שהוא. דרושים ארבעת ערכי החיבור:
    שרת, שם בסיס הנתונים, שם משתמש וסיסמה.
@@ -249,7 +247,7 @@ dir: rtl
 >    if (-not $uvx) { $uvx = Get-ChildItem "$env:USERPROFILE\.local","$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Filter uvx.exe -Recurse -EA SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName }
 >    $uvx
 >    ```
->    Do not search only under `WinGet\Packages` — recent uv versions install to `%USERPROFILE%\.local\bin` and that search finds nothing..
+>    Do not search only under `WinGet\Packages` — recent uv versions install to `%USERPROFILE%\.local\bin` and that search finds nothing.
    >
 > **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own.
 >
@@ -660,38 +658,7 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 > Run `scripts/stored_procedures.sql` via the mssql MCP tool.
 
-### שלב 4.6 — בדיקת ישות אחת מקצה לקצה דרך ה-MCP
-
-בחרו ישות אחת. בקשו מ-Claude להריץ עליה מחזור CRUD מלא דרך ה-MCP:
-
-> Using execute_sql via the mssql MCP, run `sp_<entity>_create` with realistic test values, then `sp_<entity>_get_all` to confirm it landed, then `sp_<entity>_update` on the new row, then `sp_<entity>_delete`. Report each result.
-
-אם מערכת ה-Stored Procedures של ישות אחת עובדת מקצה לקצה, כמעט בוודאות גם של האחרות — הייצור מכני. המשיכו הלאה.
-
-### מה בכוונה לא נכלל בשלב 4
-
-- **Stored Procedures לדוחות** (נוכחות חודשית, הכנסה חודשית) — הם מקודדים לוגיקה עסקית שברור יותר לכתוב כשיש נקודת קריאה אמיתית שמכתיבה אותה.
-- **Stored Procedures למעברי מצבים** עבור `Registration` (ביטול, ביטול מאוחר, קידום מרשימת המתנה) — מאותה סיבה; כתבו אותם כשה-UC שקורא להם ימומש.
-- **טרנזקציות מרובות טבלאות** — נכתבות לפי UC, לא לפי ישות.
-
-אלה שייכים לשלב 5 ואילך.
-
-**נקודת Commit:** בצעו commit לסקריפטי ה-SQL:
-
-> Commit `scripts/` — database schema, stored procedures, and seed data. Commit message: "Phase 4: database schema and stored procedures"
-
-
-בצעו push ל-GitHub.
-
-**התחילו Session חדש לפני השלב הבא.** פלט ה-SQL וההרצות כבר לא נחוץ — הסקריפטים שמורים בקבצים.
-
-הריצו `/clear` (חינם) — או פתחו שיחה חדשה.
-
-> מכאן והלאה `CLAUDE.md` נטען אוטומטית בכל שיחה חדשה, כך שאין צורך להסביר מחדש כלום.
-
----
-
-## שלב 4.5 — נתוני דמה
+### שלב 4.5 — נתוני דמה
 
 **מה השלב הזה עושה:** ממלא את הטבלאות בנתונים ריאליסטיים, לפני שכותבים שורת C# אחת.
 
@@ -734,11 +701,38 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 הספירות צריכות להתאים למה ש-`seed_data.sql` היה אמור להכניס. אם טבלה ריקה כשהיא לא אמורה להיות — משהו נכשל בשקט ו-Claude צריך לחקור.
 
-### למה זה שלב נפרד
+**למה זה צעד נפרד ולא חלק מ-4.4:** זו פעולת אתחול חד-פעמית ולא שלב חוזר, ודילוג עליו
+(או ביצוע רשלני שלו) שובר את חוויית האימות בשלב 5 בלי לשבור את הבנייה — בדיוק סוג
+הבעיה שצריכה נראות משלה.
 
-אפשר היה לשלב את זה בשלב 4 או בשלב 5, אבל הוא נשאר נפרד כי:
-- זו פעולת אתחול חד-פעמית, לא שלב חוזר.
-- דילוג עליו (או ביצוע רשלני שלו) שובר את חוויית האימות בשלב 5 בלי לשבור את הבנייה — בדיוק סוג הבעיה שצריכה נראות משלה.
+### שלב 4.6 — בדיקת ישות אחת מקצה לקצה דרך ה-MCP
+
+בחרו ישות אחת. בקשו מ-Claude להריץ עליה מחזור CRUD מלא דרך ה-MCP:
+
+> Using execute_sql via the mssql MCP, run `sp_<entity>_create` with realistic test values, then `sp_<entity>_get_all` to confirm it landed, then `sp_<entity>_update` on the new row, then `sp_<entity>_delete`. Report each result.
+
+אם מערכת ה-Stored Procedures של ישות אחת עובדת מקצה לקצה, כמעט בוודאות גם של האחרות — הייצור מכני. המשיכו הלאה.
+
+### מה בכוונה לא נכלל בשלב 4
+
+- **Stored Procedures לדוחות** (נוכחות חודשית, הכנסה חודשית) — הם מקודדים לוגיקה עסקית שברור יותר לכתוב כשיש נקודת קריאה אמיתית שמכתיבה אותה.
+- **Stored Procedures למעברי מצבים** עבור `Registration` (ביטול, ביטול מאוחר, קידום מרשימת המתנה) — מאותה סיבה; כתבו אותם כשה-UC שקורא להם ימומש.
+- **טרנזקציות מרובות טבלאות** — נכתבות לפי UC, לא לפי ישות.
+
+אלה שייכים לשלב 5 ואילך.
+
+**נקודת Commit:** בצעו commit לסקריפטי ה-SQL:
+
+> Commit `scripts/` — database schema, stored procedures, and seed data. Commit message: "Phase 4: database schema and stored procedures"
+
+
+בצעו push ל-GitHub.
+
+**התחילו Session חדש לפני השלב הבא.** פלט ה-SQL וההרצות כבר לא נחוץ — הסקריפטים שמורים בקבצים.
+
+הריצו `/clear` (חינם) — או פתחו שיחה חדשה.
+
+> מכאן והלאה `CLAUDE.md` נטען אוטומטית בכל שיחה חדשה, כך שאין צורך להסביר מחדש כלום.
 
 ---
 
@@ -908,13 +902,19 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 שלב 5 ייצר מסך CRUD אחד מקצה לקצה ואימת את התבנית. עכשיו מרחיבים לשאר הישויות — כל ישות בסיס, כל מחלקת קישור, וכל ישות שיש לה UC מסוג CRUD בהיקף שלכם.
 
+> **שימו לב: לכל ישות צריך גם מחלקה וגם מסך.** בשלב 5.3 יצרתם מחלקת ישות **אחת** בלבד.
+> לשאר הישויות עדיין אין קובץ `.cs` ואין רשימה סטטית ב-`Program.cs` — ולכן כל מסך כאן
+> נוצר יחד עם מחלקת הישות שמאחוריו. מסך שנוצר בלי המחלקה שלו פשוט לא יתקמפל.
+
 יש שתי דרכים. בחרו לפי מידת האמון שלכם בתבנית משלב 5 וכמה אתם נהנים מהדגמה טובה.
 
 ### אפשרות א׳ — אחד-אחד (זהירה)
 
 צרו מסך אחד, בדקו, חברו אותו תחת מסך הבית של התפקיד הנכון, ובנו. אחר כך הבא בתור. חזרו עד שסיימתם.
 
-> Generate `<EntityName>Panel.cs` (+ Designer + resx) for `<EntityName>`, following the same pattern as `<AlreadyDonePanel>.cs`. Wire it under `<RoleHomePanel>` (replacing the TODO placeholder). Match the entity pattern, RTL settings, and Hebrew labels from existing panels.
+> For `<EntityName>`: first generate the entity class `<EntityName>.cs` if it doesn't exist yet — same pattern as `<AlreadyDoneEntity>.cs`, using the columns from `scripts/create_database.sql` and the stored procedure names from `scripts/stored_procedures.sql`, and add its static list to `Program.cs` in the load order from `CLAUDE.md`.
+>
+> Then generate `<EntityName>Panel.cs` (+ Designer + resx), following the same pattern as `<AlreadyDonePanel>.cs`. Wire it under `<RoleHomePanel>` (replacing the TODO placeholder). Match the entity pattern, RTL settings, and Hebrew labels from existing panels.
 
 יתרונות: תופסים סטייה מהתבנית מוקדם. קל לבדוק כל מסך מול המקור.
 חסרונות: איטי יותר, יותר Prompts, יותר מעברי הקשר.
@@ -923,12 +923,13 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 ‏Prompt אחד שמייצר את כל מסכי ה-CRUD הנותרים, מחבר כל אחד תחת מסך הבית המתאים, ומדווח מה נבנה. צפו ב-Claude מייצר 8–10 מסכים במכה אחת.
 
-> Generate CRUD panels for every entity in `CLAUDE.md` that doesn't already have one. For each:
-> - Follow the same pattern as `<AlreadyDonePanel>.cs` exactly — entity-method wiring, RTL settings, Hebrew labels, Back-button mechanism.
+> For every entity in `CLAUDE.md` that doesn't already have one, generate **both** its entity class and its CRUD panel. For each:
+> - **The entity class first** — `<EntityName>.cs` following the same pattern as `<AlreadyDoneEntity>.cs`, using the columns from `scripts/create_database.sql` and the stored procedure names from `scripts/stored_procedures.sql`. Add each entity's static list to `Program.cs` in the load order documented in `CLAUDE.md`.
+> - Then the panel, following the same pattern as `<AlreadyDonePanel>.cs` exactly — entity-method wiring, RTL settings, Hebrew labels, Back-button mechanism.
 > - Wire each panel under the role home panel whose actor owns that UC (read the UC diagram and `CLAUDE.md` to decide).
 > - Replace each role home's TODO placeholder buttons with real handlers as you go.
 >
-> Report at the end which panels you generated and which role home each was wired under.
+> Report at the end which entity classes and which panels you generated, and which role home each panel was wired under.
 
 יתרונות: דרמטי, מהיר, ומשיג את "מטרת השיעור" של שלב 5 בבת אחת. גם חסכוני יותר בטוקנים — ההקשר נקרא פעם אחת ולא עשר פעמים.
 חסרונות: אם Claude הבין את התבנית לא נכון בשלב 5, השגיאה מתפשטת לכל המסכים. שלב הבדיקה (הבא) חשוב יותר.
@@ -937,6 +938,8 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 אחרי אפשרות א׳ או ב׳, בנו ועברו על כל מסך:
 
+- **מחלקות הישויות:** לכל ישות שקיבלה מסך יש גם קובץ `<Entity>.cs` ורשימה סטטית ב-`Program.cs`,
+  וסדר הטעינה ב-`initLists()` עדיין תואם ל-`CLAUDE.md` (ישויות בסיס קודם, מחלקות קישור אחרונות).
 - **בנייה:** קומפילציה נקייה, בלי אזהרות חדשות מעבר ל-CA1416 (שעדיין מושתקת).
 - **סריקה ויזואלית:** לכל מסך — F5 ← התחברו כשחקן הרלוונטי ← היכנסו למסך ← ודאו שהתוויות בעברית נראות נכון (יישור לימין, בלי `?????`), שתצוגת הרשימה מציגה נתונים אמיתיים מנתוני הדמה, ושהכפתורים קיימים.
 - **בדיקת חיווט מדגמית:** צרו שורה, עדכנו שורה, מחקו שורה — בשניים-שלושה מסכים. אם שלוש הפעולות עובדות על ישות בסיס ועל מחלקת קישור, סביר מאוד שהשאר תקינים.
@@ -993,7 +996,7 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 ### שלב 7.1 — איתור ישויות עם מצבים
 
-In Claude Code:
+ב-Claude Code:
 
 > Read `docs/design/state-diagram.md` (and any other state diagrams in `docs/design/`). For each entity that has a non-trivial state machine, list:
 > - The entity name
