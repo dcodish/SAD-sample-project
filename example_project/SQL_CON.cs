@@ -22,10 +22,23 @@ namespace Example_Project
 
         public SQL_CON()
         {
-            //חיבור לשרת המקומי - לפיתוח מהבית
+            // ------------------------------------------------------------
+            // אפשרות 1 (ברירת מחדל) - SQL Server מקומי, לפיתוח מהבית
+            // שימו לב: שם ה-Instance תלוי בהתקנה שלכם. ברירת המחדל היא SQLEXPRESS,
+            // אבל אם אצלכם הותקן שם אחר (SQLEXPRESS01, SQLEXPRESS02 וכו') - עדכנו בהתאם.
+            // ------------------------------------------------------------
             conn = new SqlConnection("Data Source=localhost\\SQLEXPRESS;Initial Catalog=SAD_0;Integrated Security=True;TrustServerCertificate=True");
-            //חיבור לשרת באוניברסיטה - יש לבטל את ההערה ולהעיר את השורה למעלה
-            //conn = new SqlConnection("Data Source=IEMDBS;Initial Catalog=SAD_0;Integrated Security=True");
+
+            // ------------------------------------------------------------
+            // אפשרות 2 - Azure SQL Database (בסיס הנתונים המשותף של הקבוצה)
+            // זו האפשרות שבה משתמשים בקורס. כדי לעבור אליה:
+            // הפכו את השורה של אפשרות 1 להערה, בטלו את ההערה מהשורה שלמטה,
+            // ומלאו את ארבעת הערכים שקיבלתם מיוצר בסיס הנתונים בקבוצה
+            // (שרת, בסיס נתונים, שם משתמש, סיסמה - ראו PREREQS.md חלק C).
+            //
+            // אזהרה: אל תעלו קובץ עם סיסמה אמיתית ל-git.
+            // ------------------------------------------------------------
+            //conn = new SqlConnection("Server=tcp:<servername>.database.windows.net,1433;Initial Catalog=<database>;User ID=<username>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
 
         /// <summary>
