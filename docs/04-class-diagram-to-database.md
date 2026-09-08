@@ -38,8 +38,12 @@ workerTitle: Title  →    Title workerTitle        →    workerTitle NVARCHAR(
 
 ### הרעיון
 
-הערכים הקבועים מוגדרים כ-enum בקוד. בבסיס הנתונים, התפקיד נשמר כ**טקסט** (`NVARCHAR(50)`) בטבלת Workers.
-בנוסף, קיימת טבלת `Titles` ב-DB כ**טבלת עזר (reference)** — היא לא נטענת לזיכרון, אלא משמשת כהתייחסות בלבד.
+הערכים הקבועים מוגדרים כ-enum בקוד. בבסיס הנתונים, התפקיד נשמר כ**טקסט** (`NVARCHAR(50)`) בטבלת Workers,
+והערכים החוקיים נאכפים באמצעות **אילוץ `CHECK`** על העמודה.
+
+> **לא יוצרים טבלת Lookup למניות (enumerations).** אילוץ `CHECK` אוכף בדיוק את אותם ערכים,
+> בלי טבלה נוספת, בלי מפתח זר ובלי טעינה לזיכרון. טבלה נפרדת שמורה לנתונים שהמשתמשים
+> עצמם יוצרים ומשנים — לא לרשימת ערכים קבועה שממילא מוגדרת כ-enum בקוד.
 
 ### ב-C# — הגדרת ה-Enum וה-TitleHelper
 
@@ -75,22 +79,18 @@ public static class TitleHelper
 ### ב-SQL — מבנה הטבלאות
 
 ```sql
--- טבלת Workers — שומרת את התפקיד כטקסט
+-- טבלת Workers — שומרת את התפקיד כטקסט, עם CHECK שאוכף את הערכים החוקיים
 CREATE TABLE Workers (
     workerId VARCHAR(20) PRIMARY KEY,
     workerName NVARCHAR(50),
-    workerTitle NVARCHAR(50)          -- טקסט, למשל 'מנהל משמרת'
-);
-
--- טבלת Titles — טבלת עזר (reference) בלבד, לא נטענת לזיכרון
-CREATE TABLE Titles (
-    titleId INT PRIMARY KEY,
-    titleName NVARCHAR(50)
+    workerTitle NVARCHAR(50),         -- טקסט, למשל 'מנהל משמרת'
+    CONSTRAINT CK_WORKER_TITLE CHECK (workerTitle IN (N'מנהל משמרת', N'ראש צוות', N'עובד חדש'))
 );
 ```
 
-> **שימו לב:** ב-Workers שומרים את `workerTitle` כטקסט (`NVARCHAR(50)`) — לא כ-FK לטבלת Titles.
-> טבלת Titles קיימת כטבלת עזר אבל אין קשר FK בינה לבין Workers.
+> **שימו לב:** `workerTitle` נשמר כטקסט (`NVARCHAR(50)`) ולא כמפתח זר. הערכים החוקיים
+> מופיעים פעמיים — ב-enum שב-C# וב-`CHECK` שב-DB — וחייבים להישאר זהים. כשמוסיפים ערך,
+> מעדכנים את שניהם ומריצים מחדש את סקריפט הסכמה.
 
 ### ב-Worker — טעינת Title מטקסט
 
@@ -108,7 +108,7 @@ c.Parameters.AddWithValue("@title", TitleHelper.ToDisplayString(this.workerTitle
 
 ### סדר הטעינה
 
-אין צורך לטעון טבלת Titles — ה-enum מוגדר בקוד:
+אין מה לטעון עבור המנייה — ה-enum מוגדר בקוד, וה-DB רק אוכף אותו:
 
 ```csharp
 // ב-Program.cs
@@ -142,7 +142,7 @@ Title title = TitleHelper.FromDisplayString(comboBox1.SelectedItem.ToString());
 
 | מצב | פתרון |
 |------|--------|
-| ערכים קבועים שלא ישתנו (תפקידים, סטטוסים) | **Enum** עם Helper class |
+| ערכים קבועים שלא ישתנו (תפקידים, סטטוסים) | **Enum** ב-C# + אילוץ `CHECK` ב-DB |
 | נתונים שמשתמשים יוצרים (לקוחות, הזמנות) | **טבלה רגילה** |
 
 ## 3. ירושה (Inheritance) — Table-per-Subclass

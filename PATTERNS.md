@@ -50,6 +50,16 @@ Every entity class is self-contained. Each one owns:
 
 This is deliberate: students can read the full lifecycle of an ID in one place (the C# constructor), and DB writes are deterministic from the entity's state. Concurrency is not a concern in the single-user teaching context.
 
+### Enumerations — CHECK Constraint, Never a Lookup Table
+An attribute with a fixed set of values (status, type, role, category) is an **enumeration**, not a related entity.
+
+- **DB:** store it as text on the entity's own column (`NVARCHAR(20)`) with a `CHECK (<column> IN (N'…', N'…'))` constraint listing every legal value. **Do not create a lookup/reference table, and do not make it a foreign key.**
+- **C#:** declare a matching `enum`. Where the values contain spaces, use underscores in the enum and a small `XyzHelper` with `ToDisplayString()` / `FromDisplayString()` to convert.
+- **UI:** populate combo boxes from `Enum.GetValues(typeof(Xyz))` — never from a DB query.
+- The `CHECK` list and the `enum` must stay identical; adding a value means editing both and re-running the schema script.
+
+A separate table is for data users create and change. A fixed value list is already declared in code — a second copy in a table adds a join, a load step and a way for the two to drift apart. *(Sample project example: `Title` enum in `Title.cs` + `CK_WORKER_TITLE` on `Workers.workerTitle`.)*
+
 ### In-Memory Lists
 All data lives in `Program.*` static lists after startup. No DB calls during normal use except writes.
 

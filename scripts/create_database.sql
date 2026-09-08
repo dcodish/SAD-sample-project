@@ -23,24 +23,16 @@
 -- USE SAD_0;
 -- GO
 
--- Titles — טבלת Lookup לתפקידים
--- טבלת עזר שמכילה את הערכים התקינים לתפקידים
--- הערכים מוגדרים גם כ-Enum ב-C# (Title.cs)
-CREATE TABLE Titles (
-    titleId INT NOT NULL,
-    titleName NVARCHAR(50) NOT NULL,
-    CONSTRAINT PK_TITLE PRIMARY KEY (titleId)
-);
-GO
-
 -- Create Workers table
 -- שימו לב: NVARCHAR תומך בעברית ותווים מיוחדים, בניגוד ל-VARCHAR
--- workerTitle נשמר כטקסט (לא כ-FK) — תואם את ערכי ה-Enum ב-C#
+-- workerTitle הוא ערך מתוך מנייה (enumeration): נשמר כטקסט ונאכף ב-CHECK,
+-- לא בטבלת Lookup ולא ב-FK. הערכים זהים ל-Enum ‏Title ב-C#‏ (Title.cs).
 CREATE TABLE Workers (
     workerId VARCHAR(20) NOT NULL,
     workerName NVARCHAR(20) NULL,
     workerTitle NVARCHAR(50) NULL,
-    CONSTRAINT PK_WORKER PRIMARY KEY (workerId)
+    CONSTRAINT PK_WORKER PRIMARY KEY (workerId),
+    CONSTRAINT CK_WORKER_TITLE CHECK (workerTitle IN (N'מנהל משמרת', N'ראש צוות', N'עובד חדש'))
 );
 GO
 
@@ -56,11 +48,6 @@ CREATE TABLE Orders (
 GO
 
 -- Stored Procedures
-
-CREATE PROCEDURE dbo.Get_all_Titles
-AS
-    SELECT titleId, titleName FROM dbo.Titles;
-GO
 
 CREATE PROCEDURE dbo.Get_all_Workers
 AS
@@ -219,9 +206,6 @@ GO
 -- Sample data
 
 -- Lookup values — תפקידים
-INSERT INTO Titles VALUES (1, N'מנהל משמרת');
-INSERT INTO Titles VALUES (2, N'ראש צוות');
-INSERT INTO Titles VALUES (3, N'עובד חדש');
 GO
 
 -- Workers — workerTitle נשמר כטקסט (תואם את ערכי ה-Enum ב-C#)
