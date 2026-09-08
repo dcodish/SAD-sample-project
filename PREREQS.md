@@ -1,76 +1,98 @@
-::: {custom-style="Centered"}
-![](bgu-logo.png){width=3.2in}
-:::
+---
+title: "מדריך הכנה לפני השיעור"
+subtitle: "כל מה שצריך להתקין ולאמת לפני המפגש"
+course: "ניתוח ועיצוב מערכות מידע — אוניברסיטת בן-גוריון, הנדסת תעשייה וניהול"
+author: "מרצה: דוד קודיש"
+lang: he
+dir: rtl
+---
 
-::: {custom-style="Title"}
-Software Analysis and Design
-:::
+# דרישות קדם — הכנה לשיעור
 
-::: {custom-style="Subtitle"}
-Pre-Class Setup Guide
-:::
+כל מה שבמסמך הזה חייב להיות מותקן ועובד **לפני** השיעור. ביצוע ההתקנות בכיתה מבזבז את הזמן של כולם וחוסם את שאר חברי הקבוצה שלכם.
 
-::: {custom-style="Author"}
-Lecturer: David Codish
-:::
+**זמן משוער:** כ-45 דקות אם שום דבר לא נכשל. תכננו שעה ליתר ביטחון. הפעילו מחדש את המחשב לפני שאתם מתחילים.
 
-# Prerequisites — SAD Course Pre-Class Setup
+## מה אנחנו מתקינים, ולמה
 
-Everything in this document must be installed and working **before** the lesson. Doing this in class wastes everyone's time and blocks the rest of your group.
+לפני שמתחילים — כדאי להבין מה כל כלי עושה. אתם לא מתקינים רשימה אקראית;
+כל פריט ברשימה ממלא תפקיד מוגדר בשיעור:
 
-**Time budget:** ~45 minutes if nothing fails. Plan for an hour to be safe. Reboot before you start.
+| הכלי | לְמה הוא משמש |
+|---|---|
+| **VSCode** | העורך שבתוכו רץ Claude Code. כאן תעבדו כמעט כל השיעור. |
+| **Claude Code** | הסוכן עצמו. הוא קורא את המסמכים שלכם, כותב את הקוד, ומריץ את ה-SQL. |
+| **מנוי Claude Pro/Max** | בלעדיו הסוכן לא פועל. אין גרסה חינמית. |
+| **Visual Studio** | לבנייה והרצה של אפליקציית ה-WinForms (F5), ולמעצב המסכים הגרפי. **לא** נערוך בו קוד — את זה Claude עושה. |
+| **.NET 8 SDK** | מה שמקמפל את קוד ה-C#. |
+| **.NET 8 Desktop Runtime** | מה שמריץ את האפליקציה אחרי שנבנתה. נפרד מה-SDK, וקל לשכוח אותו. |
+| **בסיס נתונים** | Azure SQL או SQL Server מקומי — שם יישמרו הטבלאות והנתונים שלכם. |
+| **SSMS** | כלי גרפי להצצה בבסיס הנתונים בעיניים שלכם. שימושי לאימות שמה ש-Claude עשה באמת קרה. |
+| **Git + GitHub** | ניהול גרסאות ושיתוף בין חברי הקבוצה. הקוד הוא מקור האמת, לא בסיס הנתונים. |
+| **uv** | מריץ חבילות Python. בשיעור הוא יפעיל את הרכיב שמחבר את Claude לבסיס הנתונים. |
 
-## The approach: bootstrap Claude first, then let it do the rest
-
-Installing dev tools always throws surprises — PATH problems, missing dependencies, version conflicts, cryptic installer errors. Rather than fight those alone, you'll install **just two things by hand** (VSCode and Claude Code), and then **let Claude install and troubleshoot everything else.** When something fails, Claude is right there to read the error and fix it, instead of you googling stack traces.
-
-So the flow is:
-
-1. **Part A — Bootstrap (manual):** VSCode + Claude Code + your Claude subscription. ~10 minutes.
-2. **Part B — Claude-assisted install:** paste one prompt; Claude installs and verifies the rest (Git, uv, .NET, Visual Studio, SQL Server, SSMS), troubleshooting failures as they come up.
-3. **Part C — Manual finish:** the few GUI steps Claude can't click for you (mainly the first SQL Server connection).
-
-If you'd rather install everything by hand, the **Manual Install Reference** at the bottom has the full per-tool steps.
+**התמונה הגדולה:** VSCode ו-Claude Code הם מקום העבודה; Visual Studio ו-.NET בונים
+ומריצים; בסיס הנתונים ו-SSMS מחזיקים ומציגים את הנתונים; Git שומר הכול ומשתף.
 
 ---
 
-# Part A — Bootstrap (Do These by Hand)
+## הגישה: קודם מקימים את Claude, ואז נותנים לו לעשות את השאר
 
-## A1. VSCode
+התקנת כלי פיתוח תמיד מזמנת הפתעות — בעיות PATH, תלויות חסרות, התנגשויות גרסאות, ושגיאות התקנה סתומות. במקום להיאבק בזה לבד, תתקינו **רק שני דברים ידנית** (VSCode ו-Claude Code), ואז **תנו ל-Claude להתקין ולפתור את כל השאר**. כשמשהו נכשל, Claude נמצא שם כדי לקרוא את השגיאה ולתקן אותה, במקום שתחפשו stack traces בגוגל.
 
-Download: <https://code.visualstudio.com> — pick the Windows installer (user version is fine).
+אז זרימת העבודה היא:
 
-Install with defaults. When the installer asks about "Additional Tasks", check:
+1. **חלק א׳ — הקמה בסיסית (ידני):** VSCode + Claude Code + המנוי שלכם ל-Claude. כ-10 דקות.
+2. **חלק ב׳ — התקנה בעזרת Claude:** מדביקים Prompt אחד; Claude מתקין ומאמת את כל השאר (Git, uv, .NET, Visual Studio, SSMS), ופותר תקלות תוך כדי.
+3. **חלק ג׳ — הקמת בסיס הנתונים:** שני מסלולים אפשריים — **Azure SQL בענן (מומלץ)** או **SQL Server Express מקומי**. בחרו מסלול אחד לכל הקבוצה.
+4. **חלק ד׳ — סיום ידני:** אימות החיבור מ-SSMS לבסיס הנתונים שבחרתם.
+
+אם אתם מעדיפים להתקין הכול ידנית, **נספח ההתקנה הידנית** בסוף המסמך מכיל את כל השלבים לכל כלי.
+
+---
+
+# חלק א׳ — הקמה בסיסית (בצעו ידנית)
+
+## א1. VSCode
+
+הורדה: <https://code.visualstudio.com> — בחרו את מתקין ה-Windows (גרסת ה-user מספיקה).
+
+התקינו עם הגדרות ברירת המחדל. כשהמתקין שואל על "Additional Tasks", סמנו:
+
 - ✅ **Add "Open with Code" action to Windows Explorer file/directory context menu**
 - ✅ **Add to PATH**
 
-Open VSCode once to confirm it launches.
+פתחו את VSCode פעם אחת כדי לוודא שהוא עולה.
 
-## A2. Claude Pro or Max subscription
+## א2. מנוי Claude Pro או Max
 
-Claude Code is included in both Pro and Max — no separate purchase. There is **no free tier** for the agent; without a subscription, nothing in this course works.
+‏Claude Code כלול גם ב-Pro וגם ב-Max — אין צורך ברכישה נפרדת. **אין גרסה חינמית** של הסוכן; בלי מנוי, שום דבר בקורס הזה לא יעבוד.
 
-1. Go to <https://claude.ai>.
-2. Sign up or sign in.
-3. Profile → **Upgrade** → **Pro** (sufficient) or **Max** (higher limits).
-4. Complete checkout.
+1. היכנסו ל-<https://claude.ai>.
+2. הירשמו או התחברו.
+3. פרופיל ← **Upgrade** ← **Pro** (מספיק) או **Max** (מגבלות גבוהות יותר).
+4. השלימו את התשלום.
 
-## A3. Claude Code extension + sign in
+## א3. תוסף Claude Code והתחברות
 
-1. In VSCode, open Extensions (Ctrl+Shift+X).
-2. Search **"Claude Code"** (published by Anthropic) → **Install**.
-3. Open the Claude Code panel (Claude icon in the sidebar, or Ctrl+Shift+P → "Claude Code: Sign In").
-4. Sign in with the **same account** as your Pro/Max subscription. Authorize in the browser when prompted.
+1. ב-VSCode, פתחו Extensions‏ (Ctrl+Shift+X).
+2. חפשו **"Claude Code"** (מפורסם על ידי Anthropic) ← **Install**.
+3. פתחו את פאנל Claude Code (אייקון Claude בסרגל הצד, או Ctrl+Shift+P ← "Claude Code: Sign In").
+4. התחברו עם **אותו חשבון** שבו רכשתם את מנוי ה-Pro/Max. אשרו בדפדפן כשתתבקשו.
 
-**Verify:** type "hello, are you connected?" in Claude Code and send. You should get a reply. If you see "no active subscription," wait 1–2 minutes after subscribing, then sign out and back in.
+**אימות:** שלחו את ההודעה הבאה ב-Claude Code:
 
-Once Claude replies, the bootstrap is done. Everything else, Claude helps with.
+> hello, are you connected?
+
+אתם אמורים לקבל תשובה. אם מופיע `no active subscription`, המתינו דקה-שתיים אחרי הרכישה, ואז התנתקו והתחברו מחדש.
+
+ברגע ש-Claude עונה, ההקמה הבסיסית הושלמה. בכל השאר Claude יעזור לכם.
 
 ---
 
-# Part B — Let Claude Install the Rest
+# חלק ב׳ — תנו ל-Claude להתקין את השאר
 
-Open a folder in VSCode (any empty folder is fine for now — you'll make your real project folder during the lesson). In the Claude Code panel, paste this prompt:
+פתחו תיקייה ב-VSCode (בשלב הזה כל תיקייה ריקה מתאימה — את תיקיית הפרויקט האמיתית תיצרו במהלך השיעור). בפאנל של Claude Code, הדביקו את ה-Prompt הבא:
 
 > Help me install and verify the development tools for a course. I'm on Windows. For each tool, first check whether it's already installed (and the right version); if not, install it — prefer `winget` and run the command for me, then verify. If a tool needs a GUI installer you can't drive, give me the exact steps and wait while I do it, then help me verify and troubleshoot. Work through them one at a time and tell me the status of each.
 >
@@ -79,162 +101,408 @@ Open a folder in VSCode (any empty folder is fine for now — you'll make your r
 > 2. **uv** (Astral's Python runner — package id `astral-sh.uv`). Verify `uvx --version` works.
 > 3. **.NET 8 SDK** — verify `dotnet --version` reports 8.x.
 > 4. **.NET 8 Windows Desktop Runtime** — separate from the SDK. Verify `dotnet --list-runtimes` shows `Microsoft.WindowsDesktop.App 8.x`.
-> 5. **Visual Studio 2025 Community** with the ".NET desktop development" workload. This is a large GUI install — guide me and help me pick the right workload.
-> 6. **SQL Server Express** (2019 or newer). If I already have a local instance, help me confirm it's running instead of reinstalling.
-> 7. **SQL Server Management Studio (SSMS)**.
+> 5. **Visual Studio Community** with the ".NET desktop development" workload — **2022 or 2025, either is fine**. If I already have Visual Studio 2022 installed, do NOT make me upgrade: just verify the ".NET desktop development" workload is present and add it via the VS Installer if it is missing. Only install 2025 if I have no Visual Studio at all. This is a large GUI install — guide me and help me pick the right workload.
+> 6. **SQL Server Management Studio (SSMS)** — any recent version works (19, 20, 21…). We use it to connect to the course database. If SSMS is already installed from a previous course, just verify it opens — do not reinstall or upgrade it.
+> 7. **SQL Server Express** — ONLY if I tell you we are taking the local route. Ask me first: our group is either using Azure SQL in the cloud (in which case skip this entirely) or a local SQL Server Express instance. If I confirm the local route, first check whether SQL Server is ALREADY installed (`Get-Service MSSQL*` and the registry key `HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL`) and list what you find. Do not install a second instance if a usable one already exists — tell me which existing instance to use instead.
 >
 > After each install, run the verification command and tell me if it passed. If anything fails, diagnose it before moving on. At the end, give me a summary table of what's installed and what (if anything) still needs my attention.
 
-Claude will work through the list, running `winget` commands, checking versions, and troubleshooting whatever breaks. Let it drive. Answer its questions (e.g., your SQL Server instance name) when it asks.
+‏Claude יעבור על הרשימה, יריץ פקודות `winget`, יבדוק גרסאות, ויפתור כל תקלה שתצוץ. תנו לו להוביל, וענו על השאלות שלו כשהוא שואל.
 
-**What Claude can and can't do here:**
-- ✅ Install Git, uv, .NET SDK, .NET Desktop Runtime via `winget` and verify them.
-- ✅ Read error messages and fix PATH / version / dependency problems.
-- ⚠️ Visual Studio and SQL Server have large GUI installers. Claude can launch them via `winget` or guide you through the download, but you'll click through the wizard. Claude helps verify the result.
+**מה Claude יכול ומה לא יכול לעשות כאן:**
+
+- ✅ להתקין Git,‏ uv,‏ .NET SDK ו-.NET Desktop Runtime דרך `winget` ולאמת אותם.
+- ✅ לקרוא הודעות שגיאה ולתקן בעיות PATH, גרסאות ותלויות.
+- ⚠️ ל-Visual Studio ול-SSMS יש מתקינים גרפיים גדולים. Claude יכול להפעיל אותם דרך `winget` או להנחות אתכם בהורדה, אבל אתם תלחצו על אשף ההתקנה. Claude יעזור לאמת את התוצאה.
 
 ---
 
-# Part C — Manual Finish
+# חלק ג׳ — הקמת בסיס הנתונים
 
-A couple of steps need your eyes and clicks. Claude can guide you, but you drive.
+יש שני מסלולים אפשריים, ושניהם עובדים לאורך כל הקורס. **בחרו מסלול אחד לכל הקבוצה** — לא כל אחד לחוד.
 
-## C1. Confirm SQL Server is running
+| | **מסלול א׳ — Azure SQL (מומלץ)** | **מסלול ב׳ — SQL Server מקומי** |
+|---|---|---|
+| בסיס נתונים משותף לכל הקבוצה | ✅ כן — כולם רואים את אותם נתונים | ❌ לא — לכל אחד עותק נפרד |
+| התקנה מקומית | אין (רק SSMS) | התקנה כבדה של SQL Server Express |
+| עבודה מהבית / מהאוניברסיטה | עובד מכל מקום | רק מהמחשב שעליו הותקן |
+| הקמה | ~15 דקות בפורטל, פעם אחת לקבוצה | ~20–30 דקות, לכל אחד בנפרד |
+| עלות | חינם (Azure for Students) | חינם |
+| תקלות אופייניות | כלל Firewall שלא נשמר | TCP/IP מכובה, שם Instance שגוי |
 
-```powershell
-Get-Service MSSQL*
-```
-`MSSQL$SQLEXPRESS` (or `MSSQLSERVER`) should be **Running**. If stopped, ask Claude to start it, or run `Start-Service MSSQL$SQLEXPRESS` in an Administrator PowerShell.
+**למה Azure מומלץ:** בפרויקט קבוצתי כולם צריכים לעבוד מול אותם נתונים. במסלול המקומי לכל חבר קבוצה יש בסיס נתונים משלו, ולכן צריך להריץ מחדש את הסקריפטים אצל כל אחד ואי אפשר להדגים את המערכת על נתונים משותפים. בנוסף, ההתקנה המקומית היא מקור התקלות הנפוץ ביותר בשיעור (TCP/IP מכובה כברירת מחדל, שמות Instance שונים בין מחשבים).
 
-## C2. First connection in SSMS + smoke test
+**מתי בכל זאת לבחור במסלול המקומי:** אם אין לכם גישה ל-Azure for Students, אם כבר יש לכם SQL Server Express מותקן ועובד מקורס קודם, או אם אתם מעדיפים לא לעבוד מול הענן.
 
-1. Open SSMS. Skip the Microsoft account sign-in ("Not now, maybe later").
-2. Connect:
-   - **Server Name:** `localhost\SQLEXPRESS` (or your instance name)
-   - **Authentication:** Windows Authentication
-   - ✅ **Trust Server Certificate**
-3. New query (Ctrl+N), run:
+> **בשני המסלולים התוצאה זהה:** בידיכם בסיס נתונים שאפשר להתחבר אליו גם מ-SSMS וגם מ-Claude Code. כל שאר השיעור זהה — רק פרטי החיבור שונים.
+
+**מתי לבצע:** לפני השיעור, במסגרת הכנת דרישות הקדם. בסיס הנתונים חייב להתקיים כבר בתחילת השיעור — בשלב 1 נחבר אליו את Claude Code.
+
+---
+
+# מסלול א׳ — Azure SQL (מומלץ)
+
+בסיס הנתונים המשותף של הקבוצה יושב על Azure SQL — שרת SQL חינמי בענן שעובד בדיוק כמו ה-SQL Server המקומי שאתם מכירים מקורסים קודמים, אבל לא דורש שום התקנה מקומית ונגיש לכל חברי הקבוצה בלי VPN ובלי הגדרות רשת.
+
+**מי מבצע:** חבר קבוצה אחד יוצר את בסיס הנתונים. כל השאר מקבלים את פרטי החיבור בשלב ג2.
+
+## ג1 — הרשמה ל-Azure for Students (רק יוצר בסיס הנתונים)
+
+1. היכנסו ל-<https://azure.microsoft.com/en-us/free/students/>
+2. לחצו **Start free** והתחברו עם המייל המוסדי שלכם (‎.ac.il).
+3. מיקרוסופט מאמתת את מעמד הסטודנט לפי דומיין המייל. **אין צורך בכרטיס אשראי.** אם מבקשים מכם כרטיס — אתם בעמוד הלא נכון; אתם צריכים את מסלול הסטודנטים.
+4. אחרי האימות יהיה לכם חשבון Azure חינמי עם 100$ קרדיט (מתחדש שנתית) וגישה ל-Azure SQL בשכבה החינמית.
+
+## ג2 — יצירת בסיס הנתונים ב-Azure SQL
+
+בפורטל של Azure‏ (portal.azure.com):
+
+1. שורת החיפוש העליונה ← **SQL databases** ← **+ Create**
+2. מלאו:
+   - **Resource group:** לחצו "Create new" ← קראו לו `sad-groupname-rg`
+   - **Database name:** בחרו שם תיאורי (למשל `sharona_pilates`). **רשמו אותו.**
+   - **Server:** לחצו "Create new":
+     - **Server name:** חייב להיות ייחודי גלובלית, למשל `sad-groupname-sql`. זה יהפוך ל-`<servername>.database.windows.net` — **רשמו אותו.**
+     - **Location:** West Europe (או האזור הקרוב ביותר).
+     - **Authentication:** בחרו SQL authentication.
+     - **Admin login:** בחרו שם משתמש (**לא** `admin` ולא `root` — הם חסומים). **רשמו אותו.**
+     - **Password:** בחרו סיסמה חזקה. **רשמו אותה.**
+     - לחצו **OK**.
+3. **Compute + storage:** לחצו **Configure database** ← בחרו **General Purpose Serverless** וסמנו את תיבת ה-**free offer**.
+4. **לשונית Networking:** Connectivity method: Public endpoint. הגדירו **"Allow Azure services"** ← Yes.
+5. **Review + create** ← **Create**. המתינו כ-3 דקות.
+6. בסיום הפריסה לחצו **Go to resource** ← לחצו על קישור **שם השרת** ← **Networking** בסרגל הצד ← תחת Firewall rules לחצו **+ Add a firewall rule**: שם הכלל `allow-all`, ‏Start IP‏ `0.0.0.0`, ‏End IP‏ `255.255.255.255`. לחצו OK ואז **Save**.
+
+עכשיו יש בידיכם ארבעה ערכים לשיתוף עם חברי הצוות (שתפו בצ׳אט פרטי — **לעולם לא ב-git**):
+
+- **Server:** `<servername>.database.windows.net`
+- **Database:** שם בסיס הנתונים
+- **User:** ה-admin login
+- **Password:** סיסמת ה-admin
+
+## ג3 — אימות החיבור מ-SSMS
+
+1. פתחו את SSMS.
+2. התחברו:
+   - **Server Name:** `<servername>.database.windows.net`
+   - **Authentication:** SQL Server Authentication
+   - **Login:** ה-admin login
+   - **Password:** סיסמת ה-admin
+   - תחת Options ← סמנו **Trust Server Certificate** ✅ וגם **Encrypt connection** ✅
+3. פתחו שאילתה חדשה והריצו:
 
 ```sql
 SELECT @@VERSION;
-GO
-CREATE DATABASE sad_smoketest;
-GO
-USE sad_smoketest;
-GO
-CREATE TABLE ping (id INT, msg NVARCHAR(50));
-INSERT INTO ping VALUES (1, N'שלום');
-SELECT * FROM ping;
-GO
-USE master;
-DROP DATABASE sad_smoketest;
-GO
+SELECT name FROM sys.databases;
 ```
 
-Expected: version info, a row showing `שלום` (not `?????`), no errors. Paste any error into Claude Code — it'll diagnose.
+**התוצאה הצפויה:** פרטי גרסה שמציינים Azure SQL, ובסיס הנתונים שלכם ברשימה. אם אתם מקבלים timeout בחיבור — בדקו שוב את כלל ה-Firewall בשלב ג2.
 
-## C3. GitHub account (required for your group)
-
-You work in groups, and your group needs a shared place to version the project — the schema scripts, the C# code, the docs. GitHub is the default. So **every group member needs a GitHub account.**
-
-- Cloning the course sample repo needs **no** account (it's public).
-- But pushing to your group's own repo, or being added as a collaborator on it, **does** need an account.
-- The "source of truth lives in git" workflow (schema changes go into `.sql` files, commit, teammates pull and re-run) only works once you have a shared remote.
-
-Steps:
-1. Each member signs up at <https://github.com> (free).
-2. One member creates the group repo and adds the others as collaborators (Settings → Collaborators).
-3. Each member sets up authentication for pushing. Ask Claude: *"Help me set up GitHub authentication so I can push — I'm on Windows."* (GitHub CLI is the easiest path; Claude can install and configure it.)
-
-If your group has decided to host elsewhere (GitLab, BGU's internal Git), that's fine — the lesson doesn't depend on GitHub specifically, but you still each need an account on whatever host you chose.
+אם בחרתם במסלול א׳ — סיימתם את חלק ג׳. דלגו לסעיף **ג4 — חשבון GitHub**.
 
 ---
 
-# Final Verification
+# מסלול ב׳ — SQL Server Express מקומי
 
-Open a **fresh** PowerShell window. All four must succeed:
+בצעו את המסלול הזה **רק אם לא בחרתם ב-Azure**. כאן כל חבר קבוצה מתקין מופע SQL Server משלו, ולכל אחד יהיה עותק נפרד של בסיס הנתונים.
+
+## ג1-מ — קודם כול: לבדוק אם כבר מותקן אצלכם SQL Server
+
+**אל תתקינו לפני שבדקתם.** בשיעור הקודם כמה סטודנטים לא ידעו שכבר מותקן אצלהם
+SQL Server מקורס קודם, התקינו מופע (Instance) שני, ואז לא ידעו לאיזה מהם להתחבר.
+מופע שני לא מזיק, אבל הוא יוצר בלבול: לכל מופע יש בסיסי נתונים משלו, ואם תתחברו
+לזה הלא נכון — הטבלאות שלכם פשוט "ייעלמו".
+
+הדביקו ב-Claude Code:
+
+> Check whether SQL Server is already installed on this Windows machine, before I install anything. List every installed instance with its service name, instance name, version, and whether the service is currently running — use `Get-Service MSSQL*` and the registry key `HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL`. Then tell me clearly: do I already have a usable SQL Server instance, or do I need to install one? If I already have one, do NOT tell me to install another — recommend which existing instance to use and why. If I have several, explain the difference between them and recommend one.
+
+- **אם Claude מצא מופע קיים** — מצוין, אל תתקינו כלום. עברו לשלב ג2-מ.
+- **אם לא נמצא מופע** — התקינו לפי השלבים הבאים.
+
+### התקנה (רק אם אין לכם מופע קיים)
+
+> **אל תנסו להתקין עם `winget install`.** בדקנו — המתקין של SQL Server הוא "מוריד"
+> שפותח חלון גרפי, ו-winget לא מצליח להריץ אותו בשקט. התוצאה היא כישלון עם
+> `Access to the path ... is denied` או התקנה שנתקעת. השתמשו באחת משתי הדרכים למטה.
+
+#### דרך א׳ — התקנה גרפית (הפשוטה)
+
+1. היכנסו ל-<https://www.microsoft.com/en-us/sql-server/sql-server-downloads>
+2. גללו ל-**Express** ולחצו **Download now**
+3. הריצו את קובץ ההתקנה ובחרו **Basic** — האפשרות הפשוטה והמהירה ביותר
+4. בסיום ההתקנה יוצג מסך סיכום עם **Instance Name** (בדרך כלל `SQLEXPRESS`).
+   **רשמו את שם ה-Instance** — תצטרכו אותו בכל שאר המדריכים.
+
+#### דרך ב׳ — התקנה אוטומטית עם Claude (מומלץ: חוסכת את שלב ג2-מ)
+
+הדרך הזו מפעילה את TCP/IP כבר בזמן ההתקנה, כך שתצטרכו רק לקבוע פורט קבוע אחר כך.
+הדביקו ב-Claude Code:
+
+> Install SQL Server 2022 Express unattended on this Windows machine. Do NOT use `winget install` for it — its bootstrapper opens a GUI and winget cannot drive it silently.
+>
+> Instead: download `https://download.microsoft.com/download/5/1/4/5145fe04-4d30-4b85-b0d1-39533663a2f1/SQL2022-SSEI-Expr.exe` to `C:	emp\sqlsetup`, run it with `/Action=Download /MediaPath=C:	emp\sqlmedia /MediaType=Core /Quiet` to fetch the full media, extract the resulting `SQLEXPR_x64_ENU.exe` with `/Q /X:C:	emp\sqlextract`, then run `C:	emp\sqlextract\setup.exe` **elevated** with these arguments:
+>
+> `/Q /ACTION=Install /FEATURES=SQLEngine /INSTANCENAME=SQLEXPRESS /SQLSYSADMINACCOUNTS="<my Windows user>" /TCPENABLED=1 /UPDATEENABLED=0 /IACCEPTSQLSERVERLICENSETERMS`
+>
+> Ask me for my Windows username first (`whoami`) and use it for `/SQLSYSADMINACCOUNTS`, otherwise I will not be able to log in. Launch the elevated step with `Start-Process ... -Verb RunAs` and tell me to approve the UAC prompt. When setup finishes, report the exit code and confirm the `MSSQL$SQLEXPRESS` service is running.
+
+**זמן צפוי:** כ-10 דקות, רובן הורדה (כ-270MB).
+
+> **גם אחרי `/TCPENABLED=1` עדיין צריך את שלב ג2-מ.** ההתקנה מפעילה TCP/IP, אבל משאירה
+> **פורט דינמי** שמשתנה בכל הפעלה מחדש של השירות — וכתובת שמשתנה שוברת את `.mcp.json`.
+> שלב ג2-מ קובע פורט **קבוע** (14330). בדקנו את זה על מחשב נקי: אחרי ההתקנה הפורט היה
+> 51466, ורק אחרי קביעת הפורט הקבוע החיבור היה יציב.
+
+> **מהו "Instance"?** אפשר להתקין כמה עותקים נפרדים של SQL Server על אותו מחשב.
+> כל עותק כזה נקרא Instance, יש לו שם משלו (`SQLEXPRESS`,‏ `SQLEXPRESS01`,‏ `SQLEXPRESS02`…),
+> והוא מחזיק **בסיסי נתונים נפרדים משלו**. לכן חשוב לדעת באיזה מופע אתם עובדים —
+> טבלה שיצרתם במופע אחד לא תופיע באחר.
+
+## ג2-מ — הפעלת TCP/IP (כדי ש-Claude יוכל להתחבר לבסיס הנתונים)
+
+**למה זה נדרש:** בהמשך השיעור Claude Code יתחבר לבסיס הנתונים בעצמו ויריץ עליו SQL
+— יצירת טבלאות, הרצת שאילתות וכו׳. הכלי שהוא משתמש בו לשם כך יודע לדבר רק בפרוטוקול
+**TCP**, ומופעי SQL Express מגיעים עם TCP/IP **מכובה כברירת מחדל**.
+
+התוצאה המבלבלת: **SSMS יתחבר בלי בעיה, אבל Claude לא יצליח** — כי SSMS משתמש בערוץ
+פנימי אחר (Shared Memory) שלא דורש TCP. לכן חשוב לבצע את השלב הזה עכשיו, גם אם
+החיבור מ-SSMS עובד לכם מצוין.
+
+הדביקו ב-Claude Code:
+
+> Enable TCP/IP on my local SQL Server instance so a TCP-based client can connect to it.
+>
+> First, discover the instances yourself — do not ask me for the name. Read `HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL` and run `Get-Service MSSQL*` to list every instance and its service state.
+>
+> If there is exactly one instance, use it. If there is more than one, show me a short table of them (instance name, version, running or stopped) and recommend which to use — prefer one that is running and is a SQL Server Express edition — then ask me to confirm before changing anything.
+>
+> For the chosen instance, check TCP/IP under `HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\<instance key>\MSSQLServer\SuperSocketNetLib\Tcp`. If it is disabled, enable it, set a static port of 14330 on IPAll, clear TcpDynamicPorts, and restart that instance's service. This needs an elevated PowerShell — launch it with `Start-Process powershell.exe -Verb RunAs` and tell me to approve the UAC prompt.
+>
+> When you are done, tell me three things I need to write down: the instance name, the port, and confirmation that the service is running.
+
+## ג3-מ — אימות החיבור מ-SSMS
+
+1. פתחו את SSMS.
+2. התחברו:
+   - **Server Name:** `localhost\SQLEXPRESS` (או שם ה-Instance שלכם)
+   - **Authentication:** Windows Authentication
+   - סמנו **Trust Server Certificate** ✅
+3. פתחו שאילתה חדשה והריצו:
+
+```sql
+SELECT @@VERSION;
+```
+
+**התוצאה הצפויה:** פרטי גרסה של SQL Server. אם ההתחברות נכשלת, ודאו שהשירות רץ:
+`Get-Service MSSQL*` ב-PowerShell — הוא אמור להיות **Running**.
+
+ארבעת ערכי החיבור שלכם במסלול הזה: השרת הוא `localhost\<instance>`, בסיס הנתונים
+ייווצר בשלב 4 של השיעור, והאימות הוא Windows Authentication (בלי שם משתמש וסיסמה).
+
+---
+
+## ג4 — חשבון GitHub (חובה לכל חבר קבוצה)
+
+אתם עובדים בקבוצות, ולקבוצה שלכם דרוש מקום משותף לניהול גרסאות הפרויקט — סקריפטי הסכמה, קוד ה-C# והמסמכים. ברירת המחדל היא GitHub.
+
+> **שימו לב להבדל:** את **חשבון ה-Claude** אתם עשויים לחלוק בקבוצה, אבל **חשבון GitHub הוא אישי לכל אחד**.
+> אלה שני דברים נפרדים לגמרי: Claude הוא הכלי שכותב את הקוד, ו-GitHub הוא המקום שבו הקוד נשמר.
+> ההתחברות ל-GitHub נשמרת **על המחשב שלכם**, לא בתוך Claude — ולכן כל אחד מכם מבצע את שלב ג4-3 על המחשב שלו,
+> עם חשבון ה-GitHub שלו, גם אם כולכם מחוברים לאותו חשבון Claude.
+
+- שכפול של repository הדוגמה של הקורס **לא** דורש חשבון (הוא ציבורי).
+- אבל העלאת קוד ל-repository של הקבוצה, או הוספה כ-collaborator, **כן** דורשת חשבון.
+- שיטת העבודה של "מקור האמת נמצא ב-git" (שינויי סכמה נכנסים לקובצי `.sql`, מבצעים commit, חברי הצוות מושכים ומריצים מחדש) עובדת רק כשיש remote משותף.
+
+### ג4-1 — כל חבר קבוצה פותח חשבון משלו
+
+היכנסו ל-<https://github.com> ולחצו **Sign up**. חינם.
+
+**רשמו לעצמכם את שם המשתמש (username) שבחרתם** — חבר הקבוצה שיוצר את ה-repository
+יצטרך את שמות המשתמש של כולם כדי להזמין אתכם.
+
+### ג4-2 — חבר אחד יוצר את ה-repository ומזמין את השאר
+
+**רק חבר קבוצה אחד מבצע את זה.** הוא יהיה הבעלים של ה-repository.
+
+1. ב-GitHub לחצו על ה-**+** בפינה הימנית העליונה ← **New repository**
+2. **Repository name:** למשל `sad-groupname`
+3. סמנו **Private** (הפרויקט שלכם לא צריך להיות ציבורי)
+4. **אל תסמנו** "Add a README file" — אתם כבר תעלו קבצים משלכם
+5. לחצו **Create repository**
+6. העתיקו את הכתובת שמופיעה (למשל `https://github.com/username/sad-groupname.git`) ושתפו אותה עם הקבוצה
+
+**עכשיו מזמינים את שאר חברי הקבוצה:**
+
+7. בתוך ה-repository, לחצו על **Settings** (בסרגל העליון של ה-repository, לא של החשבון)
+8. בתפריט הצד השמאלי לחצו **Collaborators**
+9. ייתכן שתתבקשו להזין שוב את הסיסמה שלכם — זו בדיקת אבטחה רגילה
+10. לחצו על הכפתור **Add people**
+11. הקלידו את **שם המשתמש ב-GitHub** של חבר הקבוצה (לא את המייל שלו, אלא אם הוא רשום איתו), בחרו אותו מהרשימה ולחצו **Add to this repository**
+12. חזרו על שלבים 10–11 לכל חבר קבוצה
+
+### ג4-3 — כל שאר החברים מאשרים את ההזמנה
+
+**זה השלב שהכי הרבה אנשים מפספסים.** הזמנה שלא אושרה = אין גישה.
+
+כל מי שהוזמן צריך:
+
+1. להיכנס למייל שאיתו נרשם ל-GitHub ולחפש הודעה בנושא *"invited you to collaborate"*
+2. ללחוץ על **Accept invitation**
+
+לחלופין, אפשר לאשר ישירות דרך <https://github.com/notifications> או בכתובת
+`https://github.com/<owner>/<repo>/invitations`.
+
+### ג4-4 — כל חבר מגדיר את ההזדהות על המחשב שלו
+
+כדי שתוכלו להעלות קוד (push), המחשב שלכם צריך להוכיח ל-GitHub מי אתם.
+הדרך הפשוטה ביותר היא **GitHub CLI** — כלי שורת פקודה של GitHub שמבצע את כל תהליך
+ההתחברות דרך הדפדפן, בלי סיסמאות ובלי מפתחות SSH.
+
+**תנו ל-Claude לעשות את זה עבורכם.** הדביקו ב-Claude Code:
+
+> Set up GitHub authentication on this Windows machine so I can push to a private repository. Install GitHub CLI with `winget install GitHub.cli` if it is not already installed. Then run `gh auth login` for me and walk me through the prompts — I want to authenticate through the browser. Tell me exactly what to click. Afterwards, run `gh auth status` to confirm it worked, and set my git identity with `git config --global user.name` and `git config --global user.email` — ask me for the name and the email address I used for my GitHub account. Finally confirm which GitHub user I am authenticated as.
+
+**מה יקרה בפועל:** ייפתח לכם הדפדפן עם קוד בן שמונה תווים. תדביקו את הקוד, תאשרו,
+והחלון ייסגר. מכאן והלאה כל `git push` מהמחשב הזה יעבוד בלי סיסמה.
+
+> **חשוב — הזדהות אישית:** ודאו ש-Claude מגדיר את **השם והמייל שלכם** ב-`git config`,
+> ולא של חבר קבוצה אחר. זה מה שקובע את שם הכותב שיופיע לצד כל commit, וכך רואים
+> בהיסטוריה מי עשה מה. אם כולכם עובדים תחת אותו חשבון Claude, קל לפספס את זה.
+
+**אם אתם מעדיפים לעשות זאת ידנית:** פתחו PowerShell (מקש **Windows** ← הקלידו
+`powershell` ← **Enter**) והריצו:
 
 ```powershell
-dotnet --version          # 8.x.x
-git --version             # git version 2.x.x
-uvx --version             # uv 0.x.x
-sqlcmd -L                 # lists local SQL Server instances
+winget install GitHub.cli
+gh auth login
+git config --global user.name "השם שלכם"
+git config --global user.email "המייל שלכם ב-GitHub"
+gh auth status
 ```
 
-If any fail, paste the result into Claude Code and let it fix the issue — that's exactly why we installed Claude first.
+ב-`gh auth login` בחרו: **GitHub.com** ← **HTTPS** ← **Yes** (אימות עם פרטי ה-git) ←
+**Login with a web browser**. העתיקו את הקוד שמוצג, לחצו Enter, ואשרו בדפדפן.
 
 ---
 
-# Bring-to-Class Checklist
+# אימות סופי
 
-The day of class:
+**אל תריצו את הבדיקות ידנית — תנו ל-Claude לעשות את זה.** זה בדיוק הרעיון של הקורס:
+לא להעתיק שגיאות הלוך ושוב, אלא לתת לסוכן להריץ, לאבחן ולתקן.
 
-- [ ] Claude Code is signed in (test message returns a reply)
-- [ ] VS 2025 opens
-- [ ] SSMS connects to your local instance with Windows Authentication
-- [ ] `dotnet --version`, `git --version`, `uvx --version`, `sqlcmd -L` all work in a fresh terminal
-- [ ] You have a GitHub account and can push (or your group's chosen Git host)
-- [ ] Your group's Part A + Part B PDFs are accessible
+פתחו את Claude Code והדביקו:
 
-If anything fails the morning of class, message the group chat *immediately*.
+> Verify my course development environment is ready, then fix anything that is broken. Work through this checklist one item at a time, run the commands yourself, and report a pass/fail table at the end.
+>
+> 1. `dotnet --version` — must report 8.x
+> 2. `dotnet --list-runtimes` — must include `Microsoft.WindowsDesktop.App 8.x`
+> 3. `git --version` — any 2.x
+> 4. `uvx --version` — any 0.x
+> 5. Visual Studio is installed (2022 or 2025 are both fine) and has the ".NET desktop development" workload
+> 6. SSMS is installed
+>
+> Important: run each command in a **fresh** shell so PATH changes from recent installs are picked up. If a command is missing only because PATH has not refreshed in your current session, say so rather than reinstalling.
+>
+> For anything that fails: diagnose the cause and fix it — install the missing piece, repair the PATH, or add the missing Visual Studio workload — then re-run the check to confirm. Ask me before doing anything that needs a large download or an admin prompt.
+
+‏Claude ירוץ על הרשימה, יתקן מה שצריך, ויחזיר טבלת סיכום. אם משהו דורש הורדה גדולה
+או הרשאת מנהל — הוא ישאל אתכם קודם.
+
+**מה שנשאר לכם לבדוק ידנית:** שה-SSMS מתחבר לבסיס הנתונים שלכם — ב-Azure (חלק ג3)
+או המקומי (חלק ג3-מ), לפי המסלול שבחרתם. את זה Claude לא יכול ללחוץ במקומכם.
 
 ---
 
-# Manual Install Reference (Fallback)
+# צ׳קליסט להביא לשיעור
 
-If you prefer to install by hand, or if Claude's assisted install hit a wall, here are the full per-tool steps.
+ביום השיעור:
 
-## Visual Studio 2025 (Community)
+- [ ] ‏Claude Code מחובר (הודעת בדיקה מקבלת תשובה)
+- [ ] ‏Visual Studio נפתח (2022 או 2025)
+- [ ] ‏SSMS מתחבר לבסיס הנתונים שבחרתם — Azure (SQL Server Authentication) או מקומי (Windows Authentication)
+- [ ] הפקודות `dotnet --version`,‏ `git --version`,‏ `uvx --version` עובדות בטרמינל חדש
+- [ ] יש לכם חשבון GitHub ואתם יכולים לבצע push (או בפלטפורמה שהקבוצה בחרה)
+- [ ] קובצי ה-PDF של חלק א׳ וחלק ב׳ של הקבוצה נגישים לכם
 
-<https://visualstudio.microsoft.com/downloads/> → **Community 2025**. On the Workloads screen, check **.NET desktop development** (includes the .NET 8 SDK and WinForms tooling). Verify: `dotnet --version` reports `8.x.x`.
+אם משהו נכשל בבוקר השיעור — כתבו לצ׳אט הקבוצה **מיד**.
+
+---
+
+# נספח: התקנה ידנית (חלופה)
+
+אם אתם מעדיפים להתקין ידנית, או אם ההתקנה בעזרת Claude נתקעה — הנה כל השלבים לכל כלי.
+
+## Visual Studio Community (2022 או 2025)
+
+**שתי הגרסאות עובדות.** אם כבר מותקנת אצלכם Visual Studio 2022 מקורס קודם — אין צורך לשדרג;
+רק ודאו שה-Workload‏ **.NET desktop development** מותקן (VS Installer ← Modify).
+אם אין לכם Visual Studio בכלל, התקינו את הגרסה החדשה יותר.
+
+<https://visualstudio.microsoft.com/downloads/> ← **Community**. במסך ה-Workloads, סמנו
+**.NET desktop development** (כולל את .NET 8 SDK ואת כלי ה-WinForms).
+אימות: `dotnet --version` מדווח `8.x.x`.
+
+> **הערה:** מה שקובע הוא ש-.NET 8 נתמך ושה-Workload של WinForms מותקן — לא מספר הגרסה
+> של Visual Studio. שתי הגרסאות תומכות ב-.NET 8 ובמעצב ה-WinForms.
 
 ## .NET 8 Windows Desktop Runtime
 
-Separate from the SDK; the SDK builds apps, the Desktop Runtime runs them. Without it: "You must install or update .NET to run this application" at launch.
+נפרד מה-SDK; ה-SDK בונה אפליקציות, ה-Desktop Runtime מריץ אותן. בלעדיו תקבלו בהפעלה: "You must install or update .NET to run this application".
 
-<https://dotnet.microsoft.com/download/dotnet/8.0> → under **"Run desktop apps"** → **"Windows Desktop Runtime x64"**. Verify: `dotnet --list-runtimes` shows `Microsoft.WindowsDesktop.App 8.x.x`.
+<https://dotnet.microsoft.com/download/dotnet/8.0> ← תחת **"Run desktop apps"** ← **"Windows Desktop Runtime x64"**. אימות: `dotnet --list-runtimes` מציג `Microsoft.WindowsDesktop.App 8.x.x`.
 
-## SQL Server Express
+## SQL Server Express (רק במסלול המקומי)
 
-Any version 2019+. <https://www.microsoft.com/en-us/sql-server/sql-server-downloads> → **Express** → **Download now**. Choose **Basic** install. Note the instance name (`SQLEXPRESS`). If you already have an instance from a previous course, skip — just confirm it runs (Part C1).
+נדרש **רק** אם הקבוצה בחרה במסלול ב׳. גרסה 2019 ומעלה:
+<https://www.microsoft.com/en-us/sql-server/sql-server-downloads> ← **Express** ← **Download now**.
+בחרו התקנת **Basic**. רשמו את שם ה-Instance. אם בחרתם ב-Azure — דלגו על זה לגמרי.
+
+אחרי ההתקנה יש להפעיל TCP/IP כדי ש-Claude Code יוכל להתחבר לבסיס הנתונים — ראו חלק ג2-מ.
 
 ## SQL Server Management Studio (SSMS)
 
-<https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms>. Install with defaults. First connection + smoke test in Part C2.
+<https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms>. התקינו עם הגדרות ברירת מחדל. **כל גרסה עדכנית מתאימה** (19, 20, 21) — אם כבר מותקן אצלכם SSMS מקורס קודם, אל תשדרגו, רק ודאו שהוא נפתח. SSMS הוא כלי לקוח בלבד — הוא מתחבר לבסיס הנתונים שלכם, בענן או מקומי. נדרש בשני המסלולים.
 
 ## Git
 
-<https://git-scm.com/download/win>. Defaults are fine; accept "Checkout Windows-style, commit Unix-style" for line endings; pick VSCode as the default editor if offered. Verify: `git --version`.
+<https://git-scm.com/download/win>. הגדרות ברירת המחדל מתאימות; אשרו "Checkout Windows-style, commit Unix-style" עבור סופי שורות; בחרו VSCode כעורך ברירת המחדל אם מוצע. אימות: `git --version`.
 
-## uv (Python runner for the MSSQL MCP)
+## uv (מריץ Python — ישמש בשיעור לחיבור Claude Code לבסיס הנתונים)
 
 ```powershell
 winget install astral-sh.uv
 ```
-Or `pip install uv` if you have Python. Verify: `uvx --version`. If "command not found", reopen the terminal.
 
-## VSCode extensions
+או `pip install uv` אם כבר יש לכם Python. אימות: `uvx --version`. אם מופיע "command not found" — פתחו את הטרמינל מחדש.
 
-From Extensions (Ctrl+Shift+X):
-- **C# Dev Kit** (Microsoft) — syntax highlighting + IntelliSense for the `.cs` files Claude writes. Without it, C# looks like plain text.
-- **C#** (Microsoft) — auto-installed with C# Dev Kit.
-- **Claude Code** (Anthropic) — already installed in Part A.
+## תוספים ל-VSCode
 
-Don't install random "popular" extensions — they can interfere with the lesson tooling.
+מתוך Extensions‏ (Ctrl+Shift+X):
+
+- **C# Dev Kit** (Microsoft) — צביעת תחביר ו-IntelliSense לקובצי ה-`.cs` ש-Claude כותב. בלעדיו, קוד C# נראה כמו טקסט רגיל.
+- **C#** (Microsoft) — מותקן אוטומטית יחד עם C# Dev Kit.
+- **Claude Code** (Anthropic) — כבר הותקן בחלק א׳.
+
+אל תתקינו תוספים "פופולריים" אקראיים — הם עלולים להפריע לכלים של השיעור.
 
 ---
 
-# Common Problems
+# תקלות נפוצות
 
-| Symptom | Likely cause | Fix |
+| תסמין | סיבה סבירה | פתרון |
 |---|---|---|
-| `dotnet` reports 7.x or "not found" | .NET 8 SDK not installed | Re-run VS Installer → Modify → check ".NET desktop development", or `winget install Microsoft.DotNet.SDK.8` |
-| Built app says "You must install or update .NET" at launch | Desktop Runtime missing (only SDK installed) | Install .NET 8 Windows Desktop Runtime |
-| SSMS: "Cannot connect to localhost\SQLEXPRESS" | SQL Server service stopped | `Start-Service MSSQL$SQLEXPRESS` in Admin PowerShell; set startup type Automatic |
-| SSMS: "A network-related or instance-specific error" | Wrong instance name | `sqlcmd -L` to list local instances; use whichever appears |
-| Hebrew text comes back as `?????` | Column is `VARCHAR` not `NVARCHAR` | Always use `NVARCHAR` for Hebrew |
-| SSMS: "Login failed for user" | Trying SQL auth instead of Windows auth | Use **Windows Authentication** |
-| `uvx: command not found` after install | Terminal hasn't refreshed PATH | Reopen the terminal |
-| Claude Code: "no active subscription" | Subscription not propagated, or wrong account | Wait 2 min, sign out + back in, confirm the subscribed account |
-| Visual Studio designer broken / missing | Outdated VS | Help → Check for Updates; VS 2025 has the most reliable .NET 8 WinForms designer |
+| ‏SSMS: "Cannot connect to `<server>`.database.windows.net" | כלל ה-Firewall לא נשמר | פורטל Azure ← SQL server ← Networking ← ודאו שכלל ה-Firewall‏ 0.0.0.0–255.255.255.255 קיים ונשמר |
+| ‏Azure: "Login failed for user '`<username>`'" | שם משתמש או סיסמה שגויים | הזינו מחדש; שם המשתמש **אינו** המייל שלכם ב-Azure — הוא ה-SQL admin login שהגדרתם בשלב ג2 |
+| `dotnet` מדווח 7.x או "not found" | ‏.NET 8 SDK לא מותקן | הריצו מחדש את VS Installer ← Modify ← סמנו ".NET desktop development", או `winget install Microsoft.DotNet.SDK.8` |
+| האפליקציה הבנויה מציגה "You must install or update .NET" בהפעלה | ה-Desktop Runtime חסר (הותקן רק ה-SDK) | התקינו .NET 8 Windows Desktop Runtime |
+| ‏SSMS: "Cannot connect to localhost\SQLEXPRESS" (מסלול מקומי) | שירות ה-SQL Server לא רץ | הריצו `Get-Service MSSQL*`; אם עצור — `Start-Service 'MSSQL$SQLEXPRESS'` ב-PowerShell כמנהל |
+| ‏Claude Code לא מצליח להתחבר לבסיס נתונים מקומי, אבל SSMS כן | ‏TCP/IP מכובה במופע | ראו חלק ג2-מ — Claude מתחבר ב-TCP בלבד, ואילו SSMS משתמש בערוץ פנימי (Shared Memory) |
+| שם ה-Instance לא מוכר (מסלול מקומי) | הותקן בשם אחר | הריצו `Get-Service MSSQL*` וראו את השם בפועל (למשל `SQLEXPRESS02`) |
+| טקסט בעברית חוזר כ-`?????` | העמודה מוגדרת `VARCHAR` ולא `NVARCHAR` | השתמשו תמיד ב-`NVARCHAR` לעברית |
+| `uvx: command not found` אחרי ההתקנה | הטרמינל לא רענן את ה-PATH | פתחו מחדש את הטרמינל |
+| ‏Claude Code: "no active subscription" | המנוי טרם התעדכן, או חשבון שגוי | המתינו 2 דקות, התנתקו והתחברו מחדש, ודאו שזה החשבון עם המנוי |
+| מעצב הממשק של Visual Studio שבור או חסר | גרסת VS מיושנת, או שה-Workload חסר | Help ← Check for Updates. ודאו שה-Workload‏ ".NET desktop development" מותקן (VS Installer ← Modify). גם 2022 וגם 2025 עובדות — אין צורך לשדרג רק בגלל מספר הגרסה |
 
-**For any of these:** paste the symptom into Claude Code. It has the context to diagnose and usually fixes it faster than the table.
+**לכל אחת מהתקלות האלה:** הדביקו את התסמין ב-Claude Code. יש לו את ההקשר כדי לאבחן, ובדרך כלל הוא פותר מהר יותר מהטבלה.

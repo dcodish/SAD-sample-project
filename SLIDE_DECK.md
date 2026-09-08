@@ -1,252 +1,316 @@
 ---
-title: "From Analysis to Running CRUD"
-subtitle: "Building a System with Claude Code"
-author: "Software Analysis and Design — BGU"
+title: "מניתוח ל-CRUD עובד"
+subtitle: "בניית מערכת עם Claude Code"
+course: "ניתוח ועיצוב מערכות מידע — אוניברסיטת בן-גוריון"
+author: "מרצה: דוד קודיש"
+lang: he
+dir: rtl
 date: ""
 ---
 
-# The Goal Today
+# המטרה של היום
 
-- A working SQL Server database with seed data
-- A C# WinForms project running on your machine
-- Login screen + 2–3 CRUD screens
-- Everything driven from Claude Code
+- בסיס נתונים עובד (Azure SQL או מקומי) עם נתוני דמה
+- פרויקט C# WinForms שרץ על המחשב שלכם
+- מסך התחברות + 2–3 מסכי CRUD
+- הכול מונע מתוך Claude Code
 
-# What You Bring
+# מה אתם מביאים
 
-- Your group's Part A + Part B analysis
-- A laptop with all prerequisites installed
-- A GitHub account (every group member needs one)
-- Your group's project folder, ready to go
+- את ניתוח חלק א׳ + חלק ב׳ של הקבוצה
+- מחשב נייד עם כל דרישות הקדם מותקנות
+- חשבון GitHub (כל חבר קבוצה צריך אחד)
+- את תיקיית הפרויקט של הקבוצה, מוכנה
 
-# The Big Picture — In Class
+# התמונה הגדולה — בשיעור
 
-| Phase | What |
+| שלב | מה |
 |---|---|
-| 1 | Project setup + MCP |
-| 2 | Extract analysis to markdown |
-| 3 | Generate your CLAUDE.md |
-| 4 | Database schema + stored procedures |
-| 4.5 | Seed test data |
-| 5 | C# scaffold + entry flow + first panel |
-| 6 | Remaining CRUD panels |
-| 7 | State machines (if time) |
+| 1 | הקמת הפרויקט + MCP |
+| 2 | חילוץ הניתוח ל-markdown |
+| 3 | יצירת ה-`CLAUDE.md` שלכם |
+| 4 | סכמת בסיס הנתונים + Stored Procedures |
+| 4.5 | נתוני דמה |
+| 5 | שלד C# + מסך כניסה + מסך ראשון |
+| 6 | שאר מסכי ה-CRUD |
 
-# The Big Picture — Homework
+# התמונה הגדולה — שיעורי בית
 
-| Phase | What |
+| שלב | מה |
 |---|---|
-| 8 | Reports |
-| 9 | Complex UC flows |
-| 10 | UI polish |
-| 11 | Switching to a shared DB |
+| 7 | מכונות מצבים |
+| 8 | דוחות |
+| 9 | תרחישי UC מורכבים |
+| 10 | ליטוש ממשק |
+| 11 | הפניית אפליקציית ה-C# לבסיס הנתונים המשותף |
 
-All documented with full prompts in `LESSON_STEPS.md`.
+הכול מתועד עם ה-Prompts המלאים ב-`LESSON_STEPS`.
 
-# Three Things Drive This Lesson
+# שלושה עקרונות שמנחים את השיעור
 
-**Stay in Claude Code.** One tool, no bouncing between SSMS / terminal / browser.
+**נשארים ב-Claude Code.** כלי אחד, בלי לקפוץ בין SSMS / טרמינל / דפדפן.
 
-**Files are the source of truth.** Markdown + `.sql` in git. The database is a cached projection.
+**הקבצים הם מקור האמת.** Markdown ו-`.sql` ב-git. בסיס הנתונים הוא רק תוצר נגזר.
 
-**Review what Claude produces.** Fast but not careful. Skipping review = silent errors all semester.
+**בודקים מה ש-Claude מייצר.** הוא מהיר אבל לא זהיר. דילוג על בדיקה = שגיאות שקטות לאורך כל הסמסטר.
 
-# Prerequisites — Bootstrap First
+# מכסת הטוקנים — לפני שמתחילים
 
-The smart install order (student-tested):
+מנוי **Pro** ב-20$ מספיק לשיעור — אם לא מבזבזים. שתי החלטות קובעות הכול:
 
-1. Install **VSCode + Claude Code** by hand (~10 min)
-2. **Let Claude install the rest** — Git, uv, .NET, VS, SQL Server
+| מודל | מתי |
+|---|---|
+| **Sonnet** | **ברירת המחדל לכל השיעור** |
+| **Haiku** | שלבים מכניים: SQL, קוד תבניתי, מסכים חוזרים |
+| **Opus** | **לא ב-Pro** — שורף את המכסה מהר |
 
-When installs break, Claude reads the error and fixes it — no googling stack traces alone.
+`/model sonnet` · `/model haiku` · `/usage` מראה כמה נשאר
 
-# Prerequisites — Verify
+# מה שמבזבז יותר מהמודל: שיחה ארוכה
 
-In a fresh terminal, all four must succeed:
+**בכל הודעה, Claude שולח את כל השיחה מחדש.**
+שאלה קצרה בשיחה בת שלוש שעות עולה כמו כל ההיסטוריה.
+
+- **`/clear` בין שלבים — חינם לגמרי.** זה הכלי מספר אחת
+- `/compact` **אינו** חינם — הוא עצמו בקשה גדולה
+- נסמן 🔄 בשקפים איפה לנקות
+
+**חשבון משותף לקבוצה?** המכסה היא של החשבון, לא של המחשב —
+ארבעה במקביל מרוקנים אותה פי ארבע. עדיף אחד מריץ, השאר בודקים.
+
+# שלוש הודעות שקל לבלבל ביניהן
+
+**"Context low"** — **לא** מגבלת מנוי. ההקשר התמלא. `/clear` וממשיכים.
+
+**"You've hit your session / weekly limit"** — מגבלת המנוי, **משותפת לכל המודלים**.
+מעבר ל-Haiku לא יעזור; צריך לחכות לאיפוס.
+
+**"You've hit your Opus limit"** — מגבלה של מודל אחד.
+**כאן** מעבר ל-Sonnet או Haiku מחזיר אתכם לעבודה מיד.
+
+# דרישות קדם — קודם Bootstrap
+
+סדר ההתקנה החכם (נבדק על סטודנטים):
+
+1. התקינו **VSCode + Claude Code** ידנית (~10 דקות)
+2. **תנו ל-Claude להתקין את השאר** — Git, uv, .NET, VS, SSMS
+3. **הקימו את בסיס הנתונים** — Azure SQL (מומלץ, חבר אחד לכל הקבוצה) או SQL Server מקומי
+
+כשהתקנה נתקעת, Claude קורא את השגיאה ומתקן — בלי לחפש stack traces לבד בגוגל.
+
+# דרישות קדם — אימות
+
+בטרמינל חדש, שלוש הפקודות חייבות להצליח:
 
 ```
 dotnet --version
 git --version
 uvx --version
-sqlcmd -L
 ```
 
-Plus: Claude Code signed in, VS 2025 open, SSMS connects.
+בנוסף: Claude Code מחובר, Visual Studio נפתח (2022 או 2025), ו-SSMS מתחבר לבסיס הנתונים של הקבוצה.
 
-Full details + the install prompt in `PREREQS.md`.
+בסיס הנתונים: **Azure SQL** (מומלץ) או SQL Server מקומי.
 
-# Phase 1 — Project Setup
+כל הפרטים וה-Prompt להתקנה ב-`PREREQS`.
 
-Manual (~5 min):
+# שלב 0 — התיקייה
 
-- Create your project folder
-- PDFs into `docs/`
-- `git clone … cloned`
-- `.gitignore` → `cloned/` + `.mcp.json`
+**לפני שפותחים את VSCode.** טעות ההקמה הנפוצה ביותר.
 
-Then one Claude prompt installs the MCP, verifies the DB connection.
+- תיקייה **ריקה לחלוטין**, למשל `C:\projects\sad-groupname`
+- תת-תיקייה ריקה בשם `docs` בתוכה
+- VSCode ← File ← Open Folder ← התיקייה הזו
 
-# Phase 2 — Extract to Markdown
+**לא** על שולחן העבודה (OneDrive נועל קבצים), **בלי עברית בנתיב**, בלי רווחים.
 
-One prompt, Claude produces:
+Claude קורא מהתיקייה שפתחתם. תיקייה שגויה = קבצים שגויים.
 
-- Organization, interviews, problems, BPMNs
-- Requirements + UC specs
-- Design diagrams (class, state, sequence)
+# שלב 1 — הקמת הפרויקט
 
-**Then review each file against the PDF.** Counts, tables, wording — Claude drifts here.
+- קובצי ה-PDF לתוך `docs/`
+- בקשו מ-Claude לבצע `git clone … cloned` — **לא** מהטרמינל (git לא נמצא ב-PATH שלו)
+- בקשו מ-Claude ליצור `.gitignore` ← `cloned/` + `.mcp.json`
 
-# Phase 3 — Generate CLAUDE.md
+ואז Prompt אחד מתקין את ה-MCP, מתקן שני באגים בחבילה, ומאמת את החיבור לבסיס הנתונים.
 
-Most important file in your project. Claude inlines `PATTERNS.md` + your domain.
+# שלב 2 — חילוץ ל-Markdown
 
-What to verify:
+🔄 **Session חדש לפני השלב.** אין עדיין `CLAUDE.md` — הדביקו את Prompt הפתיחה.
 
-- Implementation scope matches what you'll code
-- Entity load order is correct
-- Group decisions are real (not invented)
+Prompt אחד, ו-Claude מייצר:
 
-Don't fuss over attribute names — compiler catches those later.
+- ארגון, ראיונות, בעיות, תרשימי BPMN
+- דרישות + מפרטי Use Case
+- דיאגרמות עיצוב (מחלקות, מצבים, רצף)
 
-# Phase 4 — Schema + SPs
+**ואז בדקו כל קובץ מול ה-PDF.** ספירות, טבלאות, ניסוח — כאן Claude סוטה.
 
-1. Create the project DB (4.0)
-2. Generate `create_database.sql` (4.1)
-3. Review against class diagram (4.2)
-4. Run via MCP (4.3)
+# שלב 3 — יצירת CLAUDE.md
 
-Then SPs:
+🔄 **Session חדש.** שלב 2 קרא את כל ה-PDF — ההקשר הכי כבד בשיעור.
 
-5. Generate `stored_procedures.sql` (4.4)
-6. Spot-check one entity's CRUD (4.5)
+הקובץ החשוב ביותר בפרויקט. Claude משלב את `PATTERNS.md` יחד עם התחום שלכם.
 
-# Phase 4 — Key Conventions
+מה לבדוק:
 
-- **PKs assigned in C#, not by DB.** No `IDENTITY`.
-- **`NVARCHAR`, never `VARCHAR`.** Always.
-- **Hebrew literals prefixed `N'...'`.**
-- **Every SP takes its PK as a parameter.** No `SCOPE_IDENTITY()`.
+- היקף המימוש תואם למה שתכתבו בפועל
+- סדר טעינת הישויות נכון
+- החלטות הקבוצה אמיתיות (ולא הומצאו)
 
-These live in `PATTERNS.md` and get inlined into your `CLAUDE.md`.
+אל תתעכבו על שמות תכונות — הקומפיילר יתפוס אותן בהמשך.
 
-# Phase 4.5 — Seed Data
+# שלב 4 — סכמה ו-Stored Procedures
 
-Generate `seed_data.sql` covering every role, status, and enum.
+🔄 **Session חדש.** מכאן `CLAUDE.md` נטען לבד — `/clear` וממשיכים.
 
-~5–10 rows per base table, ~10–20 for transactional/association tables.
+1. אימות בסיס הנתונים (4.0) — ב-Azure הוא כבר קיים; במסלול המקומי יוצרים אותו פעם אחת
+2. יצירת `create_database.sql` (4.1)
+3. בדיקה מול דיאגרמת המחלקות (4.2)
+4. הרצה דרך MCP (4.3)
 
-**Why now (before code):** so when Phase 5's `LoginPanel` runs, there are real users to log in as.
+ואז ה-Stored Procedures:
 
-# Phase 5 — C# Scaffold
+5. יצירת `stored_procedures.sql` (4.4)
+6. בדיקת CRUD מלא על ישות אחת (4.6)
 
-- 5.1 — `.sln` + `.csproj` mirroring the sample
-- 5.2 — `SQL_CON.cs` reading from `app.config`
-- 5.3 — All entity classes + `Program.cs` with load order
-- 5.4 — Review entity hydration
+# שלב 4 — מוסכמות מרכזיות
 
-Build should fail expectedly until 5.5 (no entry point yet).
+- **מפתחות ראשיים נקבעים ב-C#, לא ב-DB.** בלי `IDENTITY`.
+- **`NVARCHAR`, לעולם לא `VARCHAR`.** תמיד.
+- **מחרוזות בעברית עם קידומת `N'...'`.**
+- **כל Stored Procedure מקבל את המפתח הראשי כפרמטר.** בלי `SCOPE_IDENTITY()`.
 
-# Phase 5.5 — The Entry Flow
+המוסכמות האלה נמצאות ב-`PATTERNS.md` ומשולבות לתוך ה-`CLAUDE.md` שלכם.
 
-Login is **not** a UC. But it **is** the first screen.
+# שלב 4.5 — נתוני דמה
 
-Claude reads the class diagram → finds credential-holding entities → designs login + per-role homes.
+🔄 `/clear` — פלט ה-SQL כבר לא נחוץ.
 
-Claude proposes the design and waits for your confirmation before writing files.
+צרו `seed_data.sql` שמכסה כל תפקיד, כל סטטוס וכל ערך enum.
 
-Where your design diagrams pay off visually.
+בערך 5–10 שורות לכל טבלת בסיס, 10–20 לטבלאות טרנזקציה וקישור.
 
-# Phase 5.6 + 5.7 — First Panel and Run
+**למה עכשיו, לפני הקוד:** כדי שכשה-`LoginPanel` של שלב 5 ירוץ, יהיו משתמשים אמיתיים להתחבר איתם.
 
-5.6 — Generate the first CRUD panel for a Tier 1 base entity. Wire under the right role's home.
+# שלב 5 — שלד ה-C#
 
-5.7 — Build, F5, walk through: login → role home → CRUD → verify in DB via MCP.
+🔄 `/clear` — לפני השלב הארוך ביותר.
 
-This is the "wow" moment. Login screen, real role routing, working CRUD.
+- 5.1 — `.sln` + `.csproj` במבנה של פרויקט הדוגמה
+- 5.2 — `SQL_CON.cs` שקורא מ-`app.config`
+- 5.3 — כל מחלקות הישויות + `Program.cs` עם סדר הטעינה
+- 5.4 — בדיקת טעינת הישויות מה-DB
 
-# Phase 6 — Remaining CRUDs
+הבנייה אמורה להיכשל עד שלב 5.5 (עדיין אין נקודת כניסה).
 
-Two paths:
+# שלב 5.5 — מסך הכניסה
 
-**Option A — One at a time.** Cautious. Generate, review, build, repeat.
+התחברות היא **לא** Use Case. אבל היא **כן** המסך הראשון.
 
-**Option B — All at once.** Dramatic. One prompt → 8–10 panels in one batch.
+Claude קורא את דיאגרמת המחלקות ← מאתר ישויות שמחזיקות פרטי הזדהות ← מעצב התחברות ומסך בית לכל תפקיד.
 
-Either way, sweep through every panel after. Spot-check create/update/delete on a couple.
+Claude מציע את העיצוב וממתין לאישור שלכם לפני שהוא כותב קבצים.
 
-# Phase 7 — State Machines
+כאן דיאגרמות העיצוב שלכם משתלמות ויזואלית.
 
-CRUD treats entities as bags of fields. State machines add:
+# שלבים 5.6 + 5.7 — המסך הראשון והרצה
 
-- **Guards** — not every transition is always legal
-- **Side effects** — cancel a registration → free slot + refund credit
-- **Atomicity** — `BEGIN TRAN … COMMIT`
+5.6 — יצירת מסך ה-CRUD הראשון לישות בסיס. חיברו אותו תחת מסך הבית של התפקיד הנכון.
 
-Each user-triggered transition gets a verb button, not a generic Update.
+5.7 — בנייה, F5, ומעבר מלא: התחברות ← מסך בית לפי תפקיד ← CRUD ← אימות ב-DB דרך MCP.
 
-# Phase 7 — Why It Matters
+זה רגע ה-"וואו". מסך התחברות, ניתוב אמיתי לפי תפקיד, ו-CRUD עובד.
 
-Your state diagrams from design class become **running code**.
+# שלב 6 — שאר מסכי ה-CRUD
 
-If you only do CRUD, students can manually set `status = 'Cancelled'` and silently skip all guards — broken domain.
+🔄 `/clear` — שלב 5 השאיר הרבה הקשר.
 
-State machines are where business logic lives in code, not in screens.
+שתי דרכים:
 
-# Phases 8–11 — Homework
+**אפשרות א׳ — אחד-אחד.** זהירה. יצירה, בדיקה, בנייה, וחוזר חלילה.
 
-Documented with full prompts in `LESSON_STEPS.md`:
+**אפשרות ב׳ — הכול בבת אחת.** דרמטית. Prompt אחד ← 8–10 מסכים במכה.
 
-- **8** — Reports (read-only, aggregated, parameterized)
-- **9** — Complex UC flows (orchestrated multi-entity transactions)
-- **10** — UI polish (feed Claude screenshots, get richer designs)
-- **11** — Shared DB (BGU central or free Azure SQL)
+בכל מקרה, עברו על כל המסכים אחר כך. בדקו יצירה/עדכון/מחיקה על שניים-שלושה מהם.
 
-Same pattern as in-class phases. You have the tools.
+# שלב 7 — מכונות מצבים (שיעורי בית)
 
-# Review Discipline — Catch Now
+לא נלמד בשיעור — מופיע כאן כדי שתדעו מה הצעד הבא.
 
-Errors that **won't** surface later:
+CRUD מתייחס לישויות כאל אוסף שדות. מכונות מצבים מוסיפות:
 
-- Implementation scope
-- Load order / FK ordering
-- Group decisions
-- Counts and lists
-- Silent doc conflicts
+- **Guards** — לא כל מעבר חוקי תמיד
+- **תופעות לוואי** — ביטול הרשמה ← שחרור מקום + החזר קרדיט
+- **אטומיות** — `BEGIN TRAN … COMMIT`
 
-# Review Discipline — Don't Bother
+כל מעבר שמופעל על ידי משתמש מקבל כפתור פעולה ייעודי, לא כפתור Update גנרי.
 
-Errors the compiler catches the moment code references them:
+# שלב 7 — למה זה חשוב
 
-- Attribute names
-- Enum values
-- Method signatures
-- Minor wording
+דיאגרמות המצבים שלכם משיעורי העיצוב הופכות ל**קוד רץ**.
 
-Save your attention for the silent ones.
+אם תעשו רק CRUD, סטודנטים יוכלו לשנות ידנית `status = 'Cancelled'` ולעקוף בשקט את כל ה-Guards — תחום שבור.
 
-# Working With Claude
+מכונות מצבים הן המקום שבו הלוגיקה העסקית חיה בקוד, ולא במסכים.
 
-- **Always ask Claude first.** Let it do the work, you review.
-- **Push back specifically.** Cite source, page, count.
-- **Persist decisions in files.** `CLAUDE.md` carries forward to every session.
-- **One prompt per concern.** Don't combine "generate, change, deploy" in one prompt.
-- **Never commit `.mcp.json` or `app.config`.** Credentials.
+# שלבים 8–11 — שיעורי בית
 
-# Take-Home Materials
+מתועדים עם ה-Prompts המלאים ב-`LESSON_STEPS`:
 
-- **`PREREQS.md`** — install once
-- **`LESSON_STEPS.md`** — full reference with rationale
-- **`PROMPTS_CHEATSHEET.md`** — every prompt in copy-paste form
-- **Your group's repo** — working scaffold, CLAUDE.md, runnable panel
+- **8** — דוחות (קריאה בלבד, מצטברים, עם פרמטרים)
+- **9** — תרחישי UC מורכבים (טרנזקציות מרובות ישויות)
+- **10** — ליטוש ממשק (הזינו ל-Claude צילומי מסך, קבלו עיצוב עשיר יותר)
+- **11** — הפניית אפליקציית ה-C# לבסיס הנתונים המשותף (בסיס הנתונים עצמו כבר משותף)
 
-After class: pick up where you stopped, then 8–11 over the semester.
+אותה תבנית כמו בשלבי השיעור. יש לכם את הכלים.
 
-# Questions
+# משמעת בדיקה — מה לתפוס עכשיו
 
-Repo: github.com/dcodish/SAD-sample-project
+שגיאות ש**לא** יצופו מאוחר יותר:
 
-When stuck:
+- היקף המימוש
+- סדר טעינה וסדר מפתחות זרים
+- החלטות הקבוצה
+- ספירות ורשימות
+- סתירות שקטות בין מסמכים
 
-1. Paste the error into Claude Code — full context
-2. Course group chat — second line
-3. Office hours — last resort
+# משמעת בדיקה — מה לא לבזבז עליו זמן
+
+שגיאות שהקומפיילר תופס ברגע שהקוד מפנה אליהן:
+
+- שמות תכונות
+- ערכי enum
+- חתימות מתודות
+- ניסוח קל
+
+שמרו את תשומת הלב לשגיאות השקטות.
+
+# עבודה עם Claude
+
+- **תמיד תשאלו את Claude קודם.** תנו לו לעבוד, אתם בודקים.
+- **התנגדו לגופו של עניין.** ציינו מקור, עמוד, ספירה.
+- **שמרו החלטות בקבצים.** `CLAUDE.md` נשמר לכל שיחה עתידית.
+- **Prompt אחד לכל נושא.** אל תשלבו "צור, שנה, הרץ" ב-Prompt אחד.
+- **`/clear` בין שלבים.** חינם, ומונע את הבזבוז הגדול ביותר.
+- **Sonnet כברירת מחדל, Haiku למכני.** לא Opus.
+- **לעולם אל תעלו `.mcp.json` או `app.config`.** פרטי גישה.
+
+# חומרים לקחת הביתה
+
+- **`PREREQS`** — התקנה חד-פעמית
+- **`LESSON_STEPS`** — המדריך המלא עם ההסברים
+- **`PROMPTS_CHEATSHEET`** — כל ה-Prompts להעתקה-הדבקה
+- **ה-repository של הקבוצה** — שלד עובד, `CLAUDE.md`, מסך רץ
+
+אחרי השיעור: המשיכו מהנקודה שבה עצרתם, ואז שלבים 8–11 לאורך הסמסטר.
+
+# שאלות
+
+Repository: github.com/dcodish/SAD-sample-project
+
+כשנתקעים:
+
+1. הדביקו את השגיאה ב-Claude Code — עם כל ההקשר
+2. צ׳אט הקבוצה של הקורס — קו שני
+3. שעות קבלה — מוצא אחרון
