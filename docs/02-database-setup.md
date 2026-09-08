@@ -1,37 +1,43 @@
 # הקמת בסיס הנתונים
 
-מדריך זה מסביר כיצד ליצור את בסיס הנתונים המקומי עבור הפרויקט.
+מדריך זה מסביר כיצד ליצור את הטבלאות ואת ה-Stored Procedures בבסיס הנתונים של הקבוצה.
 
 ## דרישות מקדימות
 
-ודאו שהשלמתם את [מדריך ההתקנה](01-installation.md) ושכל הכלים מותקנים.
+ודאו שהשלמתם את [מדריך ההתקנה](01-installation.md), ושבסיס הנתונים של הקבוצה
+כבר נוצר ב-Azure (ראו [`PREREQS.md`](../PREREQS.md) חלק C).
 
-## 1. יצירת בסיס הנתונים
+> **בסיס הנתונים עצמו כבר קיים.** ב-Azure יוצרים אותו דרך הפורטל, לא דרך סקריפט.
+> לכן הסקריפט `create_database.sql` **לא** מכיל `CREATE DATABASE` ולא `USE` —
+> הוא רק יוצר את הטבלאות והנתונים בתוך בסיס הנתונים שאליו התחברתם.
+> Azure SQL אינו תומך בפקודת `USE`: כל חיבור מתבצע ישירות לבסיס נתונים אחד.
 
-### אפשרות א׳: דרך Command Prompt (מומלץ)
+## 1. הרצת סקריפט יצירת הטבלאות
 
-1. פתחו Command Prompt
-2. הריצו את הפקודה הבאה:
-   ```
-   sqlcmd -S "localhost\SQLEXPRESS" -E -i "scripts\create_database.sql"
-   ```
-   > **שימו לב:** יש להריץ מתוך תיקיית הפרויקט הראשית, שם נמצאת תיקיית `scripts`.
-3. אם ההרצה הצליחה, תראו הודעות על שורות שנוספו (rows affected)
+### אפשרות א׳: דרך Claude Code (מומלץ)
+
+אם הגדרתם את ה-MCP (ראו [`MCP_SETUP.md`](../MCP_SETUP.md)), פשוט בקשו מ-Claude:
+
+> הרץ את `scripts/create_database.sql` מול בסיס הנתונים דרך ה-mssql MCP.
+> שים לב ש-`GO` הוא מפריד של SSMS ולא פקודת T-SQL — פצל את הקובץ לפי `GO`
+> ושלח כל בלוק בקריאת execute_sql נפרדת.
 
 ### אפשרות ב׳: דרך SSMS
 
-1. פתחו SSMS והתחברו ל-`localhost\SQLEXPRESS`
-2. לחצו **File > Open > File**
-3. פתחו את הקובץ `scripts\create_database.sql` מתוך תיקיית הפרויקט
-4. לחצו **Execute** (או F5)
-5. ודאו שאין הודעות שגיאה
+1. פתחו SSMS והתחברו לבסיס הנתונים של הקבוצה ב-Azure
+   (Server: `<servername>.database.windows.net`, אימות `SQL Server Authentication`)
+2. ודאו שבתיבת בחירת בסיס הנתונים למעלה נבחר **בסיס הנתונים של הקבוצה** ולא `master`
+3. לחצו **File > Open > File**
+4. פתחו את הקובץ `scripts\create_database.sql` מתוך תיקיית הפרויקט
+5. לחצו **Execute** (או F5)
+6. ודאו שאין הודעות שגיאה
 
 ## 2. אימות בסיס הנתונים
 
 לאחר הרצת הסקריפט, ודאו שהכל נוצר כראוי:
 
 ### ב-SSMS
-1. בצד שמאל, פתחו את **Databases > SAD_0 > Tables**
+1. בצד שמאל, פתחו את **Databases > בסיס הנתונים שלכם > Tables**
 2. ודאו שקיימות שבע טבלאות:
    - `dbo.Titles` — טבלת עזר (reference) לתפקידים
    - `dbo.Workers`
@@ -137,17 +143,21 @@
 
 ## 4. עדכון Connection String בפרויקט
 
-הפרויקט מגיע עם שני connection strings בקובץ `SQL_CON.cs`:
+הפרויקט מגיע עם שלוש אפשרויות חיבור בקובץ `SQL_CON.cs` — אחת פעילה ושתיים בהערה:
 
 ```csharp
-//חיבור לשרת המקומי - לפיתוח מהבית
+// אפשרות 1 (ברירת מחדל) - SQL Server מקומי
 conn = new SqlConnection("Data Source=localhost\\SQLEXPRESS;Initial Catalog=SAD_0;...");
-//חיבור לשרת באוניברסיטה - יש לבטל את ההערה ולהעיר את השורה למעלה
-//conn = new SqlConnection("Data Source=IEMDBS;Initial Catalog=SAD_0;...");
+
+// אפשרות 2 - Azure SQL (זו האפשרות של הקורס)
+//conn = new SqlConnection("Server=tcp:<servername>.database.windows.net,1433;Initial Catalog=<database>;User ID=<username>;Password=<password>;Encrypt=True;...");
 ```
 
-- **לעבודה מהבית:** השאירו את ההגדרה כפי שהיא (localhost)
-- **לעבודה באוניברסיטה:** העירו (comment out) את השורה הראשונה, ובטלו את ההערה מהשורה השנייה
+**בקורס הזה עוברים לאפשרות 2:** הפכו את שורת אפשרות 1 להערה, בטלו את ההערה
+משורת אפשרות 2, ומלאו את ארבעת הערכים של בסיס הנתונים של הקבוצה.
+
+> **אזהרה:** השורה הזו תכיל סיסמה אמיתית. אל תעלו אותה ל-git.
+> בפרויקט שלכם עדיף להחזיק את מחרוזת החיבור ב-`app.config` ולהוסיף אותו ל-`.gitignore`.
 
 ## מה הלאה?
 

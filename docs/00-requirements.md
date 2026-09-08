@@ -799,7 +799,7 @@ Each user story is labeled with its implementation status:
 | ID | Requirement | Status |
 |---|---|---|
 | NFR-01 | All data (workers, products, orders, order items) shall be loaded from the database into memory at startup. Subsequent reads shall operate from memory with no additional DB calls. | ✅ Implemented |
-| NFR-02 | The startup load shall complete in under 3 seconds on a local SQL Server instance. | ✅ Implemented |
+| NFR-02 | The startup load shall complete in under 5 seconds against the project's Azure SQL database. | ✅ Implemented |
 | NFR-03 | Any user action (button click, panel navigation) shall respond within 500 milliseconds under normal load. | ✅ Implemented |
 | NFR-04 | The system shall support at least 1,000 products and 10,000 orders without degradation of startup or UI performance. | 🔮 Future |
 
@@ -848,8 +848,8 @@ Each user story is labeled with its implementation status:
 | ID | Requirement |
 |---|---|
 | NFR-25 | The application shall be built using **C# / .NET 8** and **Windows Forms**. |
-| NFR-26 | The database shall be **Microsoft SQL Server** (any edition, including Express). |
-| NFR-27 | The development environment shall be **Visual Studio 2022**. |
+| NFR-26 | The database shall be **Microsoft SQL Server** (Azure SQL Database in this course; any edition is compatible). |
+| NFR-27 | The development environment shall be **Visual Studio 2022 or newer** (2022 and 2025 are both supported). |
 | NFR-28 | The application shall run on Windows 10 or later. |
 
 ---

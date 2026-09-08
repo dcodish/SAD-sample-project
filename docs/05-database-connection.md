@@ -23,20 +23,39 @@ SQL_CON
 
 ## 3. Connection String — מחרוזת החיבור
 
-מחרוזת החיבור אומרת ל-C# **איפה** נמצא בסיס הנתונים:
+מחרוזת החיבור אומרת ל-C# **איפה** נמצא בסיס הנתונים ו**איך** להזדהות מולו.
+בקורס הזה בסיס הנתונים נמצא ב-Azure, ולכן זו המחרוזת שתשתמשו בה:
+
+```csharp
+"Server=tcp:<servername>.database.windows.net,1433;Initial Catalog=<database>;User ID=<username>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+```
+
+| חלק | משמעות | דוגמה |
+|-----|--------|-------|
+| `Server` | כתובת השרת + פורט | `tcp:sad-group-sql.database.windows.net,1433` |
+| `Initial Catalog` | שם בסיס הנתונים | שם בסיס הנתונים של הקבוצה |
+| `User ID` | שם משתמש ה-SQL admin | לא כתובת המייל של Azure |
+| `Password` | הסיסמה שהוגדרה ביצירת השרת | |
+| `Encrypt` | הצפנת התעבורה — **חובה** ב-Azure | `True` |
+
+### לשם השוואה — חיבור ל-SQL Server מקומי
+
+כך נראית מחרוזת חיבור לשרת מקומי. היא מופיעה בפרויקט הדוגמה כברירת מחדל,
+אבל **אינה** מה שמשתמשים בו בקורס:
 
 ```csharp
 "Data Source=localhost\\SQLEXPRESS;Initial Catalog=SAD_0;Integrated Security=True;TrustServerCertificate=True"
 ```
 
-| חלק | משמעות | דוגמה |
-|-----|--------|-------|
-| `Data Source` | כתובת השרת | `localhost\SQLEXPRESS` |
-| `Initial Catalog` | שם בסיס הנתונים | `SAD_0` |
-| `Integrated Security` | אימות Windows | `True` |
-| `TrustServerCertificate` | אישור אבטחה מקומי | `True` |
+ההבדל המהותי: מקומית משתמשים ב-`Integrated Security=True` (אימות Windows —
+השרת מזהה את משתמש ההפעלה), ואילו ב-Azure אין אימות Windows ולכן מזדהים
+בשם משתמש וסיסמה של SQL.
 
 > **שימו לב:** ב-C# צריך `\\` (backslash כפול) כי `\` הוא תו מיוחד.
+> זה רלוונטי רק למחרוזת המקומית — בכתובת של Azure אין backslash כלל.
+
+> **אזהרה:** מחרוזת החיבור ל-Azure מכילה סיסמה. אל תעלו אותה ל-git —
+> החזיקו אותה ב-`app.config` והוסיפו את הקובץ ל-`.gitignore`.
 
 ## 4. שני סוגי פעולות
 

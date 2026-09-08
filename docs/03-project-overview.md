@@ -10,7 +10,7 @@
 
 ## 1. פתיחת הפרויקט
 
-1. פתחו את Visual Studio 2022
+1. פתחו את Visual Studio (2022 או 2025)
 2. בחרו **Open a project or solution**
 3. נווטו לתיקיית הפרויקט ופתחו את `Example_Project.sln`
 4. המתינו ש-Visual Studio יטען את הפרויקט ויבצע NuGet Restore

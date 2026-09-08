@@ -22,11 +22,14 @@
 
 **איך:**
 1. פתחו את `SQL_CON.cs`
-2. עדכנו את שם בסיס הנתונים (`Initial Catalog`):
+2. הפכו את שורת החיבור המקומי (אפשרות 1) להערה, ובטלו את ההערה משורת Azure (אפשרות 2):
 ```csharp
-conn = new SqlConnection("Data Source=localhost\\SQLEXPRESS;Initial Catalog=YOUR_DB_NAME;Integrated Security=True;TrustServerCertificate=True");
+conn = new SqlConnection("Server=tcp:<servername>.database.windows.net,1433;Initial Catalog=<database>;User ID=<username>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 ```
-3. הריצו את הפרויקט וודאו שאין שגיאת חיבור
+3. מלאו את ארבעת הערכים של בסיס הנתונים של הקבוצה (ראו [`PREREQS.md`](../PREREQS.md) חלק C)
+4. הריצו את הפרויקט וודאו שאין שגיאת חיבור
+
+> **אזהרה:** השורה הזו מכילה סיסמה. אל תעלו אותה ל-git.
 
 **תוצאה:** חיבור תקין לבסיס הנתונים ✓
 

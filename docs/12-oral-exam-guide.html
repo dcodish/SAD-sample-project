@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מדריך להגנה בעל-פה על הפרויקט</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:        #1a1a2e;
+      --muted:      #475569;
+      --accent:     #1e40af;
+      --accent-2:   #3b82f6;
+      --line:       #cbd5e1;
+      --callout-bg: #eff6ff;
+      --callout-br: #3b82f6;
+      --code-bg:    #f1f5f9;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    body {
+      font-family: 'Noto Sans Hebrew', sans-serif;
+      color: var(--ink);
+      line-height: 1.75;
+      font-size: 11.5pt;
+      margin: 0;
+      background: #fff;
+    }
+
+    .page {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 40px 48px 56px;
+    }
+
+    /* ===== Title block ===== */
+    .doc-head {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 16px;
+      margin-bottom: 28px;
+    }
+    .doc-head .course {
+      font-size: 10pt;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .01em;
+    }
+    h1 {
+      font-size: 23pt;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 6px 0 0;
+      line-height: 1.25;
+    }
+    .doc-head .sub {
+      font-size: 11pt;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    h2 {
+      font-size: 15pt;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 34px 0 12px;
+      padding-right: 12px;
+      border-right: 5px solid var(--accent-2);
+      line-height: 1.3;
+    }
+
+    p { margin: 0 0 12px; }
+
+    strong { font-weight: 700; color: var(--ink); }
+
+    ol, ul { margin: 0 0 14px; padding-right: 24px; }
+    li { margin-bottom: 8px; }
+
+    code {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--code-bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.86em;
+      direction: ltr;
+      unicode-bidi: embed;
+    }
+
+    em { font-style: normal; background: #fef9c3; padding: 0 3px; border-radius: 3px; }
+
+    /* ===== Callout (blockquote) ===== */
+    blockquote {
+      margin: 14px 0;
+      padding: 12px 16px;
+      background: var(--callout-bg);
+      border-right: 5px solid var(--callout-br);
+      border-radius: 6px;
+      color: #1e3a5f;
+    }
+    blockquote p { margin: 0; }
+    blockquote code { background: #dbeafe; }
+
+    /* ===== Grade table ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 8px;
+      font-size: 10.8pt;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 12px;
+      text-align: right;
+      vertical-align: top;
+    }
+    thead th {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+    tbody tr:nth-child(even) { background: #f8fafc; }
+    td:nth-child(2) {
+      text-align: center;
+      white-space: nowrap;
+      font-weight: 600;
+      color: var(--accent);
+      direction: ltr;
+    }
+    td:first-child { white-space: nowrap; }
+
+    /* ===== Question group labels ===== */
+    .qgroup {
+      font-weight: 700;
+      color: var(--ink);
+      margin: 20px 0 6px;
+      background: #f1f5f9;
+      padding: 7px 12px;
+      border-radius: 6px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin: 26px 0;
+    }
+
+    .closer {
+      margin-top: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 12.5pt;
+    }
+
+    /* ===== Print ===== */
+    @page { size: A4; margin: 16mm; }
+    @media print {
+      .page { max-width: none; margin: 0; padding: 0; }
+      h2 { break-after: avoid; }
+      blockquote, table, .qgroup { break-inside: avoid; }
+      li { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-head">
+    <div class="course">ניתוח ועיצוב מערכות (SAD) · הנדסת תעשייה וניהול · אוניברסיטת בן-גוריון בנגב</div>
+    <h1>מדריך להגנה בעל-פה על הפרויקט</h1>
+    <div class="sub">איך נראית ההגנה, מה צריך להראות, ועל מה ניתן הציון</div>
+  </div>
+
+  <p>זוהי שיחה קצרה (כ-10 עד 15 דקות) על הפרויקט <strong>שלכם</strong>. המטרה היא שתראו ש<strong>אתם תכננתם את המערכת, ושהקוד שקלוד בנה באמת נובע מהתכנון הזה.</strong></p>
+
+  <p>אנחנו <strong>לא</strong> מעריכים את איכות הקוד שקלוד כתב, ו<strong>לא</strong> נבקש מכם להסביר איך הקוד עובד שורה אחר שורה. זה לא קורס תכנות. אנחנו בודקים שיש קשר אמיתי ועקיב בין מה שתכננתם לבין מה שפותח, שאתם מסוגלים לזהות את התכנון שלכם בתוך הפרויקט, ושאתם מבינים את הארכיטקטורה ברמה הכללית.</p>
+
+  <blockquote><p><strong>למה הכוונה בפועל:</strong> אתם צריכים להיות מסוגלים להסתכל על הפרויקט ולהגיד <em>"זו מחלקה (class), היא מתאימה לישות הזו בדיאגרמה שלי, והיא ממופה לטבלה או למסך הזה."</em> <strong>לא</strong> תתבקשו להסביר איך מתודה מומשה או לקרוא קוד <code>C#</code> בקול.</p></blockquote>
+
+  <h2>חלוקת הציון</h2>
+  <p>ציון הפרויקט מורכב משלושה רכיבים:</p>
+  <table>
+    <thead>
+      <tr><th>רכיב</th><th>משקל</th><th>על מה הוא ניתן</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>עמידה בדרישות</strong></td>
+        <td>~50%</td>
+        <td>תכנות <strong>3 מתוך 6 ה-Use Cases</strong> שבחרתם בשלב העיצוב, בתוספת <strong>מסכי CRUD מלאים</strong> (יצירה, צפייה, עדכון ומחיקה) עבור ישות אחת, <strong>מסך התחברות (login)</strong> ו<strong>תפריט המוביל למסכים השונים</strong>, כשהכול עובד בפועל.</td>
+      </tr>
+      <tr>
+        <td><strong>הגנה בעל-פה</strong></td>
+        <td>~50%</td>
+        <td>התשובות שלכם לשאלות שבהמשך, והיכולת להראות שהתכנון שלכם והקוד תואמים ושאתם מבינים את הארכיטקטורה.</td>
+      </tr>
+      <tr>
+        <td><strong>בונוס</strong></td>
+        <td>עד +10%</td>
+        <td>מעבר לנדרש (ראו סעיף הבונוס למטה). מתווסף מעל הציון.</td>
+      </tr>
+    </tbody>
+  </table>
+  <blockquote><p>הציון מתחלק שווה בשווה בין <strong>מה שבניתם</strong> לבין <strong>ההבנה שלכם</strong>. ההגנה בעל-פה אינה בודקת מחדש את הקוד, אלא את הקשר בין התכנון לפיתוח ואת ההבנה הארכיטקטונית, ולכך ניתן משקל זהה לעמידה בדרישות.</p></blockquote>
+
+  <h2>מה נחשב use case שעובד</h2>
+  <p>use case ש"עובד" אינו רק מסך שנפתח. כדי שייחשב כהושלם, עליכם לטפל ב<strong>כל</strong> מרכיביו, לא רק להראות שהמסך מוצג:</p>
+  <ul>
+    <li><strong>ולידציה ובדיקות תקינות נתונים:</strong> שדות חובה, ערכים חוקיים, טיפוסים נכונים, והודעות שגיאה ברורות כשמשהו לא תקין.</li>
+    <li><strong>טיפול במקרי קצה:</strong> מזהה שלא נמצא, קלט ריק, ערכים כפולים וכדומה.</li>
+    <li><strong>הזנת נתונים נוחה וניווט קל:</strong> אפשר להזין את הנתונים בלי להיתקע, ולנוע בין השדות והמסכים בצורה הגיונית.</li>
+  </ul>
+  <p>הקדישו זמן לוודא שכל הזנת הנתונים עובדת היטב מקצה לקצה. use case שהמסך שלו נפתח אבל מקבל קלט לא תקין, קורס על ערך חסר, או קשה לתפעול, אינו נחשב כהושלם.</p>
+
+  <h2>מה אתם צריכים להיות מסוגלים להראות</h2>
+  <ol>
+    <li><strong>התכנון שלכם והקוד תואמים.</strong> אתם יודעים לנוע בין הדיאגרמות (UML/ERD) לבין הפרויקט הרץ, בשני הכיוונים, בלי ללכת לאיבוד.</li>
+    <li><strong>אתם מבינים היכן התכנון והתוצאה התרחקו זה מזה, ומה היה חסר בתכנון.</strong> קלוד תמיד משנה משהו, והפיתוח כמעט תמיד חושף פערים (דרישה, ישות, או שדה שלא חשבתם עליהם). אתם יודעים היכן המימוש שונה מהתכנון המקורי, מה התברר כחסר, ולמה.</li>
+    <li><strong>הבנה בסיסית של הארכיטקטורה.</strong> אתם יכולים להסביר במילים פשוטות איך האפליקציה בנויה בשכבות: מסכים, רשימות בזיכרון, בסיס הנתונים, והקשרים ביניהם.</li>
+    <li><strong>בעלות.</strong> בקבוצה, כל חבר/ה יכול/ה לדבר על החלק שהוא/היא תכננו.</li>
+  </ol>
+  <blockquote><p><strong>כנות עובדת לטובתכם.</strong> "כאן הקוד יצא שונה מהדיאגרמה שלי, כי..." היא תשובה טובה. "הכול תואם בדיוק בכל מקום" בדרך כלל אומר שלא באמת הסתכלתם.</p></blockquote>
+
+  <h2>איך ההגנה מתנהלת</h2>
+  <ul>
+    <li>הביאו מחשב נייד עם <strong>שלושה דברים פתוחים</strong>: הדיאגרמות שלכם (Use Case Diagram והמפרטים, Class Diagram, ERD), ה<strong>קוד</strong>, וה<strong>אפליקציה הרצה</strong>.</li>
+    <li>ודאו שהמחשב הנייד <strong>טעון</strong>, או הביאו מטען.</li>
+    <li>אם בסיס הנתונים שלכם רץ מקומית (SQL Server מקומי), ודאו שהוא <strong>מותקן ופועל</strong> על המחשב שתביאו, כך שהאפליקציה עובדת מקצה לקצה.</li>
+    <li>בלי שקפים, בלי מצגת. פשוט נדבר יחד על הפרויקט.</li>
+    <li>נבקש מכם לנווט בזמן אמת: לפתוח קובץ, להצביע על מסך, לעקוב אחרי תהליך.</li>
+    <li><strong>קבוצות:</strong> כל חבר/ה יישאל/תישאל על use case או ישות אחרים, אז הגיעו מוכנים כשכל אחד/ת שולט/ת בחלק שלו/ה מקצה לקצה.</li>
+  </ul>
+  <blockquote><p><strong>תרשים המצבים (State Diagram) אינו חלק מההגנה הזו</strong>, ויוגש בנפרד. עם זאת, אם אחד ה-Use Cases שפיתחתם קשור לתרשים המצבים, ציינו זאת והראו כיצד הוא בא לידי ביטוי במערכת הרצה.</p></blockquote>
+  <p>כל השאלות מופיעות למטה. אי אפשר באמת "לדחוס" אותן ברגע האחרון, כי או שתכננתם את המערכת או שלא.</p>
+
+  <h2>השאלות שעליכם להיות מוכנים אליהן</h2>
+
+  <blockquote><p>השאלות הבאות הן <strong>קווים מנחים</strong> וסוגי השאלות שנשאל, לא רשימה סגורה. אנחנו רשאים לשאול כל שאלה על הפרויקט שלכם, גם כזו שאינה מופיעה כאן. הרשימה נועדה להראות לכם למה להתכונן, לא להגביל אותנו.</p></blockquote>
+
+  <div class="qgroup">א. מהתכנון לקוד (איתור התכנון שלכם בתוך הפרויקט)</div>
+  <ol>
+    <li><em>בחרו מחלקה אחת מה-Class Diagram שלכם</em> (למשל ישות כמו <code>Order</code>, או מחלקת קישור כמו <code>OrderItem</code>). הראו לי שהיא קיימת בפרויקט, ולאיזו טבלה היא מתאימה.</li>
+    <li><em>בחרו use case אחד מהמפרט שלכם.</em> הראו לי את המסך שמממש אותו, והריצו אותו מקצה לקצה: הזנת נתונים, ולידציה, וסיום הפעולה.</li>
+    <li>שתי ישויות קשורות זו לזו ב-Class Diagram. הראו לי איפה הקשר הזה מופיע בבסיס הנתונים (למשל ה-Foreign Key בין הטבלאות).</li>
+  </ol>
+
+  <div class="qgroup">ב. מהקוד לתכנון (הכיוון הקשה יותר, לזהות את התכנון שלכם מתוך האפליקציה הרצה)</div>
+  <ol start="4">
+    <li><em>מסתכלים על המסך הזה באפליקציה הרצה.</em> איזה use case זה? איזה user story הצדיק את בנייתו?</li>
+    <li><em>מסתכלים על המחלקה או הטבלה הזו בפרויקט.</em> הצביעו עליה ב-Class Diagram וספרו לי מה היא מייצגת במערכת שלכם.</li>
+  </ol>
+
+  <div class="qgroup">ג. פערים ושיקול דעת</div>
+  <ol start="6">
+    <li>הראו לי <strong>מקום אחד שבו התוצאה יצאה שונה מהתכנון שלכם</strong>, וספרו לי למה. (למשל שינוי שקלוד עשה, שדה שהוספתם בהמשך, תהליך שפישטתם, או מסך שיצא אחרת.)</li>
+    <li>האם היה <strong>משהו שחסר בתכנון המקורי שלכם וגיליתם אותו רק כשהפיתוח התחיל?</strong> למשל דרישה שפספסתם, ישות או שדה שלא חשבתם עליהם, או קשר בין נתונים שהתברר כנחוץ. מה זה היה, ואיך תיקנתם את התכנון?</li>
+    <li>אם הייתם צריכים להוסיף תכונה (feature) חדשה אחת למערכת מחר, מאיפה ב<strong>תכנון</strong> הייתם מתחילים, ומה היה צריך להשתנות?</li>
+  </ol>
+
+  <div class="qgroup">ד. הבנת ארכיטקטורה (ברמה הכללית, מושגים ולא קוד)</div>
+  <ol start="9">
+    <li>במילים פשוטות, מהם החלקים העיקריים של האפליקציה הזו ואיך הם מתחברים יחד? (מסכים, הנתונים שמוחזקים בזיכרון, בסיס הנתונים.)</li>
+    <li>איפה הנתונים נמצאים, ובגדול מה צריך לקרות כדי שמשהו שהמשתמש מקליד במסך יישמר בסוף בבסיס הנתונים? (בלי קוד, רק המסלול.)</li>
+    <li>מהי מחלקה (class), ומה ההבדל בין מחלקה בדיאגרמה לבין טבלה בבסיס הנתונים?</li>
+  </ol>
+
+  <h2>בונוס: מעבר למה שהתבקש (רשות)</h2>
+  <p>אם הקבוצה שלכם בנתה <strong>יותר ממה שהפרויקט ביקש</strong>, ספרו לנו. יש על כך ניקוד בונוס (עד <strong>10%</strong>, ויותר על עבודה יוצאת דופן באמת, לפי שיקול דעת הבוחנים).</p>
+  <p>זה <strong>לא</strong> חלק חובה בהגנה. אין שאלות קבועות על כך, ואתם לא מפסידים דבר אם אין לכם את זה. אבל אם הרחקתם לכת, זו ההזדמנות שלכם להציג זאת. דוגמאות למה שנחשב:</p>
+  <ul>
+    <li><strong>חיבור לשירותים חיצוניים:</strong> קריאה ל-API אמיתי, שליחת מיילים או התראות, שרת MCP וכדומה.</li>
+    <li><strong>GUI עשיר ומלוטש יותר</strong>, מעבר למסכים הבסיסיים שלימדנו.</li>
+    <li><strong>פונקציונליות נוספת:</strong> תכונות, דוחות או תהליכים מעבר להיקף הנדרש.</li>
+    <li><strong>כל דבר אחר שאתם גאים בו</strong> ומראה יוזמה אמיתית.</li>
+  </ul>
+  <p>כדי לקבל את הניקוד, פשוט היו מוכנים <strong>להדגים שזה עובד</strong> ולהסביר בקצרה <strong>מה הוספתם ולמה</strong>. כמו בכל השאר, עליכם להיות מסוגלים להצביע על המקום שבו זה משתלב בתכנון שלכם.</p>
+
+  <h2>איך נראית מוכנות</h2>
+  <p>אתם מוכנים כשאתם יכולים לשבת עם שלושת החלונות פתוחים, ולכל use case או ישות שנצביע עליהם למצוא אותם בתכנון שלכם, למצוא אותם בפרויקט, ולהסביר איך השניים מתחברים, כולל היכן הם לא בדיוק תואמים ולמה. אינכם צריכים להסביר איך הקוד עובד.</p>
+  <p class="closer">זו כל ההגנה. בואו לדבר על מה שבניתם.</p>
+
+</div>
+</body>
+</html>
