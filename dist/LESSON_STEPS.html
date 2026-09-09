@@ -289,8 +289,6 @@ unicode-bidi: isolate;
 (שיעורי בית)</a></li>
 <li><a href="#שלב-10-ליטוש-הממשק-עם-claude-שיעורי-בית" id="toc-שלב-10-ליטוש-הממשק-עם-claude-שיעורי-בית">שלב 10 — ליטוש הממשק עם
 Claude (שיעורי בית)</a></li>
-<li><a href="#שלב-11-מעבר-לבסיס-נתונים-משותף-שיעורי-בית" id="toc-שלב-11-מעבר-לבסיס-נתונים-משותף-שיעורי-בית">שלב 11 — מעבר לבסיס
-נתונים משותף (שיעורי בית)</a></li>
 <li><a href="#מה-באמת-מחוץ-להיקף" id="toc-מה-באמת-מחוץ-להיקף">מה באמת
 מחוץ להיקף</a></li>
 </ul>
@@ -301,7 +299,7 @@ Claude (שיעורי בית)</a></li>
     <div class="course">ניתוח ועיצוב מערכות מידע — אוניברסיטת בן-גוריון,
 הנדסת תעשייה וניהול</div>
     <h1 class="doc-title">שלבי השיעור</h1>
-    <div class="sub">מניתוח ל-CRUD עובד — המדריך המלא</div>
+    <div class="sub">מניתוח לפיתוח — המדריך המלא</div>
     <div class="author">מרצה: דוד קודיש</div>
   </header>
 
@@ -2064,115 +2062,6 @@ other panels in one pass.</p>
 — זו כתיבה מחדש; ראו <code>ROADMAP.md</code>).</li>
 <li>אל תכניסו ספריות ממשק של צד שלישי (Telerik,‏ DevExpress) לפני שבדקתם
 אם WinForms רגיל יכול לשאת את השאיפה הוויזואלית. רוב הזמן הוא יכול.</li>
-</ul>
-<hr />
-<h2 id="שלב-11-מעבר-לבסיס-נתונים-משותף-שיעורי-בית">שלב 11 — מעבר לבסיס
-נתונים משותף (שיעורי בית)</h2>
-<p><strong>לא נלמד בשיעור.</strong> מתועד כאן כדי שתוכלו לבצע אותו
-בעצמכם.</p>
-<blockquote class="note">
-<p><strong>☁️ אם הקבוצה שלכם על Azure SQL — השלב הזה לא רלוונטי לכם. אין
-מה לעשות.</strong></p>
-<p>בסיס הנתונים שלכם משותף מהרגע הראשון: כולם עבדו מולו לאורך כל השיעור,
-וגם אפליקציית ה-C# כבר מחוברת אליו (שלב 5.2). דלגו לשלב הבא.</p>
-</blockquote>
-<p><strong>השלב הזה נועד לקבוצות שעבדו על SQL Server מקומי.</strong>
-במסלול המקומי לכל חבר קבוצה יש בסיס נתונים נפרד משלו, ולכן אי אפשר
-להדגים את המערכת על נתונים משותפים ואי אפשר לעבוד באמת ביחד על אותם
-נתונים. השלב הזה מעביר את הקבוצה לבסיס נתונים אחד משותף.</p>
-<h3 id="היעד-azure-sql-database">היעד: Azure SQL Database</h3>
-<p>הדרך למעבר היא בדיוק אותה הקמה שמתוארת ב-<a href="PREREQS.html"><code>PREREQS</code></a> חלק ג׳, מסלול א׳: חבר קבוצה
-אחד יוצר בסיס נתונים ב-Azure SQL ומשתף עם השאר את ארבעת ערכי החיבור
-(שרת, בסיס נתונים, שם משתמש, סיסמה). זה חינם עם Azure for Students ולוקח
-כ-15 דקות.</p>
-<p>בצעו את חלק ג׳ מסלול א׳ ב-<code>PREREQS</code> (סעיפים ג1–ג3), ואז
-חזרו לכאן לשלב 11.1.</p>
-<blockquote class="note">
-<p><strong>פרטי הגישה משותפים בצ׳אט פרטי בלבד — לעולם לא
-ב-git.</strong></p>
-</blockquote>
-<h3 id="שלב-11.1-העבירו-את-המעבר-ל-claude">שלב 11.1 — העבירו את המעבר
-ל-Claude</h3>
-<p>ברגע שיש בידיכם את ארבעת פרטי החיבור ל-Azure SQL, Prompt אחד עושה את
-השאר. פתחו את Claude Code, מלאו את ארבעת המצייני מיקום, והדביקו:</p>
-<blockquote class="prompt">
-<p>Switch this project to use a shared SQL Server database in addition
-to my local one.</p>
-<p>Shared SQL connection details: - Server: <code>&lt;server&gt;</code>
-- Database: <code>&lt;database&gt;</code> - User:
-<code>&lt;username&gt;</code> - Password:
-<code>&lt;password&gt;</code></p>
-<p>Steps:</p>
-<ol type="1">
-<li><p>If my current <code>.mcp.json</code> already points at the shared
-server above, leave it alone and say so — skip to step 3. Otherwise
-rename it to <code>.mcp.json.local</code> (so I can switch back) and
-create a new <code>.mcp.json</code> pointing at the shared server, with
-<code>MSSQL_SERVER</code>, <code>MSSQL_PORT</code> (1433),
-<code>MSSQL_DATABASE</code>, <code>MSSQL_USER</code>,
-<code>MSSQL_PASSWORD</code>, and
-<code>MSSQL_ENCRYPT=true</code>.</p></li>
-<li><p>Tell me to restart Claude Code so the new MCP config takes
-effect, then stop and wait. After the restart I will type
-<strong>continue</strong> in this same chat — when I do, verify the new
-connection by calling <code>list_tables</code> against the shared DB (it
-should be empty), then carry on from step 3.</p></li>
-<li><p>Once verified, run <code>scripts/create_database.sql</code>, then
-<code>scripts/stored_procedures.sql</code>, then
-<code>scripts/seed_data.sql</code> against the shared DB via the mssql
-MCP, in that order. Report any errors per script.</p></li>
-<li><p>Rename <code>&lt;ProjectName&gt;/app.config</code> to
-<code>app.config.local</code>. Then create a new <code>app.config</code>
-with a connection string for the shared server using SQL authentication.
-Format:
-<code>Server=&lt;server&gt;;Database=&lt;database&gt;;User Id=&lt;username&gt;;Password=&lt;password&gt;;TrustServerCertificate=True;Encrypt=True;</code>.
-The <code>Encrypt=True</code> is required for Azure SQL and harmless
-elsewhere.</p></li>
-<li><p>Update the “Database” section in <code>CLAUDE.md</code> to note
-that the project now has two targets: local
-(<code>.mcp.json.local</code> / <code>app.config.local</code>) and
-shared (the currently active configs). Document the rename-swap
-convention to switch between them.</p></li>
-<li><p>Build the C# project. Then tell me to F5 and confirm the panels
-show data from the shared DB.</p></li>
-</ol>
-</blockquote>
-<p>זה כל המעבר. Claude מבצע את שינויי שמות הקבצים, את הרצת הסקריפטים דרך
-ה-MCP, את האימות ואת עדכון התיעוד. אתם רק מפעילים מחדש את Claude Code
-ולוחצים F5 פעם אחת.</p>
-<p><strong>אם משהו נכשל:</strong> - ‏“Cannot connect” או timeout ←
-Firewall. ב-Azure: בדקו שוב את Networking ← Firewall rules בפורטל; הכלל
-<code>0.0.0.0–255.255.255.255</code> צריך להיות שמור. באוניברסיטה: VPN
-או מדיניות רשת. - ‏“Login failed for user” ← שגיאת הקלדה בשם המשתמש או
-בסיסמה ב-Prompt. נסו שוב. - סקריפטים נכשלים באמצע ← הריצו אותם שוב; הם
-אידמפוטנטיים.</p>
-<h3 id="שלב-11.2-מעבר-הלוך-ושוב">שלב 11.2 — מעבר הלוך ושוב</h3>
-<p>תרצו להמשיך לפתח ולהתנסות באופן מבודד, ולעבור לסביבה המשותפת רק מדי
-פעם. כמה אפשרויות:</p>
-<ul>
-<li><strong>שני קובצי <code>.mcp.json</code></strong>, והחליפו ביניהם
-לפי הצורך (<code>.mcp.json.local</code>,‏ <code>.mcp.json.shared</code> —
-שנו את שם הפעיל ל-<code>.mcp.json</code>).</li>
-<li><strong>שני קובצי <code>app.config</code></strong>, באותה
-תבנית.</li>
-<li>או פשוט ערכו את הקובץ הפעיל כשצריך לעבור. לקבוצה של 4–5 סטודנטים,
-גישת העריכה הידנית בדרך כלל עובדת מצוין.</li>
-</ul>
-<p>מה שלא תבחרו, <strong>לעולם אל תעלו את <code>.mcp.json</code> או את
-<code>app.config</code></strong> — הם מכילים פרטי גישה.
-ה-<code>.gitignore</code> כבר מכסה אותם.</p>
-<h3 id="מה-זה-לא-מכסה">מה זה <strong>לא</strong> מכסה</h3>
-<ul>
-<li><strong>כתיבות במקביל מכמה חברי צוות</strong> — הטרנזקציות משלב 7
-והתרחישים המתוזמרים משלב 9 מטפלים באטומיות ברמת הפעולה; שום דבר בקורס
-הזה לא עוסק בנעילה פסימית או במקביליות אופטימית ברמת הטבלה. לקבוצה של
-4–5 אנשים שמבצעת בדיקות, קונפליקטים הם נדירים.</li>
-<li><strong>מיגרציות</strong> — כשחבר צוות מוסיף עמודה, בסיס הנתונים
-המשותף זקוק לאותו שינוי. המשמעת היא זו שכבר קבענו: שינויי סכמה נכנסים
-קודם ל-<code>scripts/create_database.sql</code>, מבצעים commit ו-push,
-וחברי הצוות מושכים ומריצים מחדש את הסקריפטים מול היעדים שלהם.</li>
-<li><strong>גיבוי של בסיס הנתונים המשותף</strong> — Azure SQL מטפל בזה
-אוטומטית. אל תסתמכו על המחשבים של חברי הצוות כגיבוי.</li>
 </ul>
 <hr />
 <h2 id="מה-באמת-מחוץ-להיקף">מה באמת מחוץ להיקף</h2>

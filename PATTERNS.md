@@ -124,6 +124,26 @@ Generate panels with these properties set from the start. Retrofitting RTL onto 
 
 ---
 
+## Git
+
+The repository is the group's shared state; the database is not. Anything a teammate
+needs in order to reproduce the project must be committed.
+
+- **Commit at the phase boundaries** listed in `LESSON_STEPS`. `git pull` before starting
+  work, push when the phase is done.
+- **Never commit credentials or build output:** `.mcp.json`, `app.config`, `cloned/`,
+  `bin/`, `obj/`. The `.gitignore` already covers these — do not override it. If
+  credentials are pushed by mistake, rotate the password: deleting the file does not
+  remove it from history.
+- **Schema changes go into `scripts/*.sql` and get committed.** Never apply a change by
+  hand to the database alone — the database is a derived artifact, and a teammate who
+  pulls and re-runs the scripts would silently lose the change.
+- **Claude runs the git commands.** Students should not run git in the terminal: it is
+  often not on the terminal's PATH on student machines, which produces a confusing
+  "command not found".
+
+---
+
 ## Decisions Already Made — Do Not Revisit Without Discussion
 
 These apply across all SAD projects:

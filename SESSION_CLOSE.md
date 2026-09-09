@@ -15,7 +15,7 @@ State of the SAD lesson rollout at the close of this design session. Read this w
 
 **Lesson materials:**
 - `PREREQS.md` + `PREREQS.docx` — pre-class install guide (7 tools)
-- `LESSON_STEPS.md` — full lesson plan, Phases 1–11 (in-class 1–7, homework 8–11)
+- `LESSON_STEPS.md` — full lesson plan, Phases 1–10 (in-class 1–7, homework 8–10)
 - `PROMPTS_CHEATSHEET.md` + `PROMPTS_CHEATSHEET.docx` — copy-paste prompts
 - `SLIDE_DECK.md` + `SLIDE_DECK.pptx` + `SLIDE_DECK.docx` — 24-slide deck for in-class delivery
 - `MCP_SETUP.md` — MSSQL MCP server troubleshooting reference
@@ -41,7 +41,7 @@ Folder contains: `CLAUDE.md`, `docs/`, `scripts/`, `SharonaPilates/`, `SharonaPi
 
 4. **Demo group artifacts in `sad demo 30/`** are intact (~10 entity classes + panels + sln + scripts + docs). Decided to keep for in-class demo + regression value. Delete after the semester if folder pressure becomes an issue.
 
-5. **Phase 8–11 prompts have not been empirically validated.** Phases 1–7 were walked through end-to-end with the demo group, so the prompts and review steps are tested. Phases 8–11 are written by analogy and will need real-group validation when a group first attempts them as homework.
+5. **Phase 8–10 prompts have not been empirically validated.** Phases 1–7 were walked through end-to-end with the demo group, so the prompts and review steps are tested. Phases 8–10 are written by analogy and will need real-group validation when a group first attempts them as homework.
 
 ---
 
@@ -55,7 +55,7 @@ In rough priority order:
 
 3. **Apply a Design template to `SLIDE_DECK.pptx`** so it doesn't look pandoc-default in front of students. ~30 seconds in PowerPoint.
 
-4. **Decide on Azure for Students rollout.** Are you recommending the BGU central server or Azure to your groups? If Azure, point at Phase 11 Option B. If both, students choose per group.
+4. **Decide on Azure for Students rollout.** Are you recommending the BGU central server or Azure to your groups? If Azure, point at `PREREQS` part גˈ track אˈ — the database choice is made at setup time, not migrated later. If both, students choose per group.
 
 5. **Decide whether to share the `PROMPTS_CHEATSHEET.docx` URL or the `.md` version** with students. The `.md` lives on GitHub (clickable, link previews work); the `.docx` lives locally (must be emailed/uploaded). Most students prefer the `.docx`; some prefer the GitHub link. Pick one canonical reference.
 
