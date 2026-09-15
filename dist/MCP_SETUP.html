@@ -658,11 +658,16 @@ Authentication</td>
 האפשרויות</h2>
 <p><strong>קודם כול: ודאו שזו בכלל בעיה של ה-MCP ולא של הרשת</strong> —
 ראו את הסעיף שמעל טבלת התקלות.</p>
-<p><strong>ואל תחפשו שרת MCP אחר באינטרנט על דעת עצמכם.</strong> רוב
-שרתי ה-MSSQL MCP שתמצאו אינם תומכים ב-DDL (יצירת טבלאות ו-Stored
-Procedures), וזה בדיוק מה שאנחנו צריכים בשלב 4. החלפה עיוורת בדרך כלל
-מחליפה בעיה אחת בבעיה גדולה יותר. יש <strong>חלופה אחת בדוקה</strong>
-(אפשרות 2 בטבלה) — בקשו את שם החבילה מהמרצה.</p>
+<p><strong>ואם השרת הזה באמת לא עולה — תנו ל-Claude למצוא חלופה, אבל לא
+בעיניים עצומות.</strong> רוב שרתי ה-MSSQL MCP שקיימים הם
+<strong>data-only</strong>: הם יודעים לקרוא ולעדכן נתונים בטבלאות
+קיימות, אבל <strong>לא ליצור טבלאות ו-Stored Procedures</strong>. שלב 4
+כולו הוא בדיוק זה, ולכן שרת כזה ייראה כאילו הוא עובד — עד שתגלו בשלב 4
+שהוא חסר תועלת.</p>
+<p>הפתרון הוא ה-Prompt שבאפשרות 2 למטה: הוא נותן ל-Claude את
+<strong>קריטריון הקבלה</strong> (חייב להריץ <code>CREATE TABLE</code>
+ו-<code>CREATE PROCEDURE</code>), מחייב אותו להוכיח את זה בפועל לפני
+שממשיכים, וקוצב לו שני ניסיונות לפני שעוברים למסלול הידני.</p>
 <p>עברו על האפשרויות לפי הסדר:</p>
 <table>
 <colgroup>
@@ -697,11 +702,11 @@ Procedures), וזה בדיוק מה שאנחנו צריכים בשלב 4. החל
 </tr>
 <tr>
 <td>2</td>
-<td><strong>שרת MCP חלופי מבוסס Node.js</strong></td>
-<td>אם אפשרות 1 נכשלה אחרי שביצעתם את כל השלבים, והרשת תקינה. בשיעור
-הקודם היא עבדה אצל חלק מהסטודנטים. <strong>קבלו את שם החבילה המדויק
-מהמרצה — אל תחפשו לבד</strong>, רוב מה שתמצאו לא תומך ב-DDL</td>
-<td>✅ כן</td>
+<td><strong>שרת חלופי ש-Claude מוצא ומתקין</strong></td>
+<td>אם אפשרות 1 נכשלה אחרי שביצעתם את כל השלבים, והרשת תקינה. הדביקו את
+ה-Prompt שבסעיף הבא — הוא מחייב את Claude לבדוק תמיכה ב-DDL לפני שהוא
+ממליץ. בשיעור הקודם שרת מבוסס Node.js הוא שעבד אצל מי שנתקע</td>
+<td>⚠️ רק אם נבדק</td>
 </tr>
 <tr>
 <td>3</td>
@@ -719,6 +724,81 @@ Procedures), וזה בדיוק מה שאנחנו צריכים בשלב 4. החל
 </tr>
 </tbody>
 </table>
+<h3 id="אפשרות-2-בפירוט-שיחפש-ויתקין-לבד">אפשרות 2 בפירוט — שיחפש ויתקין
+לבד</h3>
+<p><strong>תנאי מוקדם:</strong> בדיקת פורט 1433 חזרה <code>True</code>.
+אם לא — שום שרת MCP לא יעזור, חזרו לאפשרות 0.</p>
+<p>הדביקו ב-Claude Code:</p>
+<blockquote class="prompt">
+<p>The MSSQL MCP server we configured still doesn’t work after following
+every step in <code>MCP_SETUP</code>, and we’ve already confirmed this
+isn’t a network problem — <code>Test-NetConnection</code> on port 1433
+returns True. Find and install a working alternative yourself.</p>
+<p><strong>Hard requirements. Check these before you recommend
+anything:</strong></p>
+<ol type="1">
+<li>It connects to <strong>Azure SQL Database</strong> — a
+<code>.database.windows.net</code> server, SQL authentication, encrypted
+connection. (Or, if our <code>.mcp.json</code> points at
+<code>localhost</code>, to a local SQL Server over TCP.)</li>
+<li>It runs <strong>arbitrary SQL that we hand it, including
+DDL</strong> — <code>CREATE TABLE</code>, <code>CREATE PROCEDURE</code>,
+<code>ALTER</code>, <code>DROP</code>. This is the one that matters.
+Most MSSQL MCP servers are data-only: they read and write rows in tables
+that already exist. Our very next phase creates the entire schema and
+every stored procedure, so a data-only server is useless to us. If a
+server’s own documentation says something like “designed to work with
+data, not schema”, reject it and move on.</li>
+<li>It installs on Windows through a runner we have or can get in one
+command — <code>uvx</code> for a Python package, <code>npx</code> for a
+Node one (install Node with
+<code>winget install OpenJS.NodeJS.LTS</code> if it’s missing).</li>
+<li>It’s configured from <code>.mcp.json</code> in this project
+folder.</li>
+</ol>
+<p><strong>How to go about it:</strong></p>
+<ul>
+<li>Search for current MSSQL / Azure SQL MCP servers, read the actual
+README of your top candidates, and pick one that clearly meets
+requirement 2. Tell me which you chose and <strong>quote the line in its
+docs that shows it supports DDL</strong> — don’t just assert it.</li>
+<li>Prefer something actively maintained, and pin the exact version you
+install.</li>
+<li>Write the config into <code>.mcp.json</code>. Keep the credentials
+that are already in there, and keep <code>.mcp.json</code> listed in
+<code>.gitignore</code>.</li>
+<li>Then tell me to restart Claude Code, and stop and wait. I’ll type
+<strong>continue</strong> in this chat.</li>
+</ul>
+<p><strong>After the restart, prove it works before we go any
+further.</strong> List your MCP tools, then run these and show me the
+real output of each:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> @@VERSION;</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> DB_NAME();</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> mcp_smoke_test (<span class="kw">id</span> <span class="dt">INT</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, note <span class="dt">NVARCHAR</span>(<span class="dv">50</span>));</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> mcp_smoke_test <span class="kw">VALUES</span> (<span class="dv">1</span>, N<span class="st">&#39;שלום&#39;</span>);</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> mcp_smoke_test;</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">TABLE</span> mcp_smoke_test;</span></code></pre></div>
+<p>Then, as a <strong>separate</strong> call
+(‏<code>CREATE PROCEDURE</code> has to be the first statement in its
+batch):</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">PROCEDURE</span> mcp_smoke_proc <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="dv">1</span>;</span></code></pre></div>
+<p>followed by <code>DROP PROCEDURE mcp_smoke_proc;</code>.</p>
+<p>If the <code>CREATE TABLE</code> or the <code>CREATE PROCEDURE</code>
+fails, the server is data-only or can’t run DDL in its transaction mode
+— say so plainly, take it back out of <code>.mcp.json</code>, and try
+your next candidate. <strong>Two candidates maximum.</strong> If neither
+works, stop searching and tell me we’re going the SSMS route instead
+(option 4 in <code>MCP_SETUP</code>) — I’d rather spend that time on the
+project.</p>
+</blockquote>
+<p><strong>למה הבדיקה הזו ולא “תנסה שאילתה”</strong> —
+‏<code>SELECT</code> יעבוד כמעט בכל שרת. ‏<code>CREATE TABLE</code>
+ו-<code>CREATE PROCEDURE</code> הם מה שמפריד בין שרת שישרת אתכם בשלב 4
+לבין שרת שיתגלה כחסר תועלת בדיוק ברגע הלא נכון. הטקסט בעברית
+ב-<code>INSERT</code> בודק בדרך אגב גם את ה-Unicode.</p>
+<p><strong>אם גם זה לא הצליח — אתם לא תקועים.</strong> אפשרות 4 למטה
+עובדת תמיד, והיא עולה לכם בהעתקה-הדבקה בלבד.</p>
 <h3 id="אפשרות-4-בפירוט-איך-להמשיך-בלי-mcp">אפשרות 4 בפירוט — איך להמשיך
 בלי MCP</h3>
 <p>אתם לא תקועים. ה-MCP הוא נוחות, לא תנאי הכרחי: הוא רק חוסך לכם להעתיק

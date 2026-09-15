@@ -168,7 +168,7 @@ uvx --version
 >    ```
 >    Do not search only under `WinGet\Packages` — recent uv versions install to `%USERPROFILE%\.local\bin` and that search finds nothing..
 >
-> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own. Our instructor has one tested alternative and will hand us the exact package name if we need it.
+> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — don't silently swap in a different server mid-task. We have a separate prompt for finding a replacement, and I'll paste it.
 >
 > 2. **Ask me for the Azure SQL connection details** — server name (ends in `.database.windows.net`), database name, SQL username, and SQL password. Don't guess.
 >
@@ -232,7 +232,7 @@ uvx --version
 >    ```
 >    Do not search only under `WinGet\Packages` — recent uv versions install to `%USERPROFILE%\.local\bin` and that search finds nothing..
 >
-> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own. Our instructor has one tested alternative and will hand us the exact package name if we need it.
+> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — don't silently swap in a different server mid-task. We have a separate prompt for finding a replacement, and I'll paste it.
 >
 > 2. **Find my SQL Server instance yourself — do not ask me for the name.** Read `HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL` and run `Get-Service MSSQL*`. If there is more than one instance, show me a short table and ask which to use. Then confirm TCP/IP is enabled for it and tell me which static port it is listening on (we set 14330 during setup). If TCP/IP is disabled, stop and tell me — the MCP cannot connect without it.
 >
@@ -282,6 +282,47 @@ uvx --version
 > *"I just set up the MSSQL MCP server in `.mcp.json` and restarted. List your MCP tools, confirm `mssql.execute_sql` is present, then run `SELECT @@VERSION` and `SELECT DB_NAME()`."*
 
 אם משהו נכשל, טבלת פתרון התקלות ב-`MCP_SETUP` מכסה את המקרים הנפוצים.
+
+### 🆘 אם ה-MCP לא עולה אחרי שעשיתם הכול
+
+**בדקו קודם את הרשת** (פורט 1433). אם היא תקינה וה-MCP עדיין לא עובד — הדביקו את זה,
+והוא ימצא ויתקין חלופה בעצמו. ה-Prompt מחייב אותו להוכיח תמיכה ב-`CREATE TABLE`
+ו-`CREATE PROCEDURE` לפני שממשיכים, כי רוב שרתי ה-MSSQL MCP יודעים רק לקרוא ולעדכן
+נתונים — ובשלב 4 זה חסר תועלת.
+
+> The MSSQL MCP server we configured still doesn't work after following every step in `MCP_SETUP`, and we've already confirmed this isn't a network problem — `Test-NetConnection` on port 1433 returns True. Find and install a working alternative yourself.
+>
+> **Hard requirements. Check these before you recommend anything:**
+>
+> 1. It connects to **Azure SQL Database** — a `.database.windows.net` server, SQL authentication, encrypted connection. (Or, if our `.mcp.json` points at `localhost`, to a local SQL Server over TCP.)
+> 2. It runs **arbitrary SQL that we hand it, including DDL** — `CREATE TABLE`, `CREATE PROCEDURE`, `ALTER`, `DROP`. This is the one that matters. Most MSSQL MCP servers are data-only: they read and write rows in tables that already exist. Our very next phase creates the entire schema and every stored procedure, so a data-only server is useless to us. If a server's own documentation says something like "designed to work with data, not schema", reject it and move on.
+> 3. It installs on Windows through a runner we have or can get in one command — `uvx` for a Python package, `npx` for a Node one (install Node with `winget install OpenJS.NodeJS.LTS` if it's missing).
+> 4. It's configured from `.mcp.json` in this project folder.
+>
+> **How to go about it:**
+>
+> - Search for current MSSQL / Azure SQL MCP servers, read the actual README of your top candidates, and pick one that clearly meets requirement 2. Tell me which you chose and **quote the line in its docs that shows it supports DDL** — don't just assert it.
+> - Prefer something actively maintained, and pin the exact version you install.
+> - Write the config into `.mcp.json`. Keep the credentials that are already in there, and keep `.mcp.json` listed in `.gitignore`.
+> - Then tell me to restart Claude Code, and stop and wait. I'll type **continue** in this chat.
+>
+> **After the restart, prove it works before we go any further.** List your MCP tools, then run these and show me the real output of each:
+>
+> ```sql
+> SELECT @@VERSION;
+> SELECT DB_NAME();
+> CREATE TABLE mcp_smoke_test (id INT PRIMARY KEY, note NVARCHAR(50));
+> INSERT INTO mcp_smoke_test VALUES (1, N'שלום');
+> SELECT * FROM mcp_smoke_test;
+> DROP TABLE mcp_smoke_test;
+> ```
+>
+> Then, as a separate call, `CREATE PROCEDURE mcp_smoke_proc AS SELECT 1;` followed by `DROP PROCEDURE mcp_smoke_proc;`.
+>
+> If the `CREATE TABLE` or the `CREATE PROCEDURE` fails, the server is data-only or can't run DDL in its transaction mode — say so plainly, take it back out of `.mcp.json`, and try your next candidate. **Two candidates maximum.** If neither works, stop searching and tell me we're going the SSMS route instead (option 4 in `MCP_SETUP`) — I'd rather spend that time on the project.
+
+**שני ניסיונות ודי.** אם אף אחד לא עבד — ממשיכים דרך SSMS (אפשרות 4 ב-`MCP_SETUP`).
+זה עובד תמיד, ועולה לכם רק בהעתקה-הדבקה. אל תבזבזו על זה את השיעור.
 
 **נקודת Commit:**
 

@@ -306,7 +306,7 @@ dir: rtl
 >    ```
 >    Do not search only under `WinGet\Packages` — recent uv versions install to `%USERPROFILE%\.local\bin` and that search finds nothing.
    >
-> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own. Our instructor has one tested alternative and will hand us the exact package name if we need it.
+> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — don't silently swap in a different server mid-task. We have a separate prompt for finding a replacement, and I'll paste it.
 >
    > 2. **Ask me for the Azure SQL connection details** — server name (ends in .database.windows.net), database name, SQL username, and SQL password. Don't guess.
    >
@@ -361,7 +361,17 @@ dir: rtl
    > **אם השיחה לא נפתחה מחדש** (למשל פתחתם תיקייה אחרת) — הדביקו במקום זאת:
    > *"I just set up the MSSQL MCP server in `.mcp.json` and restarted. List your MCP tools, confirm `mssql.execute_sql` is present, then run `SELECT @@VERSION` and `SELECT DB_NAME()`."*
 
-   אם משהו נכשל בדרך, טבלת פתרון התקלות ב-`MCP_SETUP` מכסה את הבעיות הנפוצות.
+   אם משהו נכשל בדרך, טבלת פתרון התקלות ב-[`MCP_SETUP`](./MCP_SETUP.md) מכסה את הבעיות הנפוצות.
+
+   **ואם עברתם על כל השלבים והשרת עדיין לא עולה** — ובדיקת פורט 1433 חזרה תקינה —
+   אל תתחילו לחפש שרתים אחרים בעצמכם. יש Prompt מוכן שנותן ל-Claude למצוא ולהתקין
+   חלופה, עם קריטריון קבלה ברור: הוא חייב להוכיח שהוא מריץ `CREATE TABLE`
+   ו-`CREATE PROCEDURE` לפני שממשיכים, כי רוב שרתי ה-MSSQL MCP יודעים רק לקרוא
+   ולעדכן נתונים — ובשלב 4 זה חסר תועלת. ה-Prompt נמצא ב-`PROMPTS_CHEATSHEET`
+   (סעיף "אם ה-MCP לא עולה") ובאפשרות 2 ב-[`MCP_SETUP`](./MCP_SETUP.md).
+
+   **ואם גם זה לא עבד — אתם לא תקועים.** ממשיכים דרך SSMS: Claude כותב את ה-SQL לקובץ,
+   אתם מריצים אותו ומדביקים לו את השגיאות. כל שאר השיעור זהה. ראו אפשרות 4 ב-`MCP_SETUP`.
 
 **נקודת Commit:** ברגע ששלב 1 הושלם, הדביקו את זה — הוא עושה commit **ו-push** יחד:
 

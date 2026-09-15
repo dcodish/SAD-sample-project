@@ -671,10 +671,9 @@ server dies on startup with
 <code>AttributeError: &#39;Server&#39; object has no attribute &#39;list_resources&#39;</code>.
 Do NOT pin <code>pymssql</code> — let it resolve on its own, or you get
 <code>ModuleNotFoundError: pymssql._pymssql</code>. If this server still
-fails after you have followed every step, STOP and tell me — do not go
-looking for an alternative MCP server on your own. Our instructor has
-one tested alternative and will hand us the exact package name if we
-need it.</p>
+fails after you have followed every step, STOP and tell me — don’t
+silently swap in a different server mid-task. We have a separate prompt
+for finding a replacement, and I’ll paste it.</p>
 <ol start="2" type="1">
 <li><p><strong>Ask me for the Azure SQL connection details</strong> —
 server name (ends in <code>.database.windows.net</code>), database name,
@@ -788,10 +787,9 @@ server dies on startup with
 <code>AttributeError: &#39;Server&#39; object has no attribute &#39;list_resources&#39;</code>.
 Do NOT pin <code>pymssql</code> — let it resolve on its own, or you get
 <code>ModuleNotFoundError: pymssql._pymssql</code>. If this server still
-fails after you have followed every step, STOP and tell me — do not go
-looking for an alternative MCP server on your own. Our instructor has
-one tested alternative and will hand us the exact package name if we
-need it.</p>
+fails after you have followed every step, STOP and tell me — don’t
+silently swap in a different server mid-task. We have a separate prompt
+for finding a replacement, and I’ll paste it.</p>
 <ol start="2" type="1">
 <li><p><strong>Find my SQL Server instance yourself — do not ask me for
 the name.</strong> Read
@@ -879,6 +877,77 @@ VSCode).</p>
 </blockquote>
 <p>אם משהו נכשל, טבלת פתרון התקלות ב-<code>MCP_SETUP</code> מכסה את
 המקרים הנפוצים.</p>
+<h3 id="אם-ה-mcp-לא-עולה-אחרי-שעשיתם-הכול">🆘 אם ה-MCP לא עולה אחרי
+שעשיתם הכול</h3>
+<p><strong>בדקו קודם את הרשת</strong> (פורט 1433). אם היא תקינה וה-MCP
+עדיין לא עובד — הדביקו את זה, והוא ימצא ויתקין חלופה בעצמו. ה-Prompt
+מחייב אותו להוכיח תמיכה ב-<code>CREATE TABLE</code>
+ו-<code>CREATE PROCEDURE</code> לפני שממשיכים, כי רוב שרתי ה-MSSQL MCP
+יודעים רק לקרוא ולעדכן נתונים — ובשלב 4 זה חסר תועלת.</p>
+<blockquote class="prompt">
+<p>The MSSQL MCP server we configured still doesn’t work after following
+every step in <code>MCP_SETUP</code>, and we’ve already confirmed this
+isn’t a network problem — <code>Test-NetConnection</code> on port 1433
+returns True. Find and install a working alternative yourself.</p>
+<p><strong>Hard requirements. Check these before you recommend
+anything:</strong></p>
+<ol type="1">
+<li>It connects to <strong>Azure SQL Database</strong> — a
+<code>.database.windows.net</code> server, SQL authentication, encrypted
+connection. (Or, if our <code>.mcp.json</code> points at
+<code>localhost</code>, to a local SQL Server over TCP.)</li>
+<li>It runs <strong>arbitrary SQL that we hand it, including
+DDL</strong> — <code>CREATE TABLE</code>, <code>CREATE PROCEDURE</code>,
+<code>ALTER</code>, <code>DROP</code>. This is the one that matters.
+Most MSSQL MCP servers are data-only: they read and write rows in tables
+that already exist. Our very next phase creates the entire schema and
+every stored procedure, so a data-only server is useless to us. If a
+server’s own documentation says something like “designed to work with
+data, not schema”, reject it and move on.</li>
+<li>It installs on Windows through a runner we have or can get in one
+command — <code>uvx</code> for a Python package, <code>npx</code> for a
+Node one (install Node with
+<code>winget install OpenJS.NodeJS.LTS</code> if it’s missing).</li>
+<li>It’s configured from <code>.mcp.json</code> in this project
+folder.</li>
+</ol>
+<p><strong>How to go about it:</strong></p>
+<ul>
+<li>Search for current MSSQL / Azure SQL MCP servers, read the actual
+README of your top candidates, and pick one that clearly meets
+requirement 2. Tell me which you chose and <strong>quote the line in its
+docs that shows it supports DDL</strong> — don’t just assert it.</li>
+<li>Prefer something actively maintained, and pin the exact version you
+install.</li>
+<li>Write the config into <code>.mcp.json</code>. Keep the credentials
+that are already in there, and keep <code>.mcp.json</code> listed in
+<code>.gitignore</code>.</li>
+<li>Then tell me to restart Claude Code, and stop and wait. I’ll type
+<strong>continue</strong> in this chat.</li>
+</ul>
+<p><strong>After the restart, prove it works before we go any
+further.</strong> List your MCP tools, then run these and show me the
+real output of each:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> @@VERSION;</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> DB_NAME();</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> mcp_smoke_test (<span class="kw">id</span> <span class="dt">INT</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, note <span class="dt">NVARCHAR</span>(<span class="dv">50</span>));</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> mcp_smoke_test <span class="kw">VALUES</span> (<span class="dv">1</span>, N<span class="st">&#39;שלום&#39;</span>);</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> mcp_smoke_test;</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">TABLE</span> mcp_smoke_test;</span></code></pre></div>
+<p>Then, as a separate call,
+<code>CREATE PROCEDURE mcp_smoke_proc AS SELECT 1;</code> followed by
+<code>DROP PROCEDURE mcp_smoke_proc;</code>.</p>
+<p>If the <code>CREATE TABLE</code> or the <code>CREATE PROCEDURE</code>
+fails, the server is data-only or can’t run DDL in its transaction mode
+— say so plainly, take it back out of <code>.mcp.json</code>, and try
+your next candidate. <strong>Two candidates maximum.</strong> If neither
+works, stop searching and tell me we’re going the SSMS route instead
+(option 4 in <code>MCP_SETUP</code>) — I’d rather spend that time on the
+project.</p>
+</blockquote>
+<p><strong>שני ניסיונות ודי.</strong> אם אף אחד לא עבד — ממשיכים דרך
+SSMS (אפשרות 4 ב-<code>MCP_SETUP</code>). זה עובד תמיד, ועולה לכם רק
+בהעתקה-הדבקה. אל תבזבזו על זה את השיעור.</p>
 <p><strong>נקודת Commit:</strong></p>
 <blockquote class="prompt">
 <p>Initialize a git repository here if there isn’t one, and make the

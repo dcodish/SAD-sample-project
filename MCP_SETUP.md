@@ -270,10 +270,14 @@ Test-NetConnection <servername>.database.windows.net -Port 1433
 
 **קודם כול: ודאו שזו בכלל בעיה של ה-MCP ולא של הרשת** — ראו את הסעיף שמעל טבלת התקלות.
 
-**ואל תחפשו שרת MCP אחר באינטרנט על דעת עצמכם.** רוב שרתי ה-MSSQL MCP שתמצאו אינם
-תומכים ב-DDL (יצירת טבלאות ו-Stored Procedures), וזה בדיוק מה שאנחנו צריכים בשלב 4.
-החלפה עיוורת בדרך כלל מחליפה בעיה אחת בבעיה גדולה יותר. יש **חלופה אחת בדוקה**
-(אפשרות 2 בטבלה) — בקשו את שם החבילה מהמרצה.
+**ואם השרת הזה באמת לא עולה — תנו ל-Claude למצוא חלופה, אבל לא בעיניים עצומות.**
+רוב שרתי ה-MSSQL MCP שקיימים הם **data-only**: הם יודעים לקרוא ולעדכן נתונים בטבלאות
+קיימות, אבל **לא ליצור טבלאות ו-Stored Procedures**. שלב 4 כולו הוא בדיוק זה, ולכן
+שרת כזה ייראה כאילו הוא עובד — עד שתגלו בשלב 4 שהוא חסר תועלת.
+
+הפתרון הוא ה-Prompt שבאפשרות 2 למטה: הוא נותן ל-Claude את **קריטריון הקבלה** (חייב
+להריץ `CREATE TABLE` ו-`CREATE PROCEDURE`), מחייב אותו להוכיח את זה בפועל לפני
+שממשיכים, וקוצב לו שני ניסיונות לפני שעוברים למסלול הידני.
 
 עברו על האפשרויות לפי הסדר:
 
@@ -281,9 +285,59 @@ Test-NetConnection <servername>.database.windows.net -Port 1433
 |---|---|---|---|
 | 0 | **לתקן את הרשת** — hotspot מהטלפון | אם `Test-NetConnection` על פורט 1433 החזיר `False`. **התחילו כאן** — במקרה הזה שום שרת MCP לא יעבוד | — |
 | 1 | **`microsoft_sql_server_mcp==0.1.0` עם `mcp==1.30.0`** — מה שמתואר במסמך הזה | ברירת המחדל. נסו קודם, כולל שני התיקונים בשלב 3 | ✅ כן |
-| 2 | **שרת MCP חלופי מבוסס Node.js** | אם אפשרות 1 נכשלה אחרי שביצעתם את כל השלבים, והרשת תקינה. בשיעור הקודם היא עבדה אצל חלק מהסטודנטים. **קבלו את שם החבילה המדויק מהמרצה — אל תחפשו לבד**, רוב מה שתמצאו לא תומך ב-DDL | ✅ כן |
+| 2 | **שרת חלופי ש-Claude מוצא ומתקין** | אם אפשרות 1 נכשלה אחרי שביצעתם את כל השלבים, והרשת תקינה. הדביקו את ה-Prompt שבסעיף הבא — הוא מחייב את Claude לבדוק תמיכה ב-DDL לפני שהוא ממליץ. בשיעור הקודם שרת מבוסס Node.js הוא שעבד אצל מי שנתקע | ⚠️ רק אם נבדק |
 | 3 | **תוסף MSSQL של VS Code** | אם אף שרת MCP לא עולה. התוסף מאפשר להריץ SQL מתוך VS Code, כולל DDL — אבל **Claude לא מריץ אותו בשבילכם**, אתם מריצים ידנית | ✅ כן |
 | 4 | **בלי MCP בכלל — דרך SSMS** | מוצא אחרון, אבל **תמיד עובד** | ✅ כן |
+
+### אפשרות 2 בפירוט — שיחפש ויתקין לבד
+
+**תנאי מוקדם:** בדיקת פורט 1433 חזרה `True`. אם לא — שום שרת MCP לא יעזור, חזרו לאפשרות 0.
+
+הדביקו ב-Claude Code:
+
+> The MSSQL MCP server we configured still doesn't work after following every step in `MCP_SETUP`, and we've already confirmed this isn't a network problem — `Test-NetConnection` on port 1433 returns True. Find and install a working alternative yourself.
+>
+> **Hard requirements. Check these before you recommend anything:**
+>
+> 1. It connects to **Azure SQL Database** — a `.database.windows.net` server, SQL authentication, encrypted connection. (Or, if our `.mcp.json` points at `localhost`, to a local SQL Server over TCP.)
+> 2. It runs **arbitrary SQL that we hand it, including DDL** — `CREATE TABLE`, `CREATE PROCEDURE`, `ALTER`, `DROP`. This is the one that matters. Most MSSQL MCP servers are data-only: they read and write rows in tables that already exist. Our very next phase creates the entire schema and every stored procedure, so a data-only server is useless to us. If a server's own documentation says something like "designed to work with data, not schema", reject it and move on.
+> 3. It installs on Windows through a runner we have or can get in one command — `uvx` for a Python package, `npx` for a Node one (install Node with `winget install OpenJS.NodeJS.LTS` if it's missing).
+> 4. It's configured from `.mcp.json` in this project folder.
+>
+> **How to go about it:**
+>
+> - Search for current MSSQL / Azure SQL MCP servers, read the actual README of your top candidates, and pick one that clearly meets requirement 2. Tell me which you chose and **quote the line in its docs that shows it supports DDL** — don't just assert it.
+> - Prefer something actively maintained, and pin the exact version you install.
+> - Write the config into `.mcp.json`. Keep the credentials that are already in there, and keep `.mcp.json` listed in `.gitignore`.
+> - Then tell me to restart Claude Code, and stop and wait. I'll type **continue** in this chat.
+>
+> **After the restart, prove it works before we go any further.** List your MCP tools, then run these and show me the real output of each:
+>
+> ```sql
+> SELECT @@VERSION;
+> SELECT DB_NAME();
+> CREATE TABLE mcp_smoke_test (id INT PRIMARY KEY, note NVARCHAR(50));
+> INSERT INTO mcp_smoke_test VALUES (1, N'שלום');
+> SELECT * FROM mcp_smoke_test;
+> DROP TABLE mcp_smoke_test;
+> ```
+>
+> Then, as a **separate** call (‏`CREATE PROCEDURE` has to be the first statement in its batch):
+>
+> ```sql
+> CREATE PROCEDURE mcp_smoke_proc AS SELECT 1;
+> ```
+>
+> followed by `DROP PROCEDURE mcp_smoke_proc;`.
+>
+> If the `CREATE TABLE` or the `CREATE PROCEDURE` fails, the server is data-only or can't run DDL in its transaction mode — say so plainly, take it back out of `.mcp.json`, and try your next candidate. **Two candidates maximum.** If neither works, stop searching and tell me we're going the SSMS route instead (option 4 in `MCP_SETUP`) — I'd rather spend that time on the project.
+
+**למה הבדיקה הזו ולא "תנסה שאילתה"** — ‏`SELECT` יעבוד כמעט בכל שרת. ‏`CREATE TABLE`
+ו-`CREATE PROCEDURE` הם מה שמפריד בין שרת שישרת אתכם בשלב 4 לבין שרת שיתגלה כחסר תועלת
+בדיוק ברגע הלא נכון. הטקסט בעברית ב-`INSERT` בודק בדרך אגב גם את ה-Unicode.
+
+**אם גם זה לא הצליח — אתם לא תקועים.** אפשרות 4 למטה עובדת תמיד, והיא עולה לכם
+בהעתקה-הדבקה בלבד.
 
 ### אפשרות 4 בפירוט — איך להמשיך בלי MCP
 

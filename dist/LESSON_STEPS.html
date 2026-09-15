@@ -753,10 +753,9 @@ server dies on startup with
 <code>AttributeError: &#39;Server&#39; object has no attribute &#39;list_resources&#39;</code>.
 Do NOT pin <code>pymssql</code> — let it resolve on its own, or you get
 <code>ModuleNotFoundError: pymssql._pymssql</code>. If this server still
-fails after you have followed every step, STOP and tell me — do not go
-looking for an alternative MCP server on your own. Our instructor has
-one tested alternative and will hand us the exact package name if we
-need it.</p>
+fails after you have followed every step, STOP and tell me — don’t
+silently swap in a different server mid-task. We have a separate prompt
+for finding a replacement, and I’ll paste it.</p>
 <ol start="2" type="1">
 <li><p><strong>Ask me for the Azure SQL connection details</strong> —
 server name (ends in .database.windows.net), database name, SQL
@@ -843,8 +842,19 @@ VSCode).</p>
 <code>SELECT @@VERSION</code> and
 <code>SELECT DB_NAME()</code>.”</em></p>
 </blockquote>
-<p>אם משהו נכשל בדרך, טבלת פתרון התקלות ב-<code>MCP_SETUP</code> מכסה את
-הבעיות הנפוצות.</p></li>
+<p>אם משהו נכשל בדרך, טבלת פתרון התקלות ב-<a href="MCP_SETUP.html"><code>MCP_SETUP</code></a> מכסה את הבעיות
+הנפוצות.</p>
+<p><strong>ואם עברתם על כל השלבים והשרת עדיין לא עולה</strong> — ובדיקת
+פורט 1433 חזרה תקינה — אל תתחילו לחפש שרתים אחרים בעצמכם. יש Prompt מוכן
+שנותן ל-Claude למצוא ולהתקין חלופה, עם קריטריון קבלה ברור: הוא חייב
+להוכיח שהוא מריץ <code>CREATE TABLE</code>
+ו-<code>CREATE PROCEDURE</code> לפני שממשיכים, כי רוב שרתי ה-MSSQL MCP
+יודעים רק לקרוא ולעדכן נתונים — ובשלב 4 זה חסר תועלת. ה-Prompt נמצא
+ב-<code>PROMPTS_CHEATSHEET</code> (סעיף “אם ה-MCP לא עולה”) ובאפשרות 2
+ב-<a href="MCP_SETUP.html"><code>MCP_SETUP</code></a>.</p>
+<p><strong>ואם גם זה לא עבד — אתם לא תקועים.</strong> ממשיכים דרך SSMS:
+Claude כותב את ה-SQL לקובץ, אתם מריצים אותו ומדביקים לו את השגיאות. כל
+שאר השיעור זהה. ראו אפשרות 4 ב-<code>MCP_SETUP</code>.</p></li>
 </ol>
 <p><strong>נקודת Commit:</strong> ברגע ששלב 1 הושלם, הדביקו את זה — הוא
 עושה commit <strong>ו-push</strong> יחד:</p>
