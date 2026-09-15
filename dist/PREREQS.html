@@ -286,6 +286,8 @@ unicode-bidi: isolate;
 ל-Azure for Students (רק יוצר בסיס הנתונים)</a></li>
 <li><a href="#ג2-יצירת-בסיס-הנתונים-ב-azure-sql" id="toc-ג2-יצירת-בסיס-הנתונים-ב-azure-sql">ג2 — יצירת בסיס הנתונים
 ב-Azure SQL</a></li>
+<li><a href="#ג2.5-בדיקת-פורט-1433-בצעו-מהרשת-של-האוניברסיטה" id="toc-ג2.5-בדיקת-פורט-1433-בצעו-מהרשת-של-האוניברסיטה">ג2.5 — בדיקת
+פורט 1433 — <strong>בצעו מהרשת של האוניברסיטה</strong></a></li>
 <li><a href="#ג3-אימות-החיבור-מ-ssms" id="toc-ג3-אימות-החיבור-מ-ssms">ג3
 — אימות החיבור מ-SSMS</a></li>
 </ul></li>
@@ -299,6 +301,15 @@ unicode-bidi: isolate;
 <li><a href="#ג3-מ-אימות-החיבור-מ-ssms" id="toc-ג3-מ-אימות-החיבור-מ-ssms">ג3-מ — אימות החיבור מ-SSMS</a></li>
 <li><a href="#ג4-חשבון-github-חובה-לכל-חבר-קבוצה" id="toc-ג4-חשבון-github-חובה-לכל-חבר-קבוצה">ג4 — חשבון GitHub (חובה לכל
 חבר קבוצה)</a></li>
+</ul></li>
+<li><a href="#חלק-ד-קובצי-הניתוח-של-הקבוצה-pdf" id="toc-חלק-ד-קובצי-הניתוח-של-הקבוצה-pdf">חלק ד׳ — קובצי הניתוח של
+הקבוצה (PDF)</a>
+<ul>
+<li><a href="#ד1-ל-pdf-שלכם-חייבת-להיות-שכבת-טקסט" id="toc-ד1-ל-pdf-שלכם-חייבת-להיות-שכבת-טקסט">ד1 — ל-PDF שלכם חייבת להיות
+שכבת טקסט</a></li>
+<li><a href="#ד2-איך-מייצאים-נכון" id="toc-ד2-איך-מייצאים-נכון">ד2 — איך
+מייצאים נכון</a></li>
+<li><a href="#ד3-הביאו-גם-את-קובץ-המקור" id="toc-ד3-הביאו-גם-את-קובץ-המקור">ד3 — הביאו גם את קובץ המקור</a></li>
 </ul></li>
 <li><a href="#אימות-סופי" id="toc-אימות-סופי">אימות סופי</a></li>
 <li><a href="#צקליסט-להביא-לשיעור" id="toc-צקליסט-להביא-לשיעור">צ׳קליסט
@@ -663,6 +674,43 @@ Firewall rules לחצו <strong>+ Add a firewall rule</strong>: שם הכלל
 <li><strong>User:</strong> ה-admin login</li>
 <li><strong>Password:</strong> סיסמת ה-admin</li>
 </ul>
+<h2 id="ג2.5-בדיקת-פורט-1433-בצעו-מהרשת-של-האוניברסיטה">ג2.5 — בדיקת
+פורט 1433 — <strong>בצעו מהרשת של האוניברסיטה</strong></h2>
+<p>‏Azure SQL מקבל חיבורים <strong>רק בפורט 1433</strong>. ברשת הסטודנטים
+של האוניברסיטה הפורט הזה חסום ליציאה — ולכן בסיס נתונים שמתחבר מצוין
+מהבית פשוט לא נפתח מהכיתה. לא מ-SSMS, ולא מ-Claude Code.</p>
+<p><strong>זו הייתה התקלה מספר אחת בשיעור הקודם</strong>, והיא מתחזה
+לתקלת MCP: ההתקנה מצליחה, השרת עולה, וכל קריאה נכשלת בטיים-אאוט. החלפת
+שרת ה-MCP לא תעזור — הבעיה היא הרשת.</p>
+<p><strong>בדקו את זה מראש, כשאתם על הרשת שבה תשבו בשיעור.</strong>
+ב-PowerShell:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Test-NetConnection <span class="op">&lt;</span>servername<span class="op">&gt;.</span><span class="fu">database</span><span class="op">.</span><span class="fu">windows</span><span class="op">.</span><span class="fu">net</span> <span class="op">-</span>Port <span class="dv">1433</span></span></code></pre></div>
+<p>הסתכלו על השורה האחרונה:</p>
+<ul>
+<li><code>TcpTestSucceeded : True</code> — הדרך פתוחה. אתם מסודרים.</li>
+<li><code>TcpTestSucceeded : False</code> — הפורט חסום ברשת הזו.
+<strong>אל תגיעו לשיעור בלי פתרון.</strong></li>
+</ul>
+<blockquote class="note">
+<p><strong>הפתרון: נקודה חמה (hotspot) מהטלפון.</strong> חברו את המחשב
+לשיתוף האינטרנט של הטלפון במקום לרשת האוניברסיטה, והריצו שוב את הבדיקה —
+כך הקבוצות שנתקעו פתרו את זה בשיעור. נפח הנתונים זניח: תעבורת ה-SQL היא
+טקסט, וגם Claude Code עצמו קל.</p>
+<p>מספיק שהמחשב <strong>שמריץ את Claude</strong> יהיה על ה-hotspot. אם
+אתם ממילא עובדים בשיטת “אחד מריץ, השאר בודקים” (מומלץ — ראו את סעיף
+המכסה), זה טלפון אחד לכל הקבוצה.</p>
+<p><strong>בדקו שהטלפון שלכם יודע לשתף אינטרנט לפני השיעור</strong>,
+ושהבדיקה למעלה מחזירה <code>True</code> דרכו. בחלק מהמסלולים הסלולריים
+שיתוף האינטרנט כבוי כברירת מחדל.</p>
+</blockquote>
+<p><strong>רשת קווית, VPN או רשת סגל</strong> עשויות להתנהג אחרת מהרשת
+האלחוטית של הסטודנטים. הבדיקה תקפה רק לרשת שממנה הרצתם אותה — הריצו אותה
+על הרשת שבה תעבדו בפועל.</p>
+<p><strong>אם אין לכם hotspot זמין:</strong> עדיין תוכלו לעבוד — ראו את
+מסלול ב׳ (SQL Server מקומי) למטה. הוא לא דורש רשת בכלל, אבל אין בו בסיס
+נתונים משותף לקבוצה. זו החלטה שכדאי לקבל <strong>לפני</strong> השיעור,
+לא באמצעו.</p>
+<hr />
 <h2 id="ג3-אימות-החיבור-מ-ssms">ג3 — אימות החיבור מ-SSMS</h2>
 <ol type="1">
 <li>פתחו את SSMS.</li>
@@ -678,11 +726,19 @@ Firewall rules לחצו <strong>+ Add a firewall rule</strong>: שם הכלל
 </ul></li>
 <li>פתחו שאילתה חדשה והריצו:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> @@VERSION;</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> name <span class="kw">FROM</span> sys.databases;</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> @@VERSION;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> name <span class="kw">FROM</span> sys.databases;</span></code></pre></div>
 <p><strong>התוצאה הצפויה:</strong> פרטי גרסה שמציינים Azure SQL, ובסיס
-הנתונים שלכם ברשימה. אם אתם מקבלים timeout בחיבור — בדקו שוב את כלל
-ה-Firewall בשלב ג2.</p>
+הנתונים שלכם ברשימה.</p>
+<p>אם אתם מקבלים <strong>timeout</strong> בחיבור, יש שתי סיבות אפשריות,
+וכדאי להבדיל ביניהן:</p>
+<ul>
+<li><strong>מהבית:</strong> כמעט תמיד כלל ה-Firewall ב-Azure לא נשמר —
+חזרו לשלב ג2 סעיף 6.</li>
+<li><strong>מהאוניברסיטה:</strong> כמעט תמיד פורט 1433 חסום — ראו ג2.5.
+‏SSMS ו-Claude Code משתמשים באותו פורט בדיוק, ולכן אם SSMS לא מתחבר
+מהקמפוס, גם ה-MCP לא יתחבר.</li>
+</ul>
 <p>אם בחרתם במסלול א׳ — סיימתם את חלק ג׳. דלגו לסעיף <strong>ג4 — חשבון
 GitHub</strong>.</p>
 <hr />
@@ -825,7 +881,7 @@ running.</p>
 </ul></li>
 <li>פתחו שאילתה חדשה והריצו:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> @@VERSION;</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> @@VERSION;</span></code></pre></div>
 <p><strong>התוצאה הצפויה:</strong> פרטי גרסה של SQL Server. אם ההתחברות
 נכשלת, ודאו שהשירות רץ: <code>Get-Service MSSQL*</code> ב-PowerShell —
 הוא אמור להיות <strong>Running</strong>.</p>
@@ -938,15 +994,79 @@ GitHub user I am authenticated as.</p>
 <p><strong>אם אתם מעדיפים לעשות זאת ידנית:</strong> פתחו PowerShell (מקש
 <strong>Windows</strong> ← הקלידו <code>powershell</code> ←
 <strong>Enter</strong>) והריצו:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>winget install GitHub<span class="op">.</span><span class="fu">cli</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gh auth login</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>git config <span class="op">--</span>global user<span class="op">.</span><span class="fu">name</span> <span class="st">&quot;השם שלכם&quot;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>git config <span class="op">--</span>global user<span class="op">.</span><span class="fu">email</span> <span class="st">&quot;המייל שלכם ב-GitHub&quot;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>gh auth status</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>winget install GitHub<span class="op">.</span><span class="fu">cli</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>gh auth login</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>git config <span class="op">--</span>global user<span class="op">.</span><span class="fu">name</span> <span class="st">&quot;השם שלכם&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>git config <span class="op">--</span>global user<span class="op">.</span><span class="fu">email</span> <span class="st">&quot;המייל שלכם ב-GitHub&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>gh auth status</span></code></pre></div>
 <p>ב-<code>gh auth login</code> בחרו: <strong>GitHub.com</strong> ←
 <strong>HTTPS</strong> ← <strong>Yes</strong> (אימות עם פרטי ה-git) ←
 <strong>Login with a web browser</strong>. העתיקו את הקוד שמוצג, לחצו
 Enter, ואשרו בדפדפן.</p>
+<hr />
+<h1 id="חלק-ד-קובצי-הניתוח-של-הקבוצה-pdf">חלק ד׳ — קובצי הניתוח של
+הקבוצה (PDF)</h1>
+<p>בשלב 2 של השיעור Claude ימיר את מסמכי חלק א׳ וחלק ב׳ שלכם ל-markdown.
+כמה דקות הכנה כאן חוסכות שעה בכיתה.</p>
+<h2 id="ד1-ל-pdf-שלכם-חייבת-להיות-שכבת-טקסט">ד1 — ל-PDF שלכם חייבת להיות
+שכבת טקסט</h2>
+<p>יש שני סוגי PDF שנראים זהים לחלוטין על המסך:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>מה זה</th>
+<th>מה Claude עושה איתו</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PDF עם שכבת טקסט</strong></td>
+<td>נוצר על ידי <strong>ייצוא</strong> מ-Word,‏ Google Docs או Visual
+Paradigm</td>
+<td>קורא את הטקסט ישירות — מהיר וזול</td>
+</tr>
+<tr>
+<td><strong>PDF שהוא תמונות</strong></td>
+<td>סריקה, צילום מהטלפון, או “הדפסה” לתמונה</td>
+<td>חייב <strong>להסתכל על כל עמוד כתמונה</strong>, אחד-אחד</td>
+</tr>
+</tbody>
+</table>
+<p>הסוג השני הוא שהפך את שלב 2 לשעה וחצי אצל אחת הקבוצות בשיעור הקודם,
+ובדרך שרף גם את מכסת הטוקנים שלהם.</p>
+<p><strong>הבדיקה, עשר שניות:</strong> פתחו את ה-PDF, נסו <strong>לסמן
+שורת טקסט עם העכבר</strong>, או חפשו בו מילה ב-<code>Ctrl+F</code>. אם
+אי אפשר לסמן ואי אפשר לחפש — זה PDF של תמונות, ויש לייצא אותו מחדש.</p>
+<h2 id="ד2-איך-מייצאים-נכון">ד2 — איך מייצאים נכון</h2>
+<ul>
+<li><strong>Word:</strong> ‏File ← <strong>Save As</strong> (או Export ←
+Create PDF) ← בחרו <code>PDF</code> ברשימת סוגי הקובץ.
+<strong>אל</strong> תשתמשו ב-<code>Print</code> ← “Microsoft Print to
+PDF” אם אפשר להימנע — הוא לפעמים מייצר עמודי תמונה.</li>
+<li><strong>Google Docs:</strong> ‏File ← Download ← <strong>PDF
+Document</strong>.</li>
+<li><strong>Visual Paradigm:</strong> ‏Project ← Export ←
+<strong>PDF</strong>.</li>
+<li><strong>סריקה של תדפיס:</strong> לא מתאים. מצאו את הקובץ
+המקורי.</li>
+</ul>
+<h2 id="ד3-הביאו-גם-את-קובץ-המקור">ד3 — הביאו גם את קובץ המקור</h2>
+<p>שימו ב-<code>docs/</code>, לצד ה-PDF, גם את <strong>קובץ ה-Word
+המקורי</strong> (<code>.docx</code>) של חלק א׳ וחלק ב׳. ‏Claude קורא
+<code>.docx</code> ישירות ובזול, וזו רשת הביטחון הטובה ביותר אם משהו
+ב-PDF יוצא עקום.</p>
+<p><strong>הדיאגרמות הן חריג ונשארות תמונות</strong> — זה בסדר גמור
+ומצופה. הן ממילא מעטות (דיאגרמת מחלקות, מצבים, רצף, UC), ו-Claude יפתח
+רק את העמודים שלהן. מה שחייב להיות טקסט אמיתי הוא הגוף של המסמך:
+הדרישות, הטבלאות, מפרטי ה-UC והראיונות.</p>
+<p>בתחילת שלב 2 בשיעור נריץ בדיקה אוטומטית שמאשרת את כל זה לפני שמתחילים
+לחלץ.</p>
 <hr />
 <h1 id="אימות-סופי">אימות סופי</h1>
 <p><strong>אל תריצו את הבדיקות ידנית — תנו ל-Claude לעשות את
@@ -998,7 +1118,16 @@ Authentication)</label></li>
 <li><label><input type="checkbox"></input>יש לכם חשבון GitHub ואתם יכולים לבצע
 push (או בפלטפורמה שהקבוצה בחרה)</label></li>
 <li><label><input type="checkbox"></input>קובצי ה-PDF של חלק א׳ וחלק ב׳ של
-הקבוצה נגישים לכם</label></li>
+הקבוצה נגישים לכם — <strong>ואפשר לסמן בהם טקסט עם העכבר</strong> (חלק
+ד׳)</label></li>
+<li><label><input type="checkbox"></input>קובצי ה-Word המקוריים
+(<code>.docx</code>) של חלק א׳ וחלק ב׳ נמצאים איתכם כגיבוי</label></li>
+<li><label><input type="checkbox"></input>☁️ מסלול Azure:
+‏<code>Test-NetConnection &lt;servername&gt;.database.windows.net -Port 1433</code>
+מחזיר <code>True</code> <strong>מהרשת שבה תשבו בשיעור</strong> (חלק
+ג2.5)</label></li>
+<li><label><input type="checkbox"></input>☁️ מסלול Azure: אם התשובה הייתה
+<code>False</code> — שיתוף האינטרנט בטלפון עובד ונבדק</label></li>
 </ul>
 <p>אם משהו נכשל בבוקר השיעור — כתבו לצ׳אט הקבוצה
 <strong>מיד</strong>.</p>
@@ -1053,7 +1182,7 @@ x64”</strong>. אימות: <code>dotnet --list-runtimes</code> מציג
 <code>git --version</code>.</p>
 <h2 id="uv-מריץ-python-ישמש-בשיעור-לחיבור-claude-code-לבסיס-הנתונים">uv
 (מריץ Python — ישמש בשיעור לחיבור Claude Code לבסיס הנתונים)</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>winget install astral-sh<span class="op">.</span><span class="fu">uv</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>winget install astral-sh<span class="op">.</span><span class="fu">uv</span></span></code></pre></div>
 <p>או <code>pip install uv</code> אם כבר יש לכם Python. אימות:
 <code>uvx --version</code>. אם מופיע “command not found” — פתחו את
 הטרמינל מחדש.</p>
@@ -1091,6 +1220,19 @@ Kit.</li>
 <td>כלל ה-Firewall לא נשמר</td>
 <td>פורטל Azure ← SQL server ← Networking ← ודאו שכלל ה-Firewall‏
 0.0.0.0–255.255.255.255 קיים ונשמר</td>
+</tr>
+<tr>
+<td>‏Azure: הכול עובד מהבית ושום דבר לא מתחבר מהאוניברסיטה</td>
+<td>פורט 1433 חסום ברשת הסטודנטים</td>
+<td>זו לא תקלת MCP ולא תקלת Firewall. חברו את המחשב ל-hotspot מהטלפון —
+ראו חלק ג2.5. אמתו עם
+<code>Test-NetConnection &lt;servername&gt;.database.windows.net -Port 1433</code></td>
+</tr>
+<tr>
+<td>שלב 2 (חילוץ ה-PDF) נמשך שעה ויותר</td>
+<td>ל-PDF אין שכבת טקסט — Claude מסתכל על כל עמוד כתמונה</td>
+<td>ייצאו את ה-PDF מחדש מקובץ ה-Word המקורי, או תנו ל-Claude את
+ה-<code>.docx</code> עצמו. ראו חלק ד׳</td>
 </tr>
 <tr>
 <td>‏Azure: “Login failed for user ‘<code>&lt;username&gt;</code>’”</td>

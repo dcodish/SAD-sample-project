@@ -22,6 +22,7 @@ DOCS=(
   "PROMPTS_CHEATSHEET.md"
   "LESSON_STEPS.md"
   "GIT_GROUP_WORKFLOW.md"
+  "MCP_SETUP.md"
 )
 
 for src in "${DOCS[@]}"; do

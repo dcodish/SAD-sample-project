@@ -24,6 +24,7 @@
 | [`dist/PROMPTS_CHEATSHEET.html`](dist/PROMPTS_CHEATSHEET.html) | כל ה-Prompts של השיעור להעתקה־הדבקה (יש כפתור Copy על כל אחד) |
 | [`dist/LESSON_STEPS.html`](dist/LESSON_STEPS.html) | המדריך המלא של השיעור, עם ההסברים |
 | [`dist/GIT_GROUP_WORKFLOW.html`](dist/GIT_GROUP_WORKFLOW.html) | עבודה עם git בקבוצה |
+| [`dist/MCP_SETUP.html`](dist/MCP_SETUP.html) | חיבור Claude Code לבסיס הנתונים דרך MCP — הגדרה ופתרון תקלות |
 | [`dist/SLIDE_DECK.html`](dist/SLIDE_DECK.html) | מצגת השיעור — נפתחת בדפדפן. ניווט בחיצים או בשלט מצגות, `O` לתצוגת סקירה, `F` למסך מלא |
 
 המקור של כל אלה הוא קובצי ה-Markdown בשורש הפרויקט. אחרי עריכה, הריצו `bash build-docs.sh`
@@ -61,7 +62,8 @@
 ```
 ├── docs/                    ← מדריכים לסטודנטים
 ├── scripts/
-│   └── create_database.sql  ← סקריפט יצירת DB
+│   ├── create_database.sql  ← סקריפט יצירת DB
+│   └── check_pdfs.py        ← בדיקת שכבת טקסט בקובצי ה-PDF (שלב 2.0 בשיעור)
 └── example_project/         ← קוד המקור
     ├── Program.cs           ← נקודת התחלה + רשימות
     ├── SQL_CON.cs           ← חיבור DB

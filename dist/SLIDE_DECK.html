@@ -198,10 +198,13 @@ border-bottom: 1px solid #e2e8f0;
 <section id="מה-אתם-מביאים" class="level1">
 <h1>מה אתם מביאים</h1>
 <ul>
-<li>את ניתוח חלק א׳ + חלק ב׳ של הקבוצה</li>
+<li>את ניתוח חלק א׳ + חלק ב׳ — <strong>PDF שאפשר לסמן בו טקסט</strong>,
+ורצוי גם קובץ ה-Word המקורי</li>
 <li>מחשב נייד עם כל דרישות הקדם מותקנות</li>
 <li>חשבון GitHub (כל חבר קבוצה צריך אחד)</li>
 <li>את תיקיית הפרויקט של הקבוצה, מוכנה</li>
+<li>☁️ <strong>טלפון עם שיתוף אינטרנט (hotspot)</strong> — רשת
+האוניברסיטה חוסמת את Azure SQL</li>
 </ul>
 </section>
 <section id="התמונה-הגדולה-בשיעור" class="level1">
@@ -368,8 +371,11 @@ git --version
 uvx --version</code></pre>
 <p>בנוסף: Claude Code מחובר, Visual Studio נפתח (2022 או 2025), ו-SSMS
 מתחבר לבסיס הנתונים של הקבוצה.</p>
-<p>בסיס הנתונים: <strong>Azure SQL</strong> (מומלץ) או SQL Server
-מקומי.</p>
+<p>☁️ <strong>ובמסלול Azure — בדיקה רביעית, מהרשת שבה תשבו
+בשיעור:</strong></p>
+<pre><code>Test-NetConnection &lt;servername&gt;.database.windows.net -Port 1433</code></pre>
+<p><code>TcpTestSucceeded : False</code> = תצטרכו hotspot מהטלפון. בדקו
+את זה <strong>לפני</strong> השיעור.</p>
 <p>כל הפרטים וה-Prompt להתקנה ב-<code>PREREQS</code>.</p>
 </section>
 <section id="session-ו-workspace-מה-claude-רואה" class="level1">
@@ -420,26 +426,133 @@ uvx --version</code></pre>
 </ul>
 <p>ואז Prompt אחד מתקין את ה-MCP, מתקן שני באגים בחבילה, ומאמת את החיבור
 לבסיס הנתונים.</p>
+<p>⚠️ <strong>☁️ רשת האוניברסיטה חוסמת את פורט 1433 — ו-Azure SQL עובד
+רק דרכו.</strong> ההתקנה תצליח וכל שאילתה תיתקע. <strong>החלפת שרת ה-MCP
+לא תעזור.</strong> הפתרון: <strong>hotspot מהטלפון</strong> במחשב שמריץ
+את Claude.</p>
 <p>💾 <strong>commit:</strong> <code>.gitignore</code> וה-commit הראשון
 של הפרויקט.</p>
 </section>
-<section id="עבודה-עם-git-בקבוצה" class="level1">
-<h1>עבודה עם git בקבוצה</h1>
-<p><strong>Repository אחד לקבוצה.</strong> חבר אחד יוצר אותו, השאר
-מתווספים כ-Collaborators ומשכפלים.</p>
-<p><strong>השגרה בכל ישיבת עבודה:</strong> משכו (pull) ← עבדו ← commit ←
-דחפו (push).</p>
+<section id="עבודה-בקבוצה-מי-עושה-מה" class="level1">
+<h1>עבודה בקבוצה — מי עושה מה</h1>
+<p><strong>בשיעור: חבר אחד מקליד, השאר בודקים.</strong></p>
 <ul>
-<li>💾 בשקפים מסמן נקודת commit מומלצת</li>
-<li>בקשו מ-Claude להריץ את פקודות ה-git — הוא יודע גם לפתור
-קונפליקטים</li>
-<li><strong>לא עולים ל-git:</strong> <code>.mcp.json</code>,
-<code>app.config</code>, <code>cloned/</code>, <code>bin/</code></li>
-<li>שינוי סכמה נכנס ל-<code>scripts/*.sql</code> ואז push — לא ידנית
-בבסיס הנתונים</li>
+<li>המכסה היא של <strong>החשבון</strong>, לא של המחשב — ארבעה במקביל
+מרוקנים אותה פי ארבע</li>
+<li>ארבעה שדוחפים לאותו ענף באותו זמן = קונפליקטים על כל קובץ</li>
+<li><strong>הבדיקה היא העבודה האמיתית.</strong> Claude מהיר ולא זהיר —
+מי שקורא את הפלט ומשווה ל-PDF תורם יותר ממי שמקליד</li>
 </ul>
-<p>חלוקת עבודה, קונפליקטים וטבלת נקודות ה-commit — הכול
-ב-<code>GIT_GROUP_WORKFLOW</code>.</p>
+<p><strong>בסוף השיעור:</strong> המקליד עושה push, כל השאר עושים pull
+פעם אחת. לכולם אותו פרויקט.</p>
+<p><strong>חבר שלא הצליח למשוך בשיעור — יגלה את זה בבית, לבד.</strong>
+אל תלכו בלי זה.</p>
+</section>
+<section id="עבודה-בקבוצה-לאורך-הסמסטר" class="level1">
+<h1>עבודה בקבוצה — לאורך הסמסטר</h1>
+<p>מכאן מחלקים לפי <strong>קבצים</strong>, כדי ששניים לא יערכו את אותו
+קובץ:</p>
+<table>
+<thead>
+<tr>
+<th>מי</th>
+<th>מה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>חבר א׳</td>
+<td>חילוץ המסמכים, <code>CLAUDE.md</code></td>
+</tr>
+<tr>
+<td>חבר ב׳</td>
+<td>סכמה ו-Stored Procedures</td>
+</tr>
+<tr>
+<td>ביחד</td>
+<td>הישות הראשונה + מסך הכניסה</td>
+</tr>
+<tr>
+<td>לפי ישות</td>
+<td>מסכי ה-CRUD — מסך לכל אחד</td>
+</tr>
+</tbody>
+</table>
+<p>שניים חייבים לגעת באותו קובץ? תאמו לפי <strong>זמן</strong>: אחד
+מסיים ודוחף לפני שהשני מתחיל.</p>
+</section>
+<section id="git-שלוש-פעולות-ושלא-יתבלבלו" class="level1">
+<h1>‏git — שלוש פעולות, ושלא יתבלבלו</h1>
+<p>יש <strong>עותק על המחשב שלכם</strong> ו<strong>עותק משותף
+ב-GitHub</strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>מה עושה</th>
+<th>לאן</th>
+<th>מתי</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>commit</strong></td>
+<td>שומר צילום מצב</td>
+<td><strong>מקומי בלבד</strong></td>
+<td>בסוף כל שלב</td>
+</tr>
+<tr>
+<td><strong>push</strong></td>
+<td>דוחף ל-GitHub</td>
+<td>מקומי ← GitHub</td>
+<td>מיד אחרי commit</td>
+</tr>
+<tr>
+<td><strong>pull</strong></td>
+<td>מושך מהקבוצה</td>
+<td>GitHub ← מקומי</td>
+<td><strong>לפני</strong> שמתחילים</td>
+</tr>
+</tbody>
+</table>
+<p><strong>commit לבדו לא משתף כלום.</strong> commit = “שמור”. push =
+“שלח”.</p>
+<p><strong><code>rejected — fetch first</code> זה לא כישלון</strong> —
+מישהו דחף לפניכם. pull, ואז push שוב.</p>
+</section>
+<section id="git-מה-מדביקים-ומתי" class="level1">
+<h1>‏git — מה מדביקים ומתי</h1>
+<p><strong>בתחילת כל ישיבת עבודה, לפני הכול:</strong></p>
+<blockquote class="prompt">
+<p>Before we start: pull the latest from our group repo with
+<code>git pull origin main</code>, then show me <code>git status</code>
+and the last few commits.</p>
+</blockquote>
+<p><strong>בסוף כל שלב</strong> — commit ו-push ב-Prompt אחד (💾 בשקפים
+מסמן איפה):</p>
+<blockquote class="prompt">
+<p>Commit the work from this phase with the commit message “Phase N: …”,
+then push with <code>git push origin main</code>. If the push is
+rejected, pull first, help me resolve any conflict, and push again.</p>
+</blockquote>
+<p>הנוסח המלא לכל שלב — ב-<code>PROMPTS_CHEATSHEET</code>, סעיף git.
+<strong>אתם לא מקלידים git בטרמינל.</strong></p>
+<p><strong>לא עולים ל-git:</strong> <code>.mcp.json</code>,
+<code>app.config</code>, <code>cloned/</code>, <code>bin/</code></p>
+</section>
+<section id="שלב-2-קודם-בודקים-את-ה-pdf" class="level1">
+<h1>שלב 2 — קודם בודקים את ה-PDF</h1>
+<p><strong>שלוש דקות שחוסכות שעה.</strong> קבוצה אחת בשיעור הקודם בילתה
+כאן <strong>שעה וחצי</strong>.</p>
+<p>הסיבה: ל-PDF שלהם לא הייתה <strong>שכבת טקסט</strong> — Claude נאלץ
+להסתכל על כל עמוד כתמונה.</p>
+<pre><code>uv run --with pymupdf cloned/scripts/check_pdfs.py docs</code></pre>
+<p><code>NO TEXT LAYER</code> ← ייצאו מחדש מה-Word (File ← Save As ←
+PDF), או תנו ל-Claude את ה-<code>.docx</code>.</p>
+<p><strong>בדיקה ידנית, 10 שניות:</strong> אי אפשר לסמן טקסט ב-PDF עם
+העכבר? זה PDF של תמונות.</p>
+<p><strong>הדיאגרמות הן חריג מכוון</strong> — הן תמונות, וזה בסדר.
+Claude יפתח רק את העמודים שלהן.</p>
 </section>
 <section id="שלב-2-חילוץ-ל-markdown" class="level1">
 <h1>שלב 2 — חילוץ ל-Markdown</h1>

@@ -71,6 +71,49 @@ uvx --version
 
 ---
 
+# git — מה מדביקים, ומתי
+
+**אתם לא מקלידים git בטרמינל — אתם מבקשים מ-Claude.** אבל כדאי לדעת מה ביקשתם:
+
+| | מה עושה | לאן | מתי |
+|---|---|---|---|
+| **commit** | שומר צילום מצב **על המחשב שלכם** | מקומי בלבד | בסוף כל שלב |
+| **push** | דוחף את ה-commits ל-GitHub | מקומי ← GitHub | מיד אחרי כל commit |
+| **pull** | מושך את מה שהקבוצה העלתה | GitHub ← מקומי | **לפני** שמתחילים לעבוד |
+
+‏**commit לבדו לא משתף כלום** — עד ל-push אף חבר קבוצה לא רואה שום דבר.
+
+## בתחילת כל ישיבת עבודה (וגם אחרי הפסקה)
+
+> Before we start: pull the latest from our group repo with `git pull origin main`, then show me `git status` and the last few commits with `git log --oneline -5`. Tell me if anything came in from my teammates, and if the pull hit a conflict, stop and walk me through it.
+
+## בסוף כל שלב — commit ו-push יחד
+
+החליפו את `<N>` ואת התיאור בשורה של השלב שסיימתם (הטבלה למטה):
+
+> Commit the work from this phase with the commit message "Phase `<N>`: `<what changed>`", then push to our group repo with `git push origin main`. If the push is rejected because a teammate pushed first, run `git pull origin main`, help me resolve any conflict, and push again. Tell me what you did at each step.
+
+| שלב | מה נשמר | הודעת ה-commit |
+|---|---|---|
+| 1 | `.gitignore`, ההקמה | `Phase 1: project setup` |
+| 2 | כל ה-markdown ב-`docs/` | `Phase 2: extract analysis docs to markdown` |
+| 3 | `CLAUDE.md` | `Phase 3: add CLAUDE.md` |
+| 4 | `scripts/*.sql` | `Phase 4: database schema and stored procedures` |
+| 5 | שלד ה-C#, ישות ראשונה, מסך כניסה | `Phase 5: C# scaffold and first entity end-to-end` |
+| 6 | כל מסכי ה-CRUD | `Phase 6: all CRUD panels` |
+
+## כשיש קונפליקט
+
+> I have a git conflict. Show me which files conflict and what each side changed, in plain language, then help me decide which version to keep for each part. Don't resolve it on your own — explain first. When we're done, stage the resolved files, commit, and push.
+
+## מה אסור להעלות
+
+‏`.mcp.json` (סיסמת בסיס הנתונים), `app.config` עם סיסמה אמיתית, `cloned/`,‏ `bin/`,‏ `obj/`.
+
+> Check that `.gitignore` covers `.mcp.json`, `cloned/`, `bin/` and `obj/`, then show me exactly which files `git status` says would be committed right now. Flag anything that looks like a credential.
+
+---
+
 # שלב 0 — יצירת תיקיית הפרויקט
 
 **בצעו את זה לפני שאתם פותחים את VSCode.** דילוג על השלב הזה הוא טעות ההקמה הנפוצה ביותר.
@@ -107,6 +150,11 @@ uvx --version
 
 עכשיו מחברים את בסיס הנתונים. **הדביקו רק את ה-Prompt של המסלול שלכם.**
 
+> **⚠️ ☁️ ברשת של האוניברסיטה, פורט 1433 חסום — ו-Azure SQL עובד רק דרכו.**
+> ההתקנה תצליח, השרת יעלה, וכל שאילתה תיתקע בטיים-אאוט. **החלפת שרת ה-MCP לא תעזור.**
+> הפתרון: חברו את המחשב לשיתוף האינטרנט (hotspot) של הטלפון. ה-Prompt שלמטה בודק את זה
+> לבד ועוצר אם הפורט חסום. במסלול המקומי אין בעיה כזו.
+
 ### ☁️ מסלול א׳ — Azure SQL
 
 > Set up the MSSQL MCP server for this project so you can talk to our Azure SQL database. Follow every step.
@@ -120,9 +168,11 @@ uvx --version
 >    ```
 >    Do not search only under `WinGet\Packages` — recent uv versions install to `%USERPROFILE%\.local\bin` and that search finds nothing..
 >
-> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own.
+> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own. Our instructor has one tested alternative and will hand us the exact package name if we need it.
 >
 > 2. **Ask me for the Azure SQL connection details** — server name (ends in `.database.windows.net`), database name, SQL username, and SQL password. Don't guess.
+>
+>    Then, before you install anything else, **check that this network can actually reach that server**: run `Test-NetConnection <server>.database.windows.net -Port 1433`. If `TcpTestSucceeded` comes back False, STOP immediately and tell me this: my network is blocking outbound port 1433 — the university student network does — and no MSSQL MCP server of any kind will be able to connect until that changes. Tell me to connect this laptop to my phone's hotspot and then type **continue**. Do not carry on with the setup, and do not go looking for a different MCP server: this is a network problem, not a package problem.
 >
 > 3. **Create `.mcp.json` at the project root** with this shape, filling in the absolute uvx path and the connection details:
 >    ```json
@@ -182,7 +232,7 @@ uvx --version
 >    ```
 >    Do not search only under `WinGet\Packages` — recent uv versions install to `%USERPROFILE%\.local\bin` and that search finds nothing..
 >
-> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own.
+> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own. Our instructor has one tested alternative and will hand us the exact package name if we need it.
 >
 > 2. **Find my SQL Server instance yourself — do not ask me for the name.** Read `HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL` and run `Get-Service MSSQL*`. If there is more than one instance, show me a short table and ask which to use. Then confirm TCP/IP is enabled for it and tell me which static port it is listening on (we set 14330 during setup). If TCP/IP is disabled, stop and tell me — the MCP cannot connect without it.
 >
@@ -235,7 +285,7 @@ uvx --version
 
 **נקודת Commit:**
 
-> Initialize a git repository here and make the first commit with `.gitignore` and any files created so far.
+> Initialize a git repository here if there isn't one, and make the first commit with `.gitignore` and everything created so far. Then push it to our group repo on GitHub: check `git remote -v`, and if no `origin` is set, ask me for our repo URL and add it with `git remote add origin <url>`. Then run `git push -u origin main`. Before pushing, confirm out loud that `.mcp.json` is in `.gitignore` and is NOT among the files being committed — it has our database password in it. Finish by showing me `git log --oneline` and `git status`.
 
 ---
 
@@ -243,7 +293,31 @@ uvx --version
 
 # שלב 2 — חילוץ הניתוח ל-Markdown מובנה
 
-> Read all the PDFs in `docs/`. Extract our group's analysis and design into structured markdown files matching this layout:
+## 2.0 — בדיקת קובצי ה-PDF (הריצו את זה קודם)
+
+‏PDF שנוצר מסריקה או מצילום אין בו שכבת טקסט, ואז Claude נאלץ להסתכל על כל עמוד
+כתמונה — זה מה שהפך את השלב הזה לשעה וחצי אצל אחת הקבוצות. הבדיקה לוקחת שלוש דקות.
+
+> Before extracting anything, check the PDFs we're about to work from. Run this from the project root:
+>
+> `uv run --with pymupdf cloned/scripts/check_pdfs.py docs`
+>
+> (If `uv` isn't found on PATH, use the absolute path: it sits next to the `uvx.exe` whose path is recorded as `command` in our `.mcp.json` — same folder, `uv.exe`.)
+>
+> Show me the table it prints, then tell me two things:
+>
+> 1. Whether any PDF came back as `NO TEXT LAYER` or `MOSTLY IMAGES`. If any did, STOP there — do not start extracting. Tell me which file, and that I need to re-export it from the original Word or Visual Paradigm file before we continue.
+> 2. For the PDFs that came back `OK`: which page numbers it flagged as having little or no text. Those are our diagram pages, and they are the only pages you'll need to open the PDF itself for.
+>
+> The script also wrote a `.txt` of each PDF's text into `docs/_extracted/`. Read the first 20 lines of one of them and tell me whether the Hebrew looks intact — words spelled normally, not letter-by-letter garbage. Numbers and parentheses landing in odd places inside a Hebrew line is normal and fine.
+
+**אם קובץ נכשל:** ייצאו אותו מחדש מה-Word (‏File ← **Save As** ← `PDF`), או פשוט
+העתיקו את קובץ ה-`.docx` עצמו ל-`docs/` — ‏Claude קורא אותו ישירות. אל תתחילו לחלץ לפני זה.
+
+## 2.1 — החילוץ
+
+
+> Extract our group's analysis and design from the documents in `docs/` into structured markdown files matching this layout:
 >
 > Analysis stage:
 > - `docs/org-analysis/01-organization.md` — organization description and current information systems. Hebrew.
@@ -262,10 +336,12 @@ uvx --version
 >
 > If a category above is not present in our PDFs, skip that file and tell me at the end which ones you skipped. If our PDFs contain content categories not covered above, tell me where you placed them.
 >
+> **How to read the sources — this decides whether this step takes 20 minutes or two hours.** Step 2.0 already extracted the text of every PDF into `docs/_extracted/*.txt`. Read those `.txt` files for all the prose, tables, requirements and use case specs. Do **not** page through the PDFs themselves for that content. Open a PDF directly only for the specific pages step 2.0 flagged as having little or no text — those are the diagram pages. If a `.docx` of the same document is also in `docs/`, prefer it over both. Where an extracted line looks garbled or ambiguous, open that page in the PDF and treat the PDF as the source of truth.
+>
 > Rules:
 > - Preserve our team's original wording. Do not paraphrase, summarize, or invent content.
 > - Match the section structure of the source documents (headings, ordering).
-> - **The diagrams are images inside the PDFs — read them.** Every diagram we produced (use case, class, state, sequence) is embedded as a picture on a PDF page. Open the PDFs and actually look at those pages; extract the model from what the diagram shows, not only from the text around it. The PDFs are the source of truth and I should not have to hand you anything else.
+> - **The diagrams are images inside the PDFs — read them.** Every diagram we produced (use case, class, state, sequence) is embedded as a picture on a PDF page, and those are the pages step 2.0 flagged as having little or no text. Open the PDFs at **those pages** and actually look at them; extract the model from what the diagram shows, not only from the text around it. The PDFs are the source of truth and I should not have to hand you anything else.
 > - Do not re-draw diagrams as ASCII art. Extract their *content* in structured text, and leave the image placeholder at the top of the file.
 > - **If you genuinely cannot read a diagram** — too low resolution, cropped, rotated, or rendered in a way you cannot interpret — then STOP on that file. Do not guess, do not infer it from the prose, and do not invent entities or relationships. Tell me exactly which diagram you cannot read and why. I can then give you the same diagram another way: an **exported HTML version**, a **PNG/SVG export**, or the original **Visual Paradigm (`.vpp`) file**. Ask me for whichever would help most.
 > - The `.png` files I will add myself later by exporting from the modeling tool.

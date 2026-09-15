@@ -55,7 +55,9 @@ dir: rtl
   הם באנגלית בכוונה: כך הם נוסחו ונבדקו.
 - **הטקסט סביבם בעברית מסביר מה קורה ולמה.** אל תדלגו עליו —
   ההסבר הוא מה שמאפשר לכם לזהות מתי Claude טעה.
-- כל שלב מסתיים ב**נקודת Commit** — שמרו את העבודה לפני שאתם ממשיכים.
+- כל שלב מסתיים ב**נקודת Commit** — ה-Prompt שם עושה commit **ו-push** יחד.
+  אל תעצרו אחרי commit: עד ל-push, חברי הקבוצה לא רואים כלום. ראו את הסעיף
+  "שלוש פעולות git" למטה.
 
 ---
 
@@ -146,6 +148,43 @@ dir: rtl
 
 ---
 
+## שלוש פעולות git — commit, ‏push, ‏pull
+
+בשיעור הקודם זו הייתה שאלת ההבנה הנפוצה ביותר, אז נסגור אותה כאן, לפני שמתחילים.
+**אתם לא מקלידים פקודות git בטרמינל** — אתם מבקשים מ-Claude, והוא מריץ. אבל אתם
+צריכים לדעת מה ביקשתם.
+
+חשבו על זה כך: יש לכם **עותק על המחשב**, ויש **עותק משותף על GitHub**.
+
+| פעולה | מה היא עושה | לאן | מתי |
+|---|---|---|---|
+| **`commit`** | שומרת צילום מצב של העבודה שלכם **על המחשב שלכם** | מקומי — GitHub עדיין לא יודע כלום | בסוף כל שלב, ובכל פעם שמשהו עובד |
+| **`push`** | **דוחפת** את ה-commits שלכם לעותק המשותף ב-GitHub | מקומי ← GitHub | אחרי כל commit, כדי שהקבוצה תראה |
+| **`pull`** | **מושכת** את מה שחברי הקבוצה העלו אל המחשב שלכם | GitHub ← מקומי | **לפני** שאתם מתחילים לעבוד |
+
+שלוש נקודות שמסבירות כמעט כל בלבול:
+
+- **commit לבדו לא משתף כלום.** אפשר לעשות עשרה commits ושום חבר קבוצה לא יראה מהם
+  כלום עד ה-push. commit הוא "שמור", push הוא "שלח".
+- **pull לפני שמתחילים, לא אחרי.** אם תעבדו על עותק ישן ורק אז תמשכו, git יצטרך
+  למזג שתי גרסאות של אותם קבצים — זה בדיוק מה שמייצר קונפליקטים.
+- **`push` שנדחה זה לא כישלון.** ההודעה `rejected — fetch first` פירושה שחבר קבוצה
+  העלה משהו אחריכם. מושכים (`pull`), פותרים אם צריך, ודוחפים שוב.
+
+**בתחילת כל ישיבת עבודה — גם באמצע השיעור, אחרי הפסקה — הדביקו קודם כול את זה:**
+
+> Before we start: pull the latest from our group repo with `git pull origin main`, then show me `git status` and the last few commits with `git log --oneline -5`. Tell me if anything came in from my teammates, and if the pull hit a conflict, stop and walk me through it.
+
+**ובסוף כל שלב**, ה-Prompt שבנקודת ה-Commit של אותו שלב עושה commit **ו-push** יחד —
+הדביקו אותו כמו שהוא, ואל תעצרו באמצע.
+
+> **בקבוצה, ברירת המחדל בשיעור היא שחבר אחד מקליד.** במקרה כזה רק המחשב שלו עושה
+> commit ו-push במהלך השיעור, ושאר החברים עושים `pull` פעם אחת בסוף. זה הרבה פחות
+> כאב ראש מארבעה אנשים שדוחפים לאותו ענף באותו זמן. ראו את השקף "עבודה בקבוצה"
+> ואת [`GIT_GROUP_WORKFLOW`](./GIT_GROUP_WORKFLOW.md).
+
+---
+
 ## שלב 0 — יצירת תיקיית הפרויקט
 
 **מה השלב הזה עושה:** מכין את מקום העבודה. Claude Code קורא וכותב קבצים בתיקייה
@@ -192,6 +231,8 @@ dir: rtl
 
 **זמן צפוי:** 15–20 דקות. הגדרת ה-MCP היא החלק שהכי נוטה להשתבש — אל תיבהלו.
 
+☁️ **במסלול Azure, קראו קודם את אזהרת הרשת בסעיף 5.** רשת האוניברסיטה חוסמת את הפורט ש-Azure SQL משתמש בו, וזה מתחזה לתקלת התקנה.
+
 1. **ודאו שאתם בתיקייה שיצרתם בשלב 0** — היא פתוחה ב-VSCode והיא עדיין ריקה למעט תת-התיקייה `docs`. זו תיקיית העבודה שלכם — היא אינה פרויקט הדוגמה.
 2. **הכניסו את קובצי הניתוח והעיצוב הקיימים שלכם ל-`docs/`** — קובצי ה-PDF של חלק א׳ וחלק ב׳ (ניתוח ארגוני, דרישות, דיאגרמת UC, דיאגרמת מחלקות וכו׳).
 3. **שכפלו את פרויקט הדוגמה של הקורס לתוך `cloned/`** על ידי בקשה מ-Claude Code:
@@ -214,6 +255,22 @@ dir: rtl
 
    **☁️ מסלול Azure:** ה-Prompt שלמטה מתאים לכם כמו שהוא. דרושים ארבעת ערכי החיבור:
    שרת, שם בסיס הנתונים, שם משתמש וסיסמה.
+
+   > **⚠️ ☁️ אם אתם ברשת של האוניברסיטה — קראו את זה לפני שאתם מדביקים.**
+   >
+   > ‏Azure SQL מאזין **רק בפורט 1433**, ורשת הסטודנטים של האוניברסיטה חוסמת אותו
+   > ליציאה. התוצאה מבלבלת: ההתקנה מצליחה, השרת עולה, הכלים מופיעים — וכל שאילתה
+   > נתקעת בטיים-אאוט. זו הייתה התקלה הנפוצה ביותר בשיעור הקודם, וכמה קבוצות בזבזו
+   > עליה זמן יקר בניסיון להחליף את שרת ה-MCP. **החלפת השרת לא תעזור — הבעיה היא הרשת.**
+   >
+   > **הפתרון: חברו את המחשב לשיתוף האינטרנט (hotspot) של הטלפון.** מספיק שהמחשב
+   > שמריץ את Claude יהיה על ה-hotspot.
+   >
+   > ה-Prompt שלמטה בודק את זה בעצמו (סעיף 2) ועוצר אם הפורט חסום. לבדיקה ידנית:
+   > `Test-NetConnection <servername>.database.windows.net -Port 1433` — מחפשים
+   > ‏`TcpTestSucceeded : True`. אם גם SSMS לא מתחבר מאותה רשת, זה סופית הרשת.
+   >
+   > **מסלול מקומי לא מושפע** — החיבור שלכם הוא ל-`localhost` ולא יוצא לאינטרנט.
 
    **💻 מסלול מקומי:** השתמשו ב-Prompt שלמטה, עם שני שינויים בלבד —
    בסעיף 2 בקשו מ-Claude **לאתר את ה-Instance בעצמו** (לא לשאול אתכם לשם),
@@ -249,9 +306,11 @@ dir: rtl
 >    ```
 >    Do not search only under `WinGet\Packages` — recent uv versions install to `%USERPROFILE%\.local\bin` and that search finds nothing.
    >
-> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own.
+> **Use exactly this MCP server — do not substitute a different one.** The package is `microsoft_sql_server_mcp` version `0.1.0`, and it MUST run with `mcp==1.30.0`. Without that pin, uv resolves mcp 2.x and the server dies on startup with `AttributeError: 'Server' object has no attribute 'list_resources'`. Do NOT pin `pymssql` — let it resolve on its own, or you get `ModuleNotFoundError: pymssql._pymssql`. If this server still fails after you have followed every step, STOP and tell me — do not go looking for an alternative MCP server on your own. Our instructor has one tested alternative and will hand us the exact package name if we need it.
 >
    > 2. **Ask me for the Azure SQL connection details** — server name (ends in .database.windows.net), database name, SQL username, and SQL password. Don't guess.
+   >
+   >    Then, before you install anything else, **check that this network can actually reach that server**: run `Test-NetConnection <server>.database.windows.net -Port 1433`. If `TcpTestSucceeded` comes back False, STOP immediately and tell me this: my network is blocking outbound port 1433 — the university student network does — and no MSSQL MCP server of any kind will be able to connect until that changes. Tell me to connect this laptop to my phone's hotspot and then type **continue**. Do not carry on with the setup, and do not go looking for a different MCP server: this is a network problem, not a package problem.
    >
    > 3. **Create `.mcp.json` at the project root** with this shape (fill in the absolute uvx path and the connection details you just asked me for):
    >    ```json
@@ -304,12 +363,13 @@ dir: rtl
 
    אם משהו נכשל בדרך, טבלת פתרון התקלות ב-`MCP_SETUP` מכסה את הבעיות הנפוצות.
 
-**נקודת Commit:** ברגע ששלב 1 הושלם, בקשו מ-Claude:
+**נקודת Commit:** ברגע ששלב 1 הושלם, הדביקו את זה — הוא עושה commit **ו-push** יחד:
 
-> Initialize a git repository here and make the first commit with `.gitignore` and any files created so far.
+> Initialize a git repository here if there isn't one, and make the first commit with `.gitignore` and everything created so far. Then push it to our group repo on GitHub: check whether a remote named `origin` is already set with `git remote -v`, and if it isn't, ask me for our repo URL and add it with `git remote add origin <url>`. Then run `git push -u origin main`. Before you push, confirm out loud that `.mcp.json` is listed in `.gitignore` and is NOT among the files being committed — it has our database password in it. Finish by showing me `git log --oneline` and `git status`.
 
-
-אחר כך בצעו push ל-repository של הקבוצה ב-GitHub, אם כבר הוקם. ראו את [`GIT_GROUP_WORKFLOW`](./GIT_GROUP_WORKFLOW.md) להסבר על תיאום בין חברי קבוצה עם git.
+‏Claude יבצע את הכול ויעצור אם ה-push נדחה. אם עוד לא הקמתם repository לקבוצה,
+עשו את זה עכשיו לפי [`GIT_GROUP_WORKFLOW`](./GIT_GROUP_WORKFLOW.md) — זה שלוש דקות,
+וזה מה שמאפשר לשאר הקבוצה לעבוד על אותו קוד.
 
 **התחילו Session חדש לפני השלב הבא.** שלב 1 מייצר הרבה פלט של התקנות ותיקוני באגים — הקשר שלא תצטרכו שוב.
 
@@ -342,7 +402,7 @@ sad-<group>/
 
 **מה השלב הזה עושה ולמה:** Claude עובד הרבה יותר טוב כשהניתוח שלכם נמצא ב-markdown מובנה מאשר בקובצי PDF. השלב הזה ממיר את המסמכים שלכם לפורמט ש-Claude יקרא לאורך כל שאר הפרויקט. הוא גם מאלץ אתכם לבדוק את הניתוח שלכם ולאתר פערים וסתירות — עדיף לגלות בעיות עכשיו מאשר אחרי שכתבתם קוד לפיהן.
 
-**זמן צפוי:** 20–25 דקות. אם הזמן בכיתה קצר, חלצו רק את דיאגרמת המחלקות ואת הדרישות (מסמכי העיצוב); דחו את קובצי הניתוח הארגוני (`01-04`) לשיעורי בית — הם לא נחוצים עד שמסיימים את שלב 3.
+**זמן צפוי:** 20–25 דקות — **אם** קובצי ה-PDF שלכם תקינים. שלב 2.0 למטה מוודא את זה בשלוש דקות, ובלעדיו השלב הזה יכול לקחת שעה וחצי. אם הזמן בכיתה קצר, חלצו רק את דיאגרמת המחלקות ואת הדרישות (מסמכי העיצוב); דחו את קובצי הניתוח הארגוני (`01-04`) לשיעורי בית — הם לא נחוצים עד שמסיימים את שלב 3.
 
 **מה יש לכם בשלב הזה:** בנקודה הזו בקורס יהיה בידיכם קובץ ה-PDF המלא של חלק א׳ (ניתוח ארגוני, בעיות, ראיונות, תהליכים, דרישות), ומחלק ב׳ תהיה לכם לפחות דיאגרמת מחלקות. ייתכן שדיאגרמות מצבים ורצף עדיין לא סופיות — דלגו על הקבצים האלה והוסיפו אותם בהמשך כשהם מוכנים.
 
@@ -388,11 +448,62 @@ docs/
 > **מה שאסור:** לתת ל-Claude "להשלים" דיאגרמה שהוא לא הצליח לקרוא. ישות מומצאת בשלב הזה
 > מתגלגלת ל-`CLAUDE.md`, משם לסכמת בסיס הנתונים, ומשם לקוד.
 
+### שלב 2.0 — בדקו את קובצי ה-PDF לפני שמחלצים (3 דקות)
+
+**אל תדלגו.** בשיעור הראשון קבוצה אחת בילתה **שעה וחצי** בשלב 2 במקום 20 דקות, ובדרך
+שרפה חלק גדול ממכסת הטוקנים שלה. הסיבה לא הייתה הניתוח שלהם אלא הקובץ: ל-PDF שלהם
+לא הייתה **שכבת טקסט**.
+
+שני קובצי PDF יכולים להיראות זהים לחלוטין על המסך ולהתנהג הפוך לגמרי:
+
+| | איך נוצר | מה Claude עושה איתו |
+|---|---|---|
+| **PDF עם שכבת טקסט** | ייצוא מ-Word, מ-Google Docs או מ-Visual Paradigm | קורא את הטקסט ישירות — שניות |
+| **PDF שהוא תמונות בלבד** | סריקה, צילום מהטלפון, "הדפסה" לתמונה | **מסתכל על כל עמוד כתמונה**, אחד-אחד — דקות לעמוד, והרבה טוקנים |
+
+**הבדיקה הידנית, עשר שניות:** פתחו את ה-PDF ונסו לסמן שורת טקסט עם העכבר, או חפשו
+בו מילה ב-`Ctrl+F`. אם אי אפשר — זה PDF של תמונות.
+
+**הבדיקה האמיתית — תנו ל-Claude להריץ אותה.** הדביקו:
+
+> Before extracting anything, check the PDFs we're about to work from. Run this from the project root:
+>
+> `uv run --with pymupdf cloned/scripts/check_pdfs.py docs`
+>
+> (If `uv` isn't found on PATH, use the absolute path: it sits next to the `uvx.exe` whose path is recorded as `command` in our `.mcp.json` — same folder, `uv.exe`.)
+>
+> Show me the table it prints, then tell me two things:
+>
+> 1. Whether any PDF came back as `NO TEXT LAYER` or `MOSTLY IMAGES`. If any did, STOP there — do not start extracting. Tell me which file, and that I need to re-export it from the original Word or Visual Paradigm file before we continue.
+> 2. For the PDFs that came back `OK`: which page numbers it flagged as having little or no text. Those are our diagram pages, and they are the only pages you'll need to open the PDF itself for.
+>
+> The script also wrote a `.txt` of each PDF's text into `docs/_extracted/`. Read the first 20 lines of one of them and tell me whether the Hebrew looks intact — words spelled normally, not letter-by-letter garbage. Numbers and parentheses landing in odd places inside a Hebrew line is normal and fine.
+
+**מה הסקריפט עושה:** סופר לכל PDF כמה עמודים יש בו וכמה מהם מכילים טקסט אמיתי,
+מוציא את הטקסט לקובץ `.txt` אחד לכל PDF תחת `docs/_extracted/`, ומצביע על העמודים
+שאין בהם טקסט — אלה בדרך כלל בדיוק עמודי הדיאגרמות. הוא מגיע עם פרויקט הדוגמה
+ששכפלתם בשלב 1, ולכן הוא כבר אצלכם ב-`cloned/scripts/check_pdfs.py`.
+
+**אם קובץ נכשל בבדיקה**, יש שלוש דרכים לתקן, לפי סדר העדיפות:
+
+1. **ייצאו מחדש מהמקור.** ‏Word: ‏File ← **Save As** ← `PDF`. ‏Visual Paradigm: ‏Project ← Export ← PDF. (‏`Print` ← "Microsoft Print to PDF" לפעמים מייצר עמודי תמונה — העדיפו Save As.)
+2. **תנו ל-Claude את ה-`.docx` עצמו.** העתיקו את קובץ ה-Word ל-`docs/` — ‏Claude קורא אותו ישירות, וזה אפילו עדיף על PDF.
+3. **רק אם אין מקור** — המשיכו עם ה-PDF כמו שהוא, אבל דעו שהשלב ייקח הרבה יותר זמן.
+   שקלו לחלץ בשלב הזה רק את דיאגרמת המחלקות ואת הדרישות, ולדחות את השאר לשיעורי בית.
+
+> **הדיאגרמות הן חריג מכוון.** דיאגרמת המחלקות, המצבים, הרצף וה-UC הן תמונות בתוך
+> ה-PDF, וזה בסדר גמור — הן מעט עמודים, ו-Claude יפתח רק אותם. מה שחייב להיות טקסט
+> אמיתי הוא גוף המסמך: הדרישות, הטבלאות, מפרטי ה-UC והראיונות.
+
+**נקודת Commit:** אין. קובצי `docs/_extracted/` הם קובצי עבודה בלבד — אפשר למחוק אותם
+בסוף שלב 2. אם אתם רוצים שלא ייכנסו ל-git, בקשו מ-Claude להוסיף שורה `docs/_extracted/`
+ל-`.gitignore`.
+
 ### שלב 2.1 — הרצת החילוץ המרוכז
 
 פתחו את Claude Code בתיקיית הפרויקט והדביקו את ה-Prompt הבא:
 
-> Read all the PDFs in `docs/`. Extract our group's analysis and design into structured markdown files matching this layout:
+> Extract our group's analysis and design from the documents in `docs/` into structured markdown files matching this layout:
 >
 > Analysis stage:
 > - `docs/org-analysis/01-organization.md` — organization description and current information systems. Hebrew.
@@ -411,10 +522,12 @@ docs/
 >
 > If a category above is not present in our PDFs, skip that file and tell me at the end which ones you skipped. If our PDFs contain content categories not covered above, tell me where you placed them.
 >
+> **How to read the sources — this decides whether this step takes 20 minutes or two hours.** Step 2.0 already extracted the text of every PDF into `docs/_extracted/*.txt`. Read those `.txt` files for all the prose, tables, requirements and use case specs. Do **not** page through the PDFs themselves for that content. Open a PDF directly only for the specific pages step 2.0 flagged as having little or no text — those are the diagram pages. If a `.docx` of the same document is also in `docs/`, prefer it over both. Where an extracted line looks garbled or ambiguous, open that page in the PDF and treat the PDF as the source of truth.
+>
 > Rules:
 > - Preserve our team's original wording. Do not paraphrase, summarize, or invent content.
 > - Match the section structure of the source documents (headings, ordering).
-> - **The diagrams are images inside the PDFs — read them.** Every diagram we produced (use case, class, state, sequence) is embedded as a picture on a PDF page. Open the PDFs and actually look at those pages; extract the model from what the diagram shows, not only from the text around it. The PDFs are the source of truth and I should not have to hand you anything else.
+> - **The diagrams are images inside the PDFs — read them.** Every diagram we produced (use case, class, state, sequence) is embedded as a picture on a PDF page, and those are the pages step 2.0 flagged as having little or no text. Open the PDFs at **those pages** and actually look at them; extract the model from what the diagram shows, not only from the text around it. The PDFs are the source of truth and I should not have to hand you anything else.
 > - Do not re-draw diagrams as ASCII art. Extract their *content* in structured text, and leave the image placeholder at the top of the file.
 > - **If you genuinely cannot read a diagram** — too low resolution, cropped, rotated, or rendered in a way you cannot interpret — then STOP on that file. Do not guess, do not infer it from the prose, and do not invent entities or relationships. Tell me exactly which diagram you cannot read and why. I can then give you the same diagram another way: an **exported HTML version**, a **PNG/SVG export**, or the original **Visual Paradigm (`.vpp`) file**. Ask me for whichever would help most.
 > - The `.png` files I will add myself later by exporting from the modeling tool.
@@ -460,9 +573,9 @@ docs/
 
 **נקודת Commit:** כששלב 2 הסתיים, בצעו commit לכל קובצי ה-markdown:
 
-> Commit all files in `docs/` — extracted analysis and design in markdown form. Commit message: "Phase 2: extract analysis docs to markdown"
+> Commit all files in `docs/` — extracted analysis and design in markdown form — with the commit message "Phase 2: extract analysis docs to markdown", then push to our group repo with `git push origin main`. If the push is rejected because a teammate pushed first, run `git pull origin main`, help me resolve any conflict, and push again. Tell me what you did at each step.
 
-בצעו push ל-GitHub כדי שלחברי הצוות תהיה הגרסה העדכנית.
+עכשיו לכל חברי הצוות יש את הגרסה העדכנית — הם צריכים `git pull` לפני שהם ממשיכים.
 
 **התחילו Session חדש לפני השלב הבא.** שלב 2 קרא את כל קובצי ה-PDF שלכם לתוך ההקשר — זה החלק הכבד ביותר בשיעור.
 
@@ -550,9 +663,7 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 **נקודת Commit:** בצעו commit ל-`CLAUDE.md`:
 
-> Commit `CLAUDE.md` — project AI context file. Commit message: "Phase 3: add CLAUDE.md"
-
-בצעו push ל-GitHub.
+> Commit `CLAUDE.md` — our project AI context file — with the commit message "Phase 3: add CLAUDE.md", then push to our group repo with `git push origin main`. If the push is rejected, pull first, help me resolve any conflict, and push again.
 
 **התחילו Session חדש לפני השלב הבא.** מכאן והלאה `CLAUDE.md` מחליף את כל ההסברים.
 
@@ -723,10 +834,10 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 **נקודת Commit:** בצעו commit לסקריפטי ה-SQL:
 
-> Commit `scripts/` — database schema, stored procedures, and seed data. Commit message: "Phase 4: database schema and stored procedures"
+> Commit everything in `scripts/` — database schema, stored procedures, and seed data — with the commit message "Phase 4: database schema and stored procedures", then push to our group repo with `git push origin main`. If the push is rejected, pull first, help me resolve any conflict, and push again.
 
-
-בצעו push ל-GitHub.
+מכאן והלאה, **כל שינוי בסכמה נכנס לקובץ `.sql` ואז ל-push** — לא ידנית בבסיס הנתונים.
+אחרת אצל חברי הקבוצה הקוד יצפה לטבלה שהסקריפט שלהם לא יוצר.
 
 **התחילו Session חדש לפני השלב הבא.** פלט ה-SQL וההרצות כבר לא נחוץ — הסקריפטים שמורים בקבצים.
 
@@ -879,9 +990,9 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 **נקודת Commit:** בצעו commit לכל קובצי ה-C# החדשים:
 
-> Commit all C# project files — scaffold, DB connection, first entity, entry flow, first CRUD panel. Commit message: "Phase 5: C# scaffold and first entity end-to-end"
+> Commit all the C# project files — scaffold, DB connection, first entity, entry flow, first CRUD panel — with the commit message "Phase 5: C# scaffold and first entity end-to-end", then push to our group repo with `git push origin main`. Make sure `bin/`, `obj/` and `app.config` with a real password are not being committed; add them to `.gitignore` if they are. If the push is rejected, pull first, help me resolve any conflict, and push again.
 
-בצעו push ל-GitHub כדי שחברי הצוות יוכלו למשוך ולבנות.
+עכשיו כל חברי הצוות יכולים לבצע `git pull` ולבנות את אותו פרויקט אצלם.
 
 **התחילו Session חדש לפני השלב הבא.** שלב 5 ארוך במיוחד. נקו לפני שלב 6, שבו נוצרים הרבה מסכים.
 
@@ -959,9 +1070,10 @@ Claude ישאל שאלות הבהרה לפני שיכתוב את `CLAUDE.md` —
 
 **נקודת Commit:** בצעו commit לכל המסכים החדשים:
 
-> Commit all new panel files and wired home panels. Commit message: "Phase 6: all CRUD panels"
+> Commit all the new panel files and the wired home panels with the commit message "Phase 6: all CRUD panels", then push to our group repo with `git push origin main`. If the push is rejected, pull first, help me resolve any conflict, and push again.
 
-בצעו push ל-GitHub. זה רגע טוב לכל חברי הקבוצה למשוך ולבצע בנייה מלאה.
+זה הרגע שבו כל שאר חברי הקבוצה מבצעים `git pull` ובונים אצלם — הדביקו אצלם את Prompt
+ה-`pull` מהסעיף "שלוש פעולות git".
 
 **התחילו Session חדש לפני השלב הבא.** סיימתם את החלק הנלמד בכיתה.
 

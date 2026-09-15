@@ -267,12 +267,29 @@ unicode-bidi: isolate;
 <li><a href="#ניהול-טוקנים-מנוי-pro" id="toc-ניהול-טוקנים-מנוי-pro">ניהול טוקנים (מנוי Pro)</a></li>
 <li><a href="#פתיחת-session-חדש" id="toc-פתיחת-session-חדש">פתיחת
 Session חדש</a></li>
+<li><a href="#git-מה-מדביקים-ומתי" id="toc-git-מה-מדביקים-ומתי">git — מה
+מדביקים, ומתי</a>
+<ul>
+<li><a href="#בתחילת-כל-ישיבת-עבודה-וגם-אחרי-הפסקה" id="toc-בתחילת-כל-ישיבת-עבודה-וגם-אחרי-הפסקה">בתחילת כל ישיבת עבודה (וגם
+אחרי הפסקה)</a></li>
+<li><a href="#בסוף-כל-שלב-commit-ו-push-יחד" id="toc-בסוף-כל-שלב-commit-ו-push-יחד">בסוף כל שלב — commit ו-push
+יחד</a></li>
+<li><a href="#כשיש-קונפליקט" id="toc-כשיש-קונפליקט">כשיש
+קונפליקט</a></li>
+<li><a href="#מה-אסור-להעלות" id="toc-מה-אסור-להעלות">מה אסור
+להעלות</a></li>
+</ul></li>
 <li><a href="#שלב-0-יצירת-תיקיית-הפרויקט" id="toc-שלב-0-יצירת-תיקיית-הפרויקט">שלב 0 — יצירת תיקיית
 הפרויקט</a></li>
 <li><a href="#שלב-1-הקמת-הפרויקט" id="toc-שלב-1-הקמת-הפרויקט">שלב 1 —
 הקמת הפרויקט</a></li>
 <li><a href="#שלב-2-חילוץ-הניתוח-ל-markdown-מובנה" id="toc-שלב-2-חילוץ-הניתוח-ל-markdown-מובנה">שלב 2 — חילוץ הניתוח
-ל-Markdown מובנה</a></li>
+ל-Markdown מובנה</a>
+<ul>
+<li><a href="#בדיקת-קובצי-ה-pdf-הריצו-את-זה-קודם" id="toc-בדיקת-קובצי-ה-pdf-הריצו-את-זה-קודם">2.0 — בדיקת קובצי ה-PDF
+(הריצו את זה קודם)</a></li>
+<li><a href="#החילוץ" id="toc-החילוץ">2.1 — החילוץ</a></li>
+</ul></li>
 <li><a href="#שלב-3-יצירת-ה-claude.md-של-הפרויקט" id="toc-שלב-3-יצירת-ה-claude.md-של-הפרויקט">שלב 3 — יצירת ה-CLAUDE.md של
 הפרויקט</a></li>
 <li><a href="#שלב-4-סכמת-בסיס-הנתונים-ו-stored-procedures" id="toc-שלב-4-סכמת-בסיס-הנתונים-ו-stored-procedures">שלב 4 — סכמת בסיס
@@ -446,6 +463,132 @@ what you think the next step is, and wait for me to confirm before
 changing anything.</p>
 </blockquote>
 <hr />
+<h1 id="git-מה-מדביקים-ומתי">git — מה מדביקים, ומתי</h1>
+<p><strong>אתם לא מקלידים git בטרמינל — אתם מבקשים מ-Claude.</strong>
+אבל כדאי לדעת מה ביקשתם:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>מה עושה</th>
+<th>לאן</th>
+<th>מתי</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>commit</strong></td>
+<td>שומר צילום מצב <strong>על המחשב שלכם</strong></td>
+<td>מקומי בלבד</td>
+<td>בסוף כל שלב</td>
+</tr>
+<tr>
+<td><strong>push</strong></td>
+<td>דוחף את ה-commits ל-GitHub</td>
+<td>מקומי ← GitHub</td>
+<td>מיד אחרי כל commit</td>
+</tr>
+<tr>
+<td><strong>pull</strong></td>
+<td>מושך את מה שהקבוצה העלתה</td>
+<td>GitHub ← מקומי</td>
+<td><strong>לפני</strong> שמתחילים לעבוד</td>
+</tr>
+</tbody>
+</table>
+<p>‏<strong>commit לבדו לא משתף כלום</strong> — עד ל-push אף חבר קבוצה לא
+רואה שום דבר.</p>
+<h2 id="בתחילת-כל-ישיבת-עבודה-וגם-אחרי-הפסקה">בתחילת כל ישיבת עבודה (וגם
+אחרי הפסקה)</h2>
+<blockquote class="prompt">
+<p>Before we start: pull the latest from our group repo with
+<code>git pull origin main</code>, then show me <code>git status</code>
+and the last few commits with <code>git log --oneline -5</code>. Tell me
+if anything came in from my teammates, and if the pull hit a conflict,
+stop and walk me through it.</p>
+</blockquote>
+<h2 id="בסוף-כל-שלב-commit-ו-push-יחד">בסוף כל שלב — commit ו-push
+יחד</h2>
+<p>החליפו את <code>&lt;N&gt;</code> ואת התיאור בשורה של השלב שסיימתם
+(הטבלה למטה):</p>
+<blockquote class="prompt">
+<p>Commit the work from this phase with the commit message “Phase
+<code>&lt;N&gt;</code>: <code>&lt;what changed&gt;</code>”, then push to
+our group repo with <code>git push origin main</code>. If the push is
+rejected because a teammate pushed first, run
+<code>git pull origin main</code>, help me resolve any conflict, and
+push again. Tell me what you did at each step.</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>שלב</th>
+<th>מה נשמר</th>
+<th>הודעת ה-commit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>.gitignore</code>, ההקמה</td>
+<td><code>Phase 1: project setup</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>כל ה-markdown ב-<code>docs/</code></td>
+<td><code>Phase 2: extract analysis docs to markdown</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>CLAUDE.md</code></td>
+<td><code>Phase 3: add CLAUDE.md</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>scripts/*.sql</code></td>
+<td><code>Phase 4: database schema and stored procedures</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>שלד ה-C#, ישות ראשונה, מסך כניסה</td>
+<td><code>Phase 5: C# scaffold and first entity end-to-end</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>כל מסכי ה-CRUD</td>
+<td><code>Phase 6: all CRUD panels</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="כשיש-קונפליקט">כשיש קונפליקט</h2>
+<blockquote class="prompt">
+<p>I have a git conflict. Show me which files conflict and what each
+side changed, in plain language, then help me decide which version to
+keep for each part. Don’t resolve it on your own — explain first. When
+we’re done, stage the resolved files, commit, and push.</p>
+</blockquote>
+<h2 id="מה-אסור-להעלות">מה אסור להעלות</h2>
+<p>‏<code>.mcp.json</code> (סיסמת בסיס הנתונים), <code>app.config</code>
+עם סיסמה אמיתית, <code>cloned/</code>,‏ <code>bin/</code>,‏
+<code>obj/</code>.</p>
+<blockquote class="prompt">
+<p>Check that <code>.gitignore</code> covers <code>.mcp.json</code>,
+<code>cloned/</code>, <code>bin/</code> and <code>obj/</code>, then show
+me exactly which files <code>git status</code> says would be committed
+right now. Flag anything that looks like a credential.</p>
+</blockquote>
+<hr />
 <h1 id="שלב-0-יצירת-תיקיית-הפרויקט">שלב 0 — יצירת תיקיית הפרויקט</h1>
 <p><strong>בצעו את זה לפני שאתם פותחים את VSCode.</strong> דילוג על השלב
 הזה הוא טעות ההקמה הנפוצה ביותר.</p>
@@ -493,6 +636,13 @@ with two entries: <code>cloned/</code> and <code>.mcp.json</code></p>
 </blockquote>
 <p>עכשיו מחברים את בסיס הנתונים. <strong>הדביקו רק את ה-Prompt של המסלול
 שלכם.</strong></p>
+<blockquote class="note">
+<p><strong>⚠️ ☁️ ברשת של האוניברסיטה, פורט 1433 חסום — ו-Azure SQL עובד
+רק דרכו.</strong> ההתקנה תצליח, השרת יעלה, וכל שאילתה תיתקע בטיים-אאוט.
+<strong>החלפת שרת ה-MCP לא תעזור.</strong> הפתרון: חברו את המחשב לשיתוף
+האינטרנט (hotspot) של הטלפון. ה-Prompt שלמטה בודק את זה לבד ועוצר אם
+הפורט חסום. במסלול המקומי אין בעיה כזו.</p>
+</blockquote>
 <h3 id="מסלול-א-azure-sql">☁️ מסלול א׳ — Azure SQL</h3>
 <blockquote class="prompt">
 <p>Set up the MSSQL MCP server for this project so you can talk to our
@@ -522,11 +672,23 @@ server dies on startup with
 Do NOT pin <code>pymssql</code> — let it resolve on its own, or you get
 <code>ModuleNotFoundError: pymssql._pymssql</code>. If this server still
 fails after you have followed every step, STOP and tell me — do not go
-looking for an alternative MCP server on your own.</p>
+looking for an alternative MCP server on your own. Our instructor has
+one tested alternative and will hand us the exact package name if we
+need it.</p>
 <ol start="2" type="1">
 <li><p><strong>Ask me for the Azure SQL connection details</strong> —
 server name (ends in <code>.database.windows.net</code>), database name,
-SQL username, and SQL password. Don’t guess.</p></li>
+SQL username, and SQL password. Don’t guess.</p>
+<p>Then, before you install anything else, <strong>check that this
+network can actually reach that server</strong>: run
+<code>Test-NetConnection &lt;server&gt;.database.windows.net -Port 1433</code>.
+If <code>TcpTestSucceeded</code> comes back False, STOP immediately and
+tell me this: my network is blocking outbound port 1433 — the university
+student network does — and no MSSQL MCP server of any kind will be able
+to connect until that changes. Tell me to connect this laptop to my
+phone’s hotspot and then type <strong>continue</strong>. Do not carry on
+with the setup, and do not go looking for a different MCP server: this
+is a network problem, not a package problem.</p></li>
 <li><p><strong>Create <code>.mcp.json</code> at the project
 root</strong> with this shape, filling in the absolute uvx path and the
 connection details:</p>
@@ -627,7 +789,9 @@ server dies on startup with
 Do NOT pin <code>pymssql</code> — let it resolve on its own, or you get
 <code>ModuleNotFoundError: pymssql._pymssql</code>. If this server still
 fails after you have followed every step, STOP and tell me — do not go
-looking for an alternative MCP server on your own.</p>
+looking for an alternative MCP server on your own. Our instructor has
+one tested alternative and will hand us the exact package name if we
+need it.</p>
 <ol start="2" type="1">
 <li><p><strong>Find my SQL Server instance yourself — do not ask me for
 the name.</strong> Read
@@ -717,8 +881,17 @@ VSCode).</p>
 המקרים הנפוצים.</p>
 <p><strong>נקודת Commit:</strong></p>
 <blockquote class="prompt">
-<p>Initialize a git repository here and make the first commit with
-<code>.gitignore</code> and any files created so far.</p>
+<p>Initialize a git repository here if there isn’t one, and make the
+first commit with <code>.gitignore</code> and everything created so far.
+Then push it to our group repo on GitHub: check
+<code>git remote -v</code>, and if no <code>origin</code> is set, ask me
+for our repo URL and add it with
+<code>git remote add origin &lt;url&gt;</code>. Then run
+<code>git push -u origin main</code>. Before pushing, confirm out loud
+that <code>.mcp.json</code> is in <code>.gitignore</code> and is NOT
+among the files being committed — it has our database password in it.
+Finish by showing me <code>git log --oneline</code> and
+<code>git status</code>.</p>
 </blockquote>
 <hr />
 <blockquote class="note">
@@ -728,9 +901,44 @@ VSCode).</p>
 </blockquote>
 <h1 id="שלב-2-חילוץ-הניתוח-ל-markdown-מובנה">שלב 2 — חילוץ הניתוח
 ל-Markdown מובנה</h1>
+<h2 id="בדיקת-קובצי-ה-pdf-הריצו-את-זה-קודם">2.0 — בדיקת קובצי ה-PDF
+(הריצו את זה קודם)</h2>
+<p>‏PDF שנוצר מסריקה או מצילום אין בו שכבת טקסט, ואז Claude נאלץ להסתכל
+על כל עמוד כתמונה — זה מה שהפך את השלב הזה לשעה וחצי אצל אחת הקבוצות.
+הבדיקה לוקחת שלוש דקות.</p>
 <blockquote class="prompt">
-<p>Read all the PDFs in <code>docs/</code>. Extract our group’s analysis
-and design into structured markdown files matching this layout:</p>
+<p>Before extracting anything, check the PDFs we’re about to work from.
+Run this from the project root:</p>
+<p><code>uv run --with pymupdf cloned/scripts/check_pdfs.py docs</code></p>
+<p>(If <code>uv</code> isn’t found on PATH, use the absolute path: it
+sits next to the <code>uvx.exe</code> whose path is recorded as
+<code>command</code> in our <code>.mcp.json</code> — same folder,
+<code>uv.exe</code>.)</p>
+<p>Show me the table it prints, then tell me two things:</p>
+<ol type="1">
+<li>Whether any PDF came back as <code>NO TEXT LAYER</code> or
+<code>MOSTLY IMAGES</code>. If any did, STOP there — do not start
+extracting. Tell me which file, and that I need to re-export it from the
+original Word or Visual Paradigm file before we continue.</li>
+<li>For the PDFs that came back <code>OK</code>: which page numbers it
+flagged as having little or no text. Those are our diagram pages, and
+they are the only pages you’ll need to open the PDF itself for.</li>
+</ol>
+<p>The script also wrote a <code>.txt</code> of each PDF’s text into
+<code>docs/_extracted/</code>. Read the first 20 lines of one of them
+and tell me whether the Hebrew looks intact — words spelled normally,
+not letter-by-letter garbage. Numbers and parentheses landing in odd
+places inside a Hebrew line is normal and fine.</p>
+</blockquote>
+<p><strong>אם קובץ נכשל:</strong> ייצאו אותו מחדש מה-Word (‏File ←
+<strong>Save As</strong> ← <code>PDF</code>), או פשוט העתיקו את קובץ
+ה-<code>.docx</code> עצמו ל-<code>docs/</code> — ‏Claude קורא אותו
+ישירות. אל תתחילו לחלץ לפני זה.</p>
+<h2 id="החילוץ">2.1 — החילוץ</h2>
+<blockquote class="prompt">
+<p>Extract our group’s analysis and design from the documents in
+<code>docs/</code> into structured markdown files matching this
+layout:</p>
 <p>Analysis stage: - <code>docs/org-analysis/01-organization.md</code> —
 organization description and current information systems. Hebrew. -
 <code>docs/org-analysis/02-interviews.md</code> — interview transcripts.
@@ -763,26 +971,37 @@ image at top.</p>
 <p>If a category above is not present in our PDFs, skip that file and
 tell me at the end which ones you skipped. If our PDFs contain content
 categories not covered above, tell me where you placed them.</p>
+<p><strong>How to read the sources — this decides whether this step
+takes 20 minutes or two hours.</strong> Step 2.0 already extracted the
+text of every PDF into <code>docs/_extracted/*.txt</code>. Read those
+<code>.txt</code> files for all the prose, tables, requirements and use
+case specs. Do <strong>not</strong> page through the PDFs themselves for
+that content. Open a PDF directly only for the specific pages step 2.0
+flagged as having little or no text — those are the diagram pages. If a
+<code>.docx</code> of the same document is also in <code>docs/</code>,
+prefer it over both. Where an extracted line looks garbled or ambiguous,
+open that page in the PDF and treat the PDF as the source of truth.</p>
 <p>Rules: - Preserve our team’s original wording. Do not paraphrase,
 summarize, or invent content. - Match the section structure of the
 source documents (headings, ordering). - <strong>The diagrams are images
 inside the PDFs — read them.</strong> Every diagram we produced (use
-case, class, state, sequence) is embedded as a picture on a PDF page.
-Open the PDFs and actually look at those pages; extract the model from
-what the diagram shows, not only from the text around it. The PDFs are
-the source of truth and I should not have to hand you anything else. -
-Do not re-draw diagrams as ASCII art. Extract their <em>content</em> in
-structured text, and leave the image placeholder at the top of the file.
-- <strong>If you genuinely cannot read a diagram</strong> — too low
-resolution, cropped, rotated, or rendered in a way you cannot interpret
-— then STOP on that file. Do not guess, do not infer it from the prose,
-and do not invent entities or relationships. Tell me exactly which
-diagram you cannot read and why. I can then give you the same diagram
-another way: an <strong>exported HTML version</strong>, a
-<strong>PNG/SVG export</strong>, or the original <strong>Visual Paradigm
-(<code>.vpp</code>) file</strong>. Ask me for whichever would help most.
-- The <code>.png</code> files I will add myself later by exporting from
-the modeling tool.</p>
+case, class, state, sequence) is embedded as a picture on a PDF page,
+and those are the pages step 2.0 flagged as having little or no text.
+Open the PDFs at <strong>those pages</strong> and actually look at them;
+extract the model from what the diagram shows, not only from the text
+around it. The PDFs are the source of truth and I should not have to
+hand you anything else. - Do not re-draw diagrams as ASCII art. Extract
+their <em>content</em> in structured text, and leave the image
+placeholder at the top of the file. - <strong>If you genuinely cannot
+read a diagram</strong> — too low resolution, cropped, rotated, or
+rendered in a way you cannot interpret — then STOP on that file. Do not
+guess, do not infer it from the prose, and do not invent entities or
+relationships. Tell me exactly which diagram you cannot read and why. I
+can then give you the same diagram another way: an <strong>exported HTML
+version</strong>, a <strong>PNG/SVG export</strong>, or the original
+<strong>Visual Paradigm (<code>.vpp</code>) file</strong>. Ask me for
+whichever would help most. - The <code>.png</code> files I will add
+myself later by exporting from the modeling tool.</p>
 <p>Do all files in this session. Before writing any of them, ask me any
 clarifying questions about scope or about choices you want me to
 make.</p>
